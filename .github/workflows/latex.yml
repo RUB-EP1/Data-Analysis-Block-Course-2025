@@ -1,4 +1,4 @@
-name: Compile all LaTeX files
+name: Render and compile exercise sheets
 
 on:
   push:
@@ -13,12 +13,36 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install TeX Live
+      - name: Install Pandoc and TeX Live
         run: |
           sudo apt-get update
           sudo apt-get install -y \
+            pandoc \
             latexmk \
             texlive-full
+
+      - name: Render attendance sheets from Markdown to LaTeX
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # attendance_exercises/*.md and attendance_solutions/*.md are the
+          # source of truth; scripts/render_tex.sh regenerates the matching
+          # .tex from each via pandoc + templates/course-sheet.latex, so the
+          # committed .tex files (removed from the repo) never drift out of
+          # sync with the Markdown. See attendance_solutions/5_neural_network_solution.tex
+          # for the one known exception (no .md source yet).
+          shopt -s nullglob
+          md_files=(attendance_exercises/*.md attendance_solutions/*.md)
+
+          if [ "${#md_files[@]}" -eq 0 ]; then
+            echo "No attendance Markdown files found."
+            exit 0
+          fi
+
+          for md_file in "${md_files[@]}"; do
+            scripts/render_tex.sh "$md_file"
+          done
 
       - name: Find and compile all LaTeX files
         shell: bash
@@ -27,11 +51,17 @@ jobs:
 
           mkdir -p build
 
+          # course_sheet.cls, course-info.tex and 2026-SoSe.tex live in
+          # attendance_exercises/ but are shared by attendance_solutions/ too.
+          export TEXINPUTS="$(pwd)/attendance_exercises:${TEXINPUTS:-}"
+
           mapfile -d '' tex_files < <(
             find . \
               -type f \
               -name '*.tex' \
               -not -path './.git/*' \
+              -not -name '2026-SoSe.tex' \
+              -not -name 'course-info.tex' \
               -print0
           )
 
@@ -52,11 +82,16 @@ jobs:
             relative="${tex_file#./}"
 
             # Put each document's output in its own directory.
-            output_dir="build/$(dirname "$relative")"
+            output_dir="$(pwd)/build/$(dirname "$relative")"
             mkdir -p "$output_dir"
 
+            # -cd: run from the source file's own directory, so its relative
+            # \input/\includegraphics paths (e.g. ../img/...) resolve.
+            # xelatex: handles UTF-8 content (e.g. arrows, em dashes) in the
+            # Markdown sources without extra LaTeX-side font packages.
             if latexmk \
-              -pdf \
+              -cd \
+              -xelatex \
               -interaction=nonstopmode \
               -halt-on-error \
               -outdir="$output_dir" \
@@ -81,7 +116,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: latex-pdfs
+          name: exercise-sheet-pdfs
           path: build/**/*.pdf
           if-no-files-found: warn
 

@@ -1,0 +1,24 @@
+$if(solutions)$
+\def\solutions{1}
+$endif$
+\documentclass{course_sheet}
+\input{2026-SoSe.tex}
+
+% Pandoc emits \tightlist for compact list items; course_sheet.cls does not
+% define it (it uses enumitem, not pandoc's convention), so provide it here.
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% \title/\author/\date must be (re)issued after \documentclass so that
+% course_sheet.cls's own \maketitle picks up the real sheet title instead of
+% its generic "Exercise sheet \sheetname" placeholder.
+\title{$title$}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+$body$
+
+\end{document}
