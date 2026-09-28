@@ -8,34 +8,14 @@
 \setlength{\emergencystretch}{2em}
 \begin{document}
 
-\title{Exercise: Adaptive Moment Estimation (Adam)}
+\title{Exercise: Adaptive Moment Estimation (Adam) and convolutional neural networks (CNN)}
 \author{}
 \date{}
 \maketitle
 In this exercise, you will apply the \textbf{\textit{Adaptive Moment Estimation (Adam)}} optimization algorithm to a simple concrete problem. You will calculate each step of Adam by hand and observe how the parameter changes over several iterations.
+\section*{Part 1: Adaptive Moment Estimation}
 
-\subsection*{Learning objectives}
-By the end of this exercise, you should be able to:
-
-\begin{itemize}
-\item
-Explain the role of the first and second moments in Adam.
-
-\item
-Compute the moving averages of gradients and squared gradients.
-
-\item
-Apply bias correction.
-
-\item
-Compute an Adam parameter update.
-
-\item
-Explain why Adam's update is different from ordinary gradient descent.
-
-\end{itemize}
-\clearpage
-\section*{Part I - The problem}
+\subsection*{The problem}
 Suppose we want to minimize the following function:
 
 \[
@@ -125,14 +105,14 @@ x_{t-1}
 \]
 
 \clearpage
-\section*{Part II - Iteration 1 - Guided calculation}
+\subsection*{Iteration 1 - Guided calculation}
 We begin with
 
 \[
 x_0=0.
 \]
 
-\subsubsection*{Exercise 2.1 - Compute the gradient}
+\subsubsection*{Compute the gradient}
 Calculate
 
 \[
@@ -145,7 +125,7 @@ g_1 = 2(x_0-3).
 g_1 = {\phantom{000}}
 \]
 
-\subsubsection*{Exercise 2.2 - Compute the first moment}
+\subsubsection*{Compute the first moment}
 Using
 
 \[
@@ -160,7 +140,7 @@ calculate $m_1$.
 m_1 = {\phantom{000}}
 \]
 
-\subsubsection*{Exercise 2.3 - Compute the second moment}
+\subsubsection*{Compute the second moment}
 Using
 
 \[
@@ -175,7 +155,7 @@ calculate $v_1$.
 v_1 = {\phantom{000}}
 \]
 
-\subsubsection*{Exercise 2.4 - Apply bias correction}
+\subsubsection*{Apply bias correction}
 Because this is the first iteration,
 
 \[
@@ -202,7 +182,7 @@ Then calculate
 \hat v_1 = {\phantom{000}}
 \]
 
-\subsubsection*{Exercise 2.5 - Update $x$}
+\subsubsection*{Update $x$}
 Finally, calculate
 
 \[
@@ -220,12 +200,12 @@ x_1 \approx {\phantom{000}}
 \]
 
 \clearpage
-\section*{Part III - Iteration 2 - Work it out yourself}
+\subsection*{Iteration 2 - Work it out yourself}
 You should now have a value for $x_1$.
 
 Repeat the same five steps.
 
-\subsubsection*{Exercise 3.1 - Gradient}
+\subsubsection*{Gradient}
 \[
 g_2 = 2(x_1-3)
 \]
@@ -234,7 +214,7 @@ g_2 = 2(x_1-3)
 g_2 = {\phantom{000}}
 \]
 
-\subsubsection*{Exercise 3.2 - First moment}
+\subsubsection*{First moment}
 \[
 m_2 = 0.9m_1+0.1g_2
 \]
@@ -243,7 +223,7 @@ m_2 = 0.9m_1+0.1g_2
 m_2 = {\phantom{000}}
 \]
 
-\subsubsection*{Exercise 3.3 - Second moment}
+\subsubsection*{Second moment}
 \[
 v_2 = 0.999v_1+0.001g_2^2
 \]
@@ -252,7 +232,7 @@ v_2 = 0.999v_1+0.001g_2^2
 v_2 = {\phantom{000}}
 \]
 
-\subsubsection*{Exercise 3.4 - Bias correction}
+\subsubsection*{Bias correction}
 \[
 \hat m_2 =
 \frac{m_2}{1-0.9^2}
@@ -273,7 +253,7 @@ Calculate:
 \hat v_2 = {\phantom{000}}
 \]
 
-\subsubsection*{Exercise 3.5 - Parameter update}
+\subsubsection*{Parameter update}
 \[
 x_2 =
 x_1 -
@@ -289,8 +269,7 @@ x_2 = {\phantom{000}}
 \]
 
 \clearpage
-\section*{Part IV - Iteration 3}
-\subsubsection*{Exercise 4.1}
+\subsection*{Iteration 3}
 Now perform the calculation for a third iteration without the intermediate hints.
 
 Complete the following table.
@@ -346,32 +325,6 @@ x_2 -
 {\sqrt{\hat v_3}+10^{-8}}.
 \]
 
-\clearpage
-\section*{Part V - Short conceptual questions}
-Answer the following conceptual questions.
-
-\subsubsection*{Exercise 5.1}
-What does $m_t$ represent?
-
-Choose the best description:
-
-\begin{itemize}
-\item
-[ ] The average of the parameters seen so far.
-
-\item
-[ ] An exponentially weighted moving average of the gradients.
-
-\item
-[ ] An exponentially weighted moving average of the squared parameters.
-
-\item
-[ ] The learning rate.
-
-\end{itemize}
-Explain your answer in one or two sentences.
-
-\subsubsection*{Exercise 5.2}
 What does $v_t$ represent?
 
 \begin{itemize}
@@ -388,12 +341,11 @@ What does $v_t$ represent?
 [ ] The accumulated parameter updates.
 
 \end{itemize}
-\subsubsection*{Exercise 5.3}
+
 Why does Adam use $g_t^2$ when calculating $v_t$?
 
 Consider what happens if a gradient is large in magnitude. How would this affect $v_t$ and, consequently, the size of the parameter update?
 
-\subsubsection*{Exercise 5.4}
 Why are the bias-correction terms
 
 \[
@@ -414,5 +366,302 @@ necessary?
 m_0=v_0=0.
 \]
 
+\section*{Part 2: convolutional neural networks}
+
+In this next part we will cover convolutional neural networks. 
+
+\section*{Images are numbers }
+
+A computer does not see an image in the same way that we do. A grayscale image can be represented as a matrix of numbers. For example, consider the following $5 \times 5$ grayscale image:
+
+\[
+X =
+\begin{bmatrix}
+0 & 0 & 0 & 0 & 0\\
+0 & 0 & 1 & 0 & 0\\
+0 & 1 & 1 & 1 & 0\\
+0 & 0 & 1 & 0 & 0\\
+0 & 0 & 0 & 0 & 0
+\end{bmatrix}.
+\]
+
+Here, $0$ represents a dark pixel and $1$ represents a bright pixel. The matrix therefore describes a simple bright pattern in the centre of the image.
+
+A colour image usually contains three channels: red, green, and blue. A colour image with height $H$ and width $W$ can therefore be represented as an array with dimensions $H \times W \times 3$.
+
+\textbf{Task} Suppose a grayscale image has a resolution of $28 \times 28$ pixels.
+
+\begin{enumerate}[label=\alph*)]
+    \item How many pixel values does the image contain?
+    \item How many values would a $28 \times 28$ RGB image contain?
+    \item Why might it be useful for a neural network to preserve the spatial arrangement of the pixel values?
+\end{enumerate}
+
+\section*{Part 2: Looking for patterns with a filter \hfill 10 minutes}
+
+Instead of processing every pixel independently, a CNN looks for local patterns. One way to do this is with a small matrix called a \textbf{filter}, \textbf{kernel}, or \textbf{convolution kernel}.
+
+Consider the filter
+
+\[
+K =
+\begin{bmatrix}
+-1 & -1 & -1\\
+0 & 0 & 0\\
+1 & 1 & 1
+\end{bmatrix}.
+\]
+
+We place this filter over a small region of an image and multiply corresponding entries. The resulting values are then added together to produce a single output value.
+
+For example, suppose the image region is
+
+\[
+P =
+\begin{bmatrix}
+0 & 0 & 0\\
+0 & 1 & 1\\
+1 & 1 & 1
+\end{bmatrix}.
+\]
+
+The element-wise multiplication gives
+
+\[
+P \odot K =
+\begin{bmatrix}
+0(-1) & 0(-1) & 0(-1)\\
+0(0) & 1(0) & 1(0)\\
+1(1) & 1(1) & 1(1)
+\end{bmatrix}.
+\]
+
+Adding all entries gives
+
+\[
+0+0+0+0+0+0+1+1+1=3.
+\]
+
+The filter therefore produces the output value $3$ for this particular image region.
+
+The same calculation can be performed at different positions in the image. In this way, one filter produces a collection of output values called a \textbf{feature map}.
+
+\textbf{Task} Calculate the result for the following image patch using the same filter:
+
+\[
+P =
+\begin{bmatrix}
+1 & 1 & 1\\
+0 & 0 & 0\\
+0 & 0 & 0
+\end{bmatrix}.
+\]
+
+Show the element-wise multiplication and calculate the final sum.
+
+\textbf{Task} Now calculate the result for
+
+\[
+P =
+\begin{bmatrix}
+0 & 0 & 0\\
+1 & 1 & 1\\
+1 & 1 & 1
+\end{bmatrix}.
+\]
+
+Compare your result with Task 2. What does the difference between the two results tell you about the pattern detected by the filter?
+
+\subsection*{From one filter to a feature map \hfill 15 minutes}
+
+Let us now apply a filter to a complete image. Consider the following $5 \times 5$ image:
+
+\[
+X =
+\begin{bmatrix}
+0 & 0 & 0 & 0 & 0\\
+0 & 1 & 1 & 1 & 0\\
+0 & 1 & 1 & 1 & 0\\
+0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0
+\end{bmatrix}
+\]
+
+and the filter
+
+\[
+K =
+\begin{bmatrix}
+1 & 1 & 1\\
+0 & 0 & 0\\
+-1 & -1 & -1
+\end{bmatrix}.
+\]
+
+For simplicity, we use a stride of $1$ and no padding. The filter starts in the upper-left corner of the image and considers the first $3 \times 3$ region:
+
+\[
+\begin{bmatrix}
+0 & 0 & 0\\
+0 & 1 & 1\\
+0 & 1 & 1
+\end{bmatrix}.
+\]
+
+The first output value is
+
+\[
+\begin{aligned}
+y_{1,1}
+&=(0\cdot1)+(0\cdot1)+(0\cdot1)\\
+&\quad +(0\cdot0)+(1\cdot0)+(1\cdot0)\\
+&\quad +(0\cdot(-1))+(1\cdot(-1))+(1\cdot(-1))\\
+&=-2.
+\end{aligned}
+\]
+
+The filter is then moved one pixel to the right and the calculation is repeated. The process continues across the image and then down to the next row.
+
+Since the input has size $5 \times 5$ and the filter has size $3 \times 3$, the output has size
+
+\[
+(5-3+1) \times (5-3+1)=3 \times 3.
+\]
+
+This output is the feature map produced by the filter.
+
+\textbf{Task} Calculate the complete feature map. The first value has already been calculated for you.
+
+\[
+F =
+\begin{bmatrix}
+-2 & \rule{1.5cm}{0.15mm} & \rule{1.5cm}{0.15mm}\\[0.8em]
+\rule{1.5cm}{0.15mm} & \rule{1.5cm}{0.15mm} & \rule{1.5cm}{0.15mm}\\[0.8em]
+\rule{1.5cm}{0.15mm} & \rule{1.5cm}{0.15mm} & \rule{1.5cm}{0.15mm}
+\end{bmatrix}.
+\]
+
+For each position, identify the corresponding $3 \times 3$ image region and calculate the sum of the element-wise products.
+
+\textbf{Task} Look at the values in your feature map. Which image regions produce large positive values? Which regions produce large negative values? Based on these results, what kind of visual pattern is the filter detecting?
+
+\subsection*{Different filters detect different features}
+
+A CNN does not normally use just one filter. It learns many different filters, and different filters can respond to different visual patterns.
+
+For example, consider the following three filters:
+
+\[
+K_1 =
+\begin{bmatrix}
+-1 & -1 & -1\\
+0 & 0 & 0\\
+1 & 1 & 1
+\end{bmatrix},
+\qquad
+K_2 =
+\begin{bmatrix}
+-1 & 0 & 1\\
+-1 & 0 & 1\\
+-1 & 0 & 1
+\end{bmatrix},
+\]
+
+and
+
+\[
+K_3 =
+\begin{bmatrix}
+1 & 0 & -1\\
+0 & 0 & 0\\
+-1 & 0 & 1
+\end{bmatrix}.
+\]
+
+The first filter responds strongly to certain horizontal intensity changes, while the second responds to vertical intensity changes. The third can respond to diagonal or corner-like patterns.
+
+The important point is that the network does not need to be explicitly told which features to look for. During training, the values inside the filters are learned from the training data.
+
+In an early CNN layer, some filters may learn to respond to edges, corners, simple textures, or changes in brightness. Later layers can combine these simpler patterns into more complex representations.
+
+For example, imagine that the input is a photograph of a cat. An early layer might detect edges. A later layer could combine several edges into a representation of a shape such as an ear. Further layers can combine information about different shapes and textures to form representations that are useful for recognizing the object.
+
+This gives us an intuitive progression from pixels to simple features, more complex features, object parts, and finally object-level representations. This description is only an intuition; the representations learned by real CNNs do not necessarily correspond to these categories in such a simple way.
+
+\textbf{Task} Give one example of a simple visual feature that an early CNN layer might detect and one example of a more complex visual feature that a later layer might represent.
+
+\subsection*{Putting the CNN together}
+
+A simplified CNN consists of several types of operations. An image is first processed by convolutional layers, which produce feature maps. Activation functions are then applied to introduce non-linearity. Pooling may be used to reduce the spatial dimensions of the feature maps. Further convolutional layers can then construct more complex representations, which are eventually used to make a prediction.
+
+\subsubsection*{Convolution}
+
+A convolution applies several learned filters to the input. If three filters are used, they produce three different feature maps:
+
+\[
+X \longrightarrow
+\begin{cases}
+F_1 & \text{from filter } K_1,\\
+F_2 & \text{from filter } K_2,\\
+F_3 & \text{from filter } K_3.
+\end{cases}
+\]
+
+The filters contain numerical parameters that are adjusted during training.
+
+\subsubsection*{Activation}
+
+A common activation function is the ReLU function:
+
+\[
+\operatorname{ReLU}(x)=\max(0,x).
+\]
+
+For example,
+
+\[
+[-2,\;3,\;-1,\;5]
+\]
+
+becomes
+
+\[
+[0,\;3,\;0,\;5].
+\]
+
+The activation function introduces non-linearity, which allows the network to learn more complex relationships.
+
+\subsubsection*{Pooling}
+
+Pooling reduces the spatial dimensions of a feature map. For example, $2 \times 2$ max pooling selects the largest value from each $2 \times 2$ region:
+
+\[
+\begin{bmatrix}
+1 & 3\\
+2 & 4
+\end{bmatrix}
+\quad \longrightarrow \quad
+4.
+\]
+
+Pooling can therefore reduce the amount of computation while retaining strong responses.
+
+\subsubsection*{Multiple layers}
+
+A simplified view of a CNN is:
+
+\[
+\text{pixels}
+\longrightarrow
+\text{local features}
+\longrightarrow
+\text{more complex features}
+\longrightarrow
+\text{object representation}
+\longrightarrow
+\text{prediction}.
+\]
+
+The filters in the network are learned during training. For example, if a CNN is trained to distinguish cats from dogs, the training process adjusts the filter values so that the resulting representations become useful for making that distinction.
 
 \end{document}
