@@ -1,4 +1,4 @@
-name: Compile all LaTeX files
+name: Render and compile exercise sheets
 
 on:
   push:
@@ -8,93 +8,38 @@ on:
 jobs:
   compile-latex:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install TeX Live
+      - name: Install Pandoc and TeX Live
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
-            latexmk \
-            texlive-full
+          sudo apt-get install -y python3 pandoc latexmk texlive-latex-extra texlive-fonts-recommended texlive-pictures lmodern
 
-      - name: Find and compile all LaTeX files
-        shell: bash
-        run: |
-          set -euo pipefail
+      - name: Check Markdown conversion
+        run: python3 scripts/test_render_tex.py
 
-          mkdir -p build
-
-          mapfile -d '' tex_files < <(
-            find . \
-              -type f \
-              -name '*.tex' \
-              -not -path './.git/*' \
-              -not -name '2026-SoSe.tex'\
-              -not -name 'course-info.tex'\
-              -print0
-          )
-
-          if [ "${#tex_files[@]}" -eq 0 ]; then
-            echo "No LaTeX files found."
-            exit 0
-          fi
-
-          failed=0
-
-          for tex_file in "${tex_files[@]}"; do
-            echo ""
-            echo "========================================"
-            echo "Compiling: $tex_file"
-            echo "========================================"
-
-            # Remove leading "./"
-            relative="${tex_file#./}"
-
-            # Put each document's output in its own directory.
-            output_dir="build/$(dirname "$relative")"
-            mkdir -p "$output_dir"
-
-            if latexmk \
-              -pdf \
-              -interaction=nonstopmode \
-              -halt-on-error \
-              -outdir="$output_dir" \
-              "$tex_file"; then
-
-              echo "Successfully compiled: $tex_file"
-            else
-              echo "Failed to compile: $tex_file"
-              failed=1
-            fi
-          done
-
-          exit "$failed"
-
-      - name: List generated PDFs
-        if: always()
-        run: |
-          echo "Generated PDFs:"
-          find build -type f -name '*.pdf' -print
+      - name: Render and compile all active Markdown sheets
+        run: python3 scripts/build_attendance.py
 
       - name: Upload compiled PDFs
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: latex-pdfs
-          path: build/**/*.pdf
-          if-no-files-found: warn
+          name: exercise-sheet-pdfs
+          path: |
+            build/attendance_exercises/*.pdf
+            build/attendance_solutions/*.pdf
+          if-no-files-found: error
 
-      - name: Upload compilation logs
+      - name: Upload generated LaTeX and compilation logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: latex-build-logs
           path: |
-            build/**/*.log
-            build/**/*.aux
-            build/**/*.fls
-            build/**/*.fdb_latexmk
+            build/tex/**/*.tex
+            build/attendance_exercises/*.log
+            build/attendance_solutions/*.log
           if-no-files-found: ignore

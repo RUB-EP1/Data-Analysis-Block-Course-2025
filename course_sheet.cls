@@ -11,7 +11,8 @@
 \RequirePackage{hyperref}
 \RequirePackage{xcolor}
 \hypersetup{
-    colorlinks=true
+    colorlinks=true,
+    urlcolor=[HTML]{17365C}
 }
 \RequirePackage{titling}
 \RequirePackage{amsmath}
@@ -120,6 +121,8 @@
 % Load course information (title, lecturer) if present
 \providecommand{\courseTitle}{Course}
 \providecommand{\courseNumber}{000000}
+\providecommand{\courseIndicoUrl}{https://indico.global/}
+\providecommand{\courseMoodleUrl}{https://moodle.ruhr-uni-bochum.de/}
 \providecommand{\lecturer}{Lecturer}
 \providecommand{\teachingAssistants}{Teaching Assistants}
 \providecommand{\correctors}{Correctors}
@@ -143,11 +146,11 @@
         % Top section with university info
         \rule{\textwidth}{2pt}\\[0.3em]
         \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lcr}
-		\textbf{Ruhr-Universität Bochum} & \textbf{160435} & \textbf{SoSe 2026} \\
+		\textbf{RU Bochum \& TU Dortmund} & \textbf{160435} & \textbf{SoSe 2026} \\
         \end{tabular*}\\[0.5em]
 
         % Main header section with logos and course info
-        \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lccr}
+        \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}l@{}c@{}r@{}}
             % Left: agmikhasenko logo
             \begin{minipage}[c]{0.22\textwidth}
                 \centering
@@ -156,23 +159,22 @@
             % Center: Course title and instructors
             \begin{minipage}[c]{0.56\textwidth}
                 \centering
-                {\Large\textbf{Data Analysis Block Course: Statistics and Machine learning}}\\[0.2em]
+                {\Large\textcolor[HTML]{17365C}{\textbf{\courseTitle}}}\\[0.2em]
                 {\Large\textbf{\@title}}\\[0.3em]
                 % {\Large\colorbox[rgb]{0,0.208,0.376}{\textcolor{white}{\textbf{Exercise \sheetname\ifsolutions\ (Solutions)\fi}}}}\\[0.3em]
                 \textbf{Prof.~Dr.~Mikhail~Mikhasenko}\\[0.1em]
-                \text{Tutor: Hendric Jonas, Christoph T/"onnis}\\[0.1em]
-                \text{Editors: Hendric Jonas, Christoph T/"onnis}
+                \textbf{Assistants:} \teachingAssistants
             \end{minipage} &
-            % Right: Physics logo
+            % Right: Course logo
             \begin{minipage}[c]{0.22\textwidth}
                 \centering
-                \includegraphics[height=1.8cm]{./img/physics-logo.png}
+                \includegraphics[height=2.4cm]{./img/stat-ml-course-logo.png}
             \end{minipage}
         \end{tabular*}\\[0.5em]
 
         % Bottom section with dates
-        \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lr}
-            \textbf{\@published} \\
+        \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lcr}
+            \textbf{\@published} & \href{\courseIndicoUrl}{Indico schedule} & \href{\courseMoodleUrl}{RUB Moodle} \\
         \end{tabular*}\\[0.3em]
 
         \rule{\textwidth}{2pt}\\[0.5em]

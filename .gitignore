@@ -1,0 +1,18 @@
+# Markdown is authoritative. TeX previews are regenerated on every render.
+attendance_exercises/[0-9]*.tex
+attendance_solutions/[0-9]*.tex
+attendance_exercises/[0-9]*.pdf
+attendance_solutions/[0-9]*.pdf
+
+# LaTeX build byproducts, in case anyone compiles locally without -outdir.
+*.aux
+*.fls
+*.fdb_latexmk
+*.out
+*.synctex.gz
+
+# Generated PDFs and LaTeX build files.
+build/
+
+# Python build helpers.
+__pycache__/

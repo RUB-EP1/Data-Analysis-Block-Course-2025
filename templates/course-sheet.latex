@@ -1,0 +1,47 @@
+$if(solutions)$
+\def\solutions{1}
+$endif$
+% Editorial and mathematical typesetting rules: templates/attendance-style.md
+\PassOptionsToClass{a4paper}{article}
+% Find shared files both from the sheet folder (VS Code) and the repo root.
+\makeatletter
+\def\input@path{{./}{../}}
+\makeatother
+\documentclass{course_sheet}
+\graphicspath{{./}{../}}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{needspace}
+% Part titles and subsection/exercise numbers are written explicitly.
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.2em}
+\raggedbottom
+\renewcommand{\arraystretch}{1.2}
+$if(tikz)$
+\usepackage{tikz}
+$endif$
+\input{2026-SoSe.tex}
+$if(published)$
+\published{$published$}
+$endif$
+
+% Pandoc emits \tightlist for compact list items; course_sheet.cls does not
+% define it (it uses enumitem, not pandoc's convention), so provide it here.
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% \title/\author/\date must be (re)issued after \documentclass so that
+% course_sheet.cls's own \maketitle picks up the real sheet title instead of
+% its generic "Exercise sheet \sheetname" placeholder.
+\title{\\$title$}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+$body$
+
+\end{document}
