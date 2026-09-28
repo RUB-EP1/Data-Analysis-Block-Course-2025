@@ -1,845 +1,389 @@
-# Exercise: Forward and Reverse Automatic Differentiation by Hand - Solutions
+---
+title: "Exercise: Forward and Reverse Automatic Differentiation by Hand - Solutions"
+published: "25 September 2026"
+---
 
-# Forward-mode AD with dual numbers
+# Part I - Forward-mode AD with dual numbers {#part-i---forward-mode-ad-with-dual-numbers needspace="8"}
 
 ## Solution 1.1 - Scalar input, scalar output
 
-We start with the dual number
+We evaluate $f(x)=\log(xe^x+3)$ at $x=1$. Start with the dual number $\hat x=1+\varepsilon$, so the input tangent is $\dot x=1$. The forward-mode rule is
 
-$$
-\hat{x}=1+\varepsilon
-$$
+::: numbered
+$$f(x+\dot x\varepsilon)=f(x)+f'(x)\dot x\varepsilon$$
+:::
 
-i.e. we set $\dot x = 1$ to obtain the derivative. Remember
+Apply the elementary operations in order, dropping all terms containing $\varepsilon^2$:
 
-$$
-f(x+\dot{x}\varepsilon) = f(x) + f'(x)\dot{x}\,\varepsilon
-$$
+1.  **Exponential:**
+    $$a=e^{\hat x}=e^{1+\varepsilon}=e+e\varepsilon$$
+2.  **Multiplication:**
+    $$b=\hat x a=(1+\varepsilon)(e+e\varepsilon)=e+2e\varepsilon$$
+3.  **Addition:**
+    $$c=b+3=(e+3)+2e\varepsilon$$
+4.  **Logarithm:**
+    $$f(\hat x)=\log(e+3)+\frac{2e}{e+3}\varepsilon$$
 
-which justifies the choice.
+The primal value and tangent therefore give
 
-### Step 1: exponential
+$$f(1)=\log(e+3)
+  \qquad
+  f'(1)=\frac{2e}{e+3}$$
 
-Use the formula for exponentials
+## Solution 1.2 - Vector input, scalar output {#solution-1.2---vector-input-scalar-output needspace="8"}
 
-$$
-a = e^{\hat{x}} = e^{1+\varepsilon} =e+e\varepsilon.
-$$
+For $g(x,y,z)=xy+\sin z+y^2$, the ordinary function value is
 
-### Step 2: multiplication
+$$g(1,2,0)=1\cdot2+\sin 0+2^2=6$$
 
-Use the multiplication formula for duals
+### The three basis seeds
 
-$$
-b=\hat{x}a = (1+\varepsilon)(e+e\varepsilon).
-$$
+Each sweep starts again at $(1,2,0)$. Set the tangent in the selected direction to $1$ and all other input tangents to $0$.
 
-Expanding and dropping $\varepsilon^2$,
+1.  **Seed in the x-direction:** Use
+    $$\hat x=1+\varepsilon
+        \qquad \hat y=2
+        \qquad \hat z=0$$
 
-$$
-b=e+2e\varepsilon
-$$
+    Forward propagation gives
 
-### Step 3: addition
+    $$\begin{split}
+          \hat x\hat y &= 2+2\varepsilon \\
+          \sin\hat z &= 0 \\
+          \hat y^2 &= 4 \\
+          g(\hat x,\hat y,\hat z) &= 6+2\varepsilon
+        \end{split}$$
 
-Doing the same with the addition formula
+    Hence $\partial g/\partial x=2$ at the chosen point.
+2.  **Seed in the y-direction:** Use
+    $$\hat x=1
+        \qquad \hat y=2+\varepsilon
+        \qquad \hat z=0$$
 
-$$
-c=b+3
-=(e+3)+2e\varepsilon
-$$
+    Forward propagation gives
 
-### Step 4: logarithm
+    $$\begin{split}
+          \hat x\hat y &= 2+\varepsilon \\
+          \sin\hat z &= 0 \\
+          \hat y^2 &= (2+\varepsilon)^2=4+4\varepsilon \\
+          g(\hat x,\hat y,\hat z) &= 6+5\varepsilon
+        \end{split}$$
 
-Finally using the formula for the logarithm we get
+    Hence $\partial g/\partial y=5$.
+3.  **Seed in the z-direction:** Use
+    $$\hat x=1
+        \qquad \hat y=2
+        \qquad \hat z=\varepsilon$$
 
-$$
-f(\hat{x}) = \log(e+3) + \frac{2e}{e+3} \varepsilon.
-$$
+    Since $\sin(\varepsilon)=\sin 0+\cos 0\,\varepsilon=\varepsilon$, we obtain
 
-Therefore
+    $$g(\hat x,\hat y,\hat z)=2+\varepsilon+4=6+\varepsilon$$
 
-$$
-f(1)=\log(e+3)
-\qquad
-\text{and}
-\qquad
-f'(1)=\frac{2e}{e+3}
-$$
+    Hence $\partial g/\partial z=1$.
 
----
+The full gradient is therefore
 
-## Solution 1.2 - Vector input, scalar output
-
-The function is
-
-$$
-g(x,y,z)=xy+\sin z+y^2
-$$
-
-At $(1,2,0)$ this then evaluates to
-
-$$
-g(1,2,0)=1\cdot2+\sin 0+2^2=6
-$$
-
-### Seed in the $x$-direction
-
-Use
-
-$$
-\hat{x}=1+\varepsilon,
-\qquad
-\hat{y}=2,
-\qquad
-\hat{z}=0
-$$
-
-Then
-
-$$
-\hat{x}\hat{y} = (1+\varepsilon)2 = 2+2\varepsilon
-$$
-
-$$
-\sin\hat{z} = 0
-$$
-
-$$
-\hat{y}^2 = 4
-$$
-
-Thus
-
-$$
-g=6+2\varepsilon
-$$
-
-Therefore
-
-$$
-\frac{\partial g}{\partial x} = 2
-$$
-
-### Seed in the $y$-direction
-
-Use
-
-$$
-\hat{x}=1,
-\qquad
-\hat{y}=2+\varepsilon,
-\qquad
-\hat{z}=0
-$$
-
-Then
-
-$$
-\hat{x}\hat{y}=2+\varepsilon
-$$
-
-$$
-\hat{y}^2 = (2+\varepsilon)^2 = 4 + 4\varepsilon.
-$$
-
-Hence
-
-$$
-g = 6 + 5 \varepsilon,
-$$
-
-so
-
-$$
-\frac{\partial g}{\partial y} = 5
-$$
-
-### Seed in the $z$-direction
-
-Use
-
-$$
-\hat{z}=\varepsilon
-$$
-
-Since
-
-$$
-\sin(\varepsilon) = \sin 0 + \cos 0\,\varepsilon = \varepsilon
-$$
-
-we get
-
-$$
-g = 6+\varepsilon
-$$
-
-Therefore
-
-$$
-\frac{\partial g}{\partial z}=1
-$$
-
-The gradient is
-
-$$
-\nabla g(1,2,0) =
-\begin{pmatrix}
-    2\\
-    5\\
-    1
-\end{pmatrix}
-$$
+$$\nabla g(1,2,0)=\begin{pmatrix}2\\5\\1\end{pmatrix}$$
 
 ### Directional derivative
 
-For
+For $\mathbf v=(1,-1,2)^T$, seed all inputs at once:
 
-$$
-\mathbf v=(1,-1,2)^T
-$$
+$$\hat x=1+\varepsilon
+  \qquad \hat y=2-\varepsilon
+  \qquad \hat z=2\varepsilon$$
 
-seed all inputs at once:
+One forward sweep gives
 
-$$
-\hat{x}=1+\varepsilon,
-\qquad
-\hat{y}=2-\varepsilon,
-\qquad
-\hat{z}=2\varepsilon
-$$
+$$\begin{split}
+    \hat x\hat y &= 2+\varepsilon \\
+    \sin\hat z &= 2\varepsilon \\
+    \hat y^2 &= 4-4\varepsilon \\
+    g(\hat x,\hat y,\hat z) &= 6-\varepsilon
+  \end{split}$$
 
-Forward propagation gives
+Thus $D_{\mathbf v}g=-1$, in agreement with the check
 
-$$
-\hat x\hat y=2+\varepsilon,\qquad
-\sin\hat z=2\varepsilon,\qquad
-\hat y^2=4-4\varepsilon
-$$
+$$\nabla g^T\mathbf v=2(1)+5(-1)+1(2)=-1$$
 
-Adding the three terms gives $g=6-\varepsilon$. The tangent is therefore $-1$, in agreement with $2(1)+5(-1)+1(2)=-1$.
+## Solution 1.3 - Vector input, vector output {#solution-1.3---vector-input-vector-output needspace="8"}
 
-Thus
+For $\mathbf h(x,y,z)=(xy+z,x^2+\sin y-z^2)^T$, the ordinary output is
 
-$$
-D_{\mathbf v}g=-1
-$$
+$$\mathbf h(1,0,1)=\begin{pmatrix}1\\0\end{pmatrix}$$
 
-The 
+### The three basis seeds
 
----
+Each sweep starts again at $(1,0,1)$ with all unselected input tangents set to zero.
 
-## Solution 1.3 - Vector input, vector output
+1.  **Seed in the x-direction:** Use
+    $$\hat x=1+\varepsilon
+        \qquad \hat y=0
+        \qquad \hat z=1$$
 
-At $(1,0,1)$
+    The two output components are
 
-$$
-\mathbf h(1,0,1) =
-\begin{pmatrix}
-    1\\
-    0
-\end{pmatrix}
-$$
+    $$\begin{split}
+          \hat h_1 &= (1+\varepsilon)0+1=1+0\varepsilon \\
+          \hat h_2 &= (1+\varepsilon)^2+\sin 0-1=2\varepsilon
+        \end{split}$$
 
-### Seed $\mathbf e_x$
+    The first Jacobian column is $(0,2)^T$.
+2.  **Seed in the y-direction:** Use
+    $$\hat x=1
+        \qquad \hat y=\varepsilon
+        \qquad \hat z=1$$
 
-Use
+    The output components are
 
-$$
-\hat{x}=1+\varepsilon,
-\qquad
-\hat{y}=0,
-\qquad
-\hat{z}=1
-$$
+    $$\begin{split}
+          \hat h_1 &= 1+\varepsilon \\
+          \hat h_2 &= \sin(\varepsilon)=\varepsilon
+        \end{split}$$
 
-For the first component,
+    The second Jacobian column is $(1,1)^T$.
+3.  **Seed in the z-direction:** Use
+    $$\hat x=1
+        \qquad \hat y=0
+        \qquad \hat z=1+\varepsilon$$
 
-$$
-h_1=(1+\varepsilon)0+1=1+0\varepsilon
-$$
+    The output components are
 
-For the second component,
+    $$\begin{split}
+          \hat h_1 &= 1+\varepsilon \\
+          \hat h_2 &= 1-(1+\varepsilon)^2=-2\varepsilon
+        \end{split}$$
 
-$$
-h_2=(1+\varepsilon)^2+\sin 0-1 = 2\varepsilon
-$$
+    The third Jacobian column is $(1,-2)^T$.
 
-So the first Jacobian column is
+Putting the columns together gives
 
-$$
-\begin{pmatrix}0\\2\end{pmatrix}
-$$
+$$J_{\mathbf h}(1,0,1)=\begin{pmatrix}0&1&1\\2&1&-2\end{pmatrix}$$
 
-### Seed $\mathbf e_y$
+### One sweep in the specified direction
 
-Use
+For $\mathbf v=(1,2,-1)^T$, use
 
-$$
-\hat{y}=\varepsilon
-$$
+$$\hat x=1+\varepsilon
+  \qquad \hat y=2\varepsilon
+  \qquad \hat z=1-\varepsilon$$
 
-Then
+One forward sweep gives
 
-$$
-h_1=1+\varepsilon
-$$
+$$\begin{split}
+    \hat h_1 &= (1+\varepsilon)2\varepsilon+(1-\varepsilon)=1+\varepsilon \\
+    \hat h_2 &= (1+\varepsilon)^2+\sin(2\varepsilon)-(1-\varepsilon)^2=6\varepsilon
+  \end{split}$$
 
-and
+The tangent vector is therefore
 
-$$
-h_2=\sin(\varepsilon)=\varepsilon
-$$
+$$J_{\mathbf h}\mathbf v=\begin{pmatrix}1\\6\end{pmatrix}$$
 
-So the second Jacobian column is
+This agrees with multiplication of the Jacobian by $\mathbf v$.
 
-$$
-\begin{pmatrix}1\\1\end{pmatrix}
-$$
+------------------------------------------------------------------------
 
-### Seed $\mathbf e_z$
-
-Use
-
-$$
-\hat{z}=1+\varepsilon
-$$
-
-Then
-
-$$
-h_1=1+\varepsilon
-$$
-
-while
-
-$$
-h_2 = 1-(1+\varepsilon)^2 = -2\varepsilon
-$$
-
-So the third Jacobian column is
-
-$$
-\begin{pmatrix}1\\-2\end{pmatrix}.
-$$
-
-Therefore
-
-$$
-J_{\mathbf h}(1,0,1) =
-\begin{pmatrix}
-    0 & 1 & 1\\
-    2 & 1 & -2
-\end{pmatrix}
-$$
-
-For
-
-$$
-\mathbf v=(1,2,-1)^T
-$$
-
-seed the inputs as $\hat x=1+\varepsilon$, $\hat y=2\varepsilon$, and $\hat z=1-\varepsilon$. One forward sweep gives
-
-$$
-\hat h_1=(1+\varepsilon)2\varepsilon+(1-\varepsilon)=1+\varepsilon
-$$
-
-$$
-\hat h_2=(1+\varepsilon)^2+\sin(2\varepsilon)-(1-\varepsilon)^2=6\varepsilon
-$$
-
-The tangent vector is $(1,6)^T$, agreeing with multiplication of the Jacobian by $\mathbf v$.
-
-Thus
-
-$$
-J_{\mathbf h}\mathbf v = \begin{pmatrix}1\\6\end{pmatrix}
-$$
-
----
-
-# Reverse-mode AD / Backward AD
+# Part II - Reverse-mode AD / Backward AD {#part-ii---reverse-mode-ad-backward-ad needspace="8"}
 
 ## Solution 2.1 - Scalar input, scalar output
 
-Define
+Write $f(x)=\log(xe^x+3)$ as elementary operations:
 
-$$
-v_1=e^x,
-\qquad
-v_2=xv_1,
-\qquad
-v_3=v_2+3,
-\qquad
-v_4=\log v_3
-$$
-
-The final output is
-
-$$
-f=v_4
-$$
+$$\begin{split}
+    v_1 &= e^x \\
+    v_2 &= xv_1 \\
+    v_3 &= v_2+3 \\
+    v_4 &= \log v_3 \\
+    f &= v_4
+  \end{split}$$
 
 ### Forward pass
 
-At $x=1$,
+At $x=1$, the intermediate values are
 
-$$
-v_1=e
-$$
-
-$$
-v_2=e
-$$
-
-$$
-v_3=e+3
-$$
-
-$$
-v_4=\log(e+3)
-$$
+$$v_1=e
+  \qquad v_2=e
+  \qquad v_3=e+3
+  \qquad v_4=\log(e+3)$$
 
 ### Backward pass
 
-Initialize all adjoints to zero before setting the output seed.
+Initialize all adjoints to zero, then set $\bar v_4=1$. Propagate backwards through the logarithm and addition:
 
-Initialize
+$$\begin{split}
+    \bar v_3 &= \bar v_4\frac{1}{v_3}=\frac{1}{e+3} \\
+    \bar v_2 &= \bar v_3=\frac{1}{e+3}
+  \end{split}$$
 
-$$
-\bar v_4=1
-$$
+The multiplication $v_2=xv_1$ gives a direct contribution to $x$ and an adjoint for $v_1$:
 
-Because
+$$\begin{split}
+    \bar x_{\text{direct}} &= \bar v_2v_1=\frac{e}{e+3} \\
+    \bar v_1 &= \bar v_2x=\frac{1}{e+3}
+  \end{split}$$
 
-$$
-v_4=\log v_3
-$$
+Finally, the exponential $v_1=e^x$ contributes
 
-the adjoint of $v_3$ is
+$$\bar x_{\text{via }v_1}=\bar v_1e^x=\frac{e}{e+3}$$
 
-$$
-\bar v_3 = \bar v_4\frac{1}{v_3} = \frac{1}{e+3}
-$$
+Add both paths to obtain
 
-Because
+$$f'(1)=\bar x=\frac{e}{e+3}+\frac{e}{e+3}=\frac{2e}{e+3}$$
 
-$$
-v_3=v_2+3
-$$
+This is the same derivative obtained with dual numbers in Exercise 1.1.
 
-the adjoint of $v_2$ is
+## Solution 2.2 - Three inputs, scalar output {#solution-2.2---three-inputs-scalar-output needspace="8"}
 
-$$
-\bar v_2 = \bar v_3 = \frac{1}{e+3}
-$$
-
-Now
-
-$$
-v_2=xv_1
-$$
-
-This gives one direct contribution to $x$:
-
-$$
-\bar x_{\text{direct}} = \bar v_2 v_1 = \frac{e}{e+3}.
-$$
-
-But it also gives a contribution to the adjoint of $v_1$
-
-$$
-\bar v_1 = \bar v_2 x = \frac{1}{e+3}
-$$
-
-Finally,
-
-$$
-v_1=e^x
-$$
-
-so the indirect contribution to $x$ is
-
-$$
-\bar x_{\text{via }v_1} = \bar v_1 e^x = \frac{e}{e+3}
-$$
-
-The two paths for $\bar x$ must be added:
-
-$$
-\bar x =
-\frac{e}{e+3} + \frac{e}{e+3}
-$$
-
-Therefore
-
-$$
-f'(1)=\bar x=\frac{2e}{e+3}
-$$
-
-This is exactly the same derivative obtained with dual numbers.
-
----
-
-## Solution 2.2 - Three inputs, scalar output
-
-Use
-
-$$
-a=xy,
-\qquad
-b=\sin z,
-\qquad
-c=y^2,
-\qquad
-d=a+b+c
-$$
-
-The scalar output is $g=d$.
+Use $a=xy$, $b=\sin z$, $c=y^2$ and $d=a+b+c$, with scalar output $g=d$.
 
 ### Forward pass
 
-At $(1,2,0)$,
+At $(x,y,z)=(1,2,0)$, the intermediate values are
 
-$$
-a=2,
-\qquad
-b=0,
-\qquad
-c=4,
-\qquad
-d=6
-$$
+$$a=2
+  \qquad b=0
+  \qquad c=4
+  \qquad d=6$$
 
 ### Backward pass
 
-Initialize all adjoints to zero before setting the output seed.
+Initialize all adjoints to zero, then set $\bar d=1$. Since $d=a+b+c$, this gives
 
-Start with
+$$\bar a=1
+  \qquad \bar b=1
+  \qquad \bar c=1$$
 
-$$
-\bar d=1
-$$
+Apply the local backward rules:
 
-Since
+-   **From $a=xy$:**
+    $$\bar x\mathrel{+}=\bar a\,y=2
+        \qquad
+        \bar y\mathrel{+}=\bar a\,x=1$$
+-   **From $b=\sin z$:**
+    $$\bar z\mathrel{+}=\bar b\cos z=1$$
+-   **From $c=y^2$:**
+    $$\bar y\mathrel{+}=\bar c\,2y=4$$
 
-$$
-d=a+b+c
-$$
+The adjoint of $y$ receives contributions through both $xy$ and $y^2$, so $\bar y=1+4=5$. Thus
 
-we obtain
+$$\nabla g(1,2,0)=\begin{pmatrix}\bar x\\\bar y\\\bar z\end{pmatrix}
+  =\begin{pmatrix}2\\5\\1\end{pmatrix}$$
 
-$$
-\bar a=1,
-\qquad
-\bar b=1,
-\qquad
-\bar c=1
-$$
+This agrees with the gradient in Exercise 1.2.
 
-From
+## Solution 2.3 - Three inputs, two outputs {#solution-2.3---three-inputs-two-outputs needspace="8"}
 
-$$
-a=xy
-$$
+Use the computation graph defined by
 
-we get
+$$\begin{split}
+    a &= xy \\
+    b &= x^2 \\
+    c &= \sin y \\
+    d &= z^2 \\
+    h_1 &= a+z \\
+    h_2 &= b+c-d
+  \end{split}$$
 
-$$
-\bar x \mathrel{+}= \bar a\,y = 2
-$$
+At $(x,y,z)=(1,0,1)$, the forward pass gives
 
-and
+$$a=0
+  \qquad b=1
+  \qquad c=0
+  \qquad d=1
+  \qquad h_1=1
+  \qquad h_2=0$$
 
-$$
-\bar y \mathrel{+}= \bar a\,x = 1
-$$
+Each reverse sweep starts with **all adjoints reset to zero**. Then assign the two output adjoints from the chosen seed.
 
-From
+### First output seed
 
-$$
-b=\sin z
-$$
+For $\mathbf w_1=(1,0)^T$, set $\bar h_1=1$ and $\bar h_2=0$. The operation $h_1=a+z$ gives
 
-we obtain
+$$\bar a\mathrel{+}=\bar h_1=1
+  \qquad
+  \bar z\mathrel{+}=\bar h_1=1$$
 
-$$
-\bar z \mathrel{+}= \bar b\cos z = 1
-$$
+The second output contributes nothing. Propagating through $a=xy$ gives
 
-From
+$$\bar x\mathrel{+}=\bar a\,y=0
+  \qquad
+  \bar y\mathrel{+}=\bar a\,x=1$$
 
-$$
-c=y^2
-$$
+Hence the input adjoints are
 
-we obtain another contribution to $y$:
+$$J_{\mathbf h}^T\mathbf w_1=\begin{pmatrix}\bar x\\\bar y\\\bar z\end{pmatrix}
+  =\begin{pmatrix}0\\1\\1\end{pmatrix}$$
 
-$$
-\bar y \mathrel{+}= \bar c\,2y = 4
-$$
+This is the first Jacobian row, written as a column vector.
 
-Therefore
+### Second output seed
 
-$$
-\bar y=1+4=5
-$$
+Reset all adjoints, then use $\mathbf w_2=(0,1)^T$, so $\bar h_1=0$ and $\bar h_2=1$. From $h_2=b+c-d$ we obtain
 
-The final gradient is
+$$\bar b=1
+  \qquad \bar c=1
+  \qquad \bar d=-1$$
 
-$$
-\nabla g(1,2,0) =
-\begin{pmatrix}
-    2\\5\\1
-\end{pmatrix}
-$$
+The first output contributes nothing. Propagate through the three elementary operations:
 
-The adjoint of $y$ gets two contributions because $y$ influences the output through both
-
-$$
-xy
-$$
-
-and
-
-$$
-y^2
-$$
-
-Reverse mode must accumulate both paths.
-
-This agrees with the gradient obtained in Exercise 1.2.
-
----
-
-## Solution 2.3 - Three inputs, two outputs
-
-The two outputs are
-
-$$
-h_1=xy+z
-$$
-
-and
-
-$$
-h_2=x^2+\sin y-z^2
-$$
-
-At $(1,0,1)$,
-
-$$
-\mathbf h(1,0,1) = \begin{pmatrix}1\\0\end{pmatrix}
-$$
-
-### Reverse sweep from $h_1$
-
-Use output seed
-
-$$
-\mathbf w_1 = \begin{pmatrix}1\\0\end{pmatrix}
-$$
-
-Only $h_1$ contributes.
-
-Since
-
-$$
-h_1=xy+z
-$$
-
-we have
-
-$$
-\frac{\partial h_1}{\partial x}=y=0
-$$
-
-$$
-\frac{\partial h_1}{\partial y}=x=1
-$$
-
-$$
-\frac{\partial h_1}{\partial z}=1
-$$
+$$\begin{split}
+    \bar x &\mathrel{+}=\bar b\,2x=2 \\
+    \bar y &\mathrel{+}=\bar c\cos y=1 \\
+    \bar z &\mathrel{+}=\bar d\,2z=-2
+  \end{split}$$
 
 Thus
 
-$$
-J_{\mathbf h}^T\mathbf w_1 =
-\begin{pmatrix}
-0\\1\\1
-\end{pmatrix}
-$$
+$$J_{\mathbf h}^T\mathbf w_2=\begin{pmatrix}2\\1\\-2\end{pmatrix}$$
 
-This is the first row of the Jacobian, written as a column vector.
+Putting the two rows together gives the complete Jacobian
 
-### Reverse sweep from $h_2$
-
-Use
-
-$$
-\mathbf w_2 = \begin{pmatrix}0\\1\end{pmatrix}.
-$$
-
-Since
-
-$$
-h_2=x^2+\sin y-z^2
-$$
-
-we obtain
-
-$$
-\frac{\partial h_2}{\partial x}=2x=2
-$$
-
-$$
-\frac{\partial h_2}{\partial y}=\cos y=1
-$$
-
-$$
-\frac{\partial h_2}{\partial z}=-2z=-2
-$$
-
-Therefore
-
-$$
-J_{\mathbf h}^T\mathbf w_2 =
-\begin{pmatrix}
-2\\1\\-2
-\end{pmatrix}
-$$
-
-Putting the two rows together gives
-
-$$
-J_{\mathbf h}(1,0,1)
-=
-\begin{pmatrix}
-0 & 1 & 1\\
-2 & 1 & -2
-\end{pmatrix}
-$$
+$$J_{\mathbf h}(1,0,1)=\begin{pmatrix}0&1&1\\2&1&-2\end{pmatrix}$$
 
 ### General output seed
 
-Let
+For $\mathbf w=(3,-1)^T$, combine the two previously computed results:
 
-$$
-\mathbf w = \begin{pmatrix}3\\-1\end{pmatrix}
-$$
+$$J_{\mathbf h}^T\mathbf w
+  =3\nabla h_1-\nabla h_2
+  =3\begin{pmatrix}0\\1\\1\end{pmatrix}
+   -\begin{pmatrix}2\\1\\-2\end{pmatrix}
+  =\begin{pmatrix}-2\\2\\5\end{pmatrix}$$
 
-Then
+------------------------------------------------------------------------
 
-$$
-J_{\mathbf h}^T\mathbf w = 3\nabla h_1-\nabla h_2
-$$
+# Solutions - Short conceptual questions {#solutions---short-conceptual-questions needspace="8"}
 
-Therefore
+1.  With $\varepsilon^2=0$, all terms of second and higher order in $\varepsilon$ vanish. The first-order term remains:
+    $$f(x+\dot x\varepsilon)=f(x)+f'(x)\dot x\varepsilon$$
 
-$$
-J_{\mathbf h}^T\mathbf w = 3 \begin{pmatrix}0\\1\\1\end{pmatrix} - \begin{pmatrix}2\\1\\-2\end{pmatrix} = \begin{pmatrix}-2\\2\\5\end{pmatrix}
-$$
+    The coefficient of $\varepsilon$ therefore follows the derivative rules, including the chain rule for compositions.
+2.  For $f:\mathbb R^{100}\to\mathbb R$, forward mode needs **100 basis-direction sweeps**. Reverse mode needs **one reverse sweep** after a forward pass, because the output is scalar.
+3.  For $f:\mathbb R\to\mathbb R^{100}$, **one forward sweep** gives the full single Jacobian column, containing all 100 derivatives with respect to the one input. Forward mode is the natural choice.
+4.  The adjoint of an intermediate variable $v$ is
 
-Hence
+    ::: numbered
+    $$\bar v=\frac{\partial L}{\partial v}$$
+    :::
 
-$$
-J_{\mathbf h}^T\mathbf w = \begin{pmatrix}-2\\2\\5\end{pmatrix}
-$$
+    It measures the sensitivity of the chosen scalar output $L$ to that variable.
+5.  A variable can influence the output through several paths. Each path contributes to the total derivative, so reverse mode must **accumulate all contributions** to its adjoint.
 
----
+# Forward mode versus reverse mode {#forward-mode-versus-reverse-mode needspace="20"}
 
-# Solutions - Conceptual questions
+For $f:\mathbb R^n\to\mathbb R^m$ with $J\in\mathbb R^{m\times n}$, the two modes efficiently compute different Jacobian products:
 
-## Solution 1
+::: center
+::: {.course-table columns="@{}p{0.18\\textwidth}p{0.25\\textwidth}p{0.18\\textwidth}p{0.27\\textwidth}@{}" font-size="normal" tabcolsep="6pt"}
+| Mode    | Seed                                      | One sweep      | Full Jacobian    |
+|:--------|:------------------------------------------|:---------------|:-----------------|
+| Forward | Input direction $\mathbf v\in\mathbb R^n$  | $J\mathbf v$   | $n$ basis sweeps |
+| Reverse | Output direction $\mathbf w\in\mathbb R^m$ | $J^T\mathbf w$ | $m$ basis sweeps |
+:::
+:::
 
-When arithmetic is expanded with
+-   **Few inputs, many outputs:** forward mode is often attractive.
+-   **Many inputs, few outputs:** reverse mode is often attractive.
+-   **Many parameters, one scalar loss:** reverse mode is especially attractive, as in neural-network training.
 
-$$
-\varepsilon^2=0
-$$
-
-all terms of second and higher order in $\varepsilon$ vanish. What remains is exactly the first-order term of the function expansion:
-
-$$
-f(x+\dot x\varepsilon) = f(x)+f'(x)\dot x\varepsilon
-$$
-
-Therefore the coefficient of $\varepsilon$ follows the chain rule automatically.
-
-## Solution 2
-
-For
-
-$$
-f:\mathbb R^{100}\to\mathbb R
-$$
-
-the full gradient has 100 input derivatives.
-
-Forward mode needs 100 basis-direction sweeps.
-
-Reverse mode needs only one reverse sweep because the output is scalar.
-
-## Solution 3
-
-For
-
-$$
-f:\mathbb R\to\mathbb R^{100}
-$$
-
-there is only one input direction. One forward sweep gives the complete single Jacobian column, i.e. all 100 output derivatives with respect to the one input.
-
-Forward mode is therefore the natural choice.
-
-## Solution 4
-
-The adjoint of an intermediate variable $v$ is
-
-$$
-\bar v=\frac{\partial L}{\partial v}
-$$
-
-where $L$ is the final scalar output being differentiated.
-
-It measures how sensitive the final output is to a change in that intermediate variable.
-
-## Solution 5
-
-A variable may influence the output through several different paths in the computational graph. Each path contributes to the total derivative. Reverse mode must therefore add all contributions to the variable's adjoint.
-
-## Forward mode versus reverse mode
-
-The most important distinction is not that one method is "better" than the other. They compute different Jacobian products efficiently.
-
-For
-
-$$
-f:\mathbb R^n\to\mathbb R^m
-$$
-
-with Jacobian
-
-$$
-J\in\mathbb R^{m\times n}
-$$
-
-we have:
-
-| Mode | Seed | One sweep computes | Full Jacobian requires |
-|---|---|---|---|
-| Forward mode | input direction $\mathbf v\in\mathbb R^n$ | $J\mathbf v$ | $n$ basis sweeps |
-| Reverse mode | output direction $\mathbf w\in\mathbb R^m$ | $J^T\mathbf w$ | $m$ basis sweeps |
-
-This gives an important rule of thumb:
-
-- **Few inputs, many outputs:** forward mode is often attractive.
-- **Many inputs, few outputs:** reverse mode is often attractive.
-- **Many parameters, one scalar loss:** reverse mode is especially attractive.
-
-That last case is exactly the situation encountered when training neural networks.
-
-A reverse sweep requires a preceding forward pass to obtain the intermediate values. The sweep counts above refer to one seed direction per sweep.
+A reverse sweep requires a preceding forward pass to obtain the intermediate values. The counts above refer to one seed direction per sweep.

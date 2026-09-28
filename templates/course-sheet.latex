@@ -1,7 +1,27 @@
 $if(solutions)$
 \def\solutions{1}
 $endif$
+% Editorial and mathematical typesetting rules: templates/attendance-style.md
+\PassOptionsToClass{a4paper}{article}
+% Find shared files both from the sheet folder (VS Code) and the repo root.
+\makeatletter
+\def\input@path{{./}{../}}
+\makeatother
 \documentclass{course_sheet}
+\graphicspath{{./}{../}}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{needspace}
+% Part titles and subsection/exercise numbers are written explicitly.
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.2em}
+\raggedbottom
+\renewcommand{\arraystretch}{1.2}
+$if(tikz)$
+\usepackage{tikz}
+$endif$
 \input{2026-SoSe.tex}
 $if(published)$
 \published{$published$}
@@ -15,7 +35,7 @@ $endif$
 % \title/\author/\date must be (re)issued after \documentclass so that
 % course_sheet.cls's own \maketitle picks up the real sheet title instead of
 % its generic "Exercise sheet \sheetname" placeholder.
-\title{$title$}
+\title{\\$title$}
 \author{}
 \date{}
 

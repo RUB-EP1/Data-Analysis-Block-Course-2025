@@ -1,343 +1,103 @@
-# Teacher Answer Key: Regularization of Neural Networks
-
-## Part 1 — Predictions and classification
-
-Using the threshold $\hat y\geq0.5$:
-
-* Class 1: images **1, 3, 5, 8**
-* Class 0: images **2, 4, 6, 7, 9, 10**
-* Incorrect: **image 10 only**
-
-Accuracy:
-
-$$
-\frac{9}{10}=\boxed{90\%}
-$$
-
-Accuracy alone does not capture prediction confidence, so it cannot fully characterize model performance or overtraining.
-
+---
+title: "Adaptive Moment Estimation (Adam) - Solutions"
+published: "29 September 2026"
 ---
 
-## Part 2 — Binary cross-entropy
-
-$$
-L=-[y\log(\hat y)+(1-y)\log(1-\hat y)]
-$$
-
-| Case | $y$ | $\hat y$ |       BCE |
-| :--- | ----: | ---------: | --------: |
-| A    |     1 |       0.90 | **0.105** |
-| B    |     1 |       0.51 | **0.673** |
-| C    |     0 |       0.10 | **0.105** |
-| D    |     0 |       0.90 | **2.303** |
-
-* Lowest loss: **A and C**
-* Highest loss: **D**
-* Confidently wrong predictions receive a very large penalty.
-* BCE incorporates **prediction confidence**, unlike accuracy.
-
----
-
-## Part 3 — Average BCE
-
-Approximate individual losses:
-
-| Example | $y$ | $\hat y$ |   BCE |
-| :-----: | ----: | ---------: | ----: |
-|    1    |     1 |       0.90 | 0.105 |
-|    2    |     0 |       0.10 | 0.105 |
-|    3    |     1 |       0.80 | 0.223 |
-|    4    |     0 |       0.30 | 0.357 |
-|    5    |     1 |       0.60 | 0.511 |
-
-Average:
-
-$$
-\frac{0.105+0.105+0.223+0.357+0.511}{5}
-\approx\boxed{0.260}
-$$
-
-Example 5 contributes the most because its prediction is only moderately confident despite being correct.
-
----
-
-## Part 4 — Training versus validation
-
-Validation BCE reaches its minimum:
-
-$$
-\boxed{0.31\text{ at epoch 6}}
-$$
-
-After epoch 6:
-
-* Training BCE continues decreasing.
-* Validation BCE increases.
-* The model continues fitting the training data but becomes worse on unseen data.
-
-This is evidence of **overtraining/overfitting**.
-
-A reasonable stopping point is approximately:
-
-$$
-\boxed{\text{Epoch 6}}
-$$
-
----
-
-## Part 5 — What is overtraining?
-
-Expected answers:
-
-* Training loss can decrease while validation loss increases because the network begins fitting training-specific details.
-* The network may learn noise or accidental patterns rather than general features.
-* Very low training BCE does not guarantee good generalization.
-* Training should be stopped around the point of minimum validation loss.
-* Continuing training would likely increase the generalization gap and worsen performance on unseen data.
-
----
-
-## Part 6 — Generalization gap
-
-$$
-\text{Gap}=L_{\text{validation}}-L_{\text{training}}
-$$
-
-| Epoch | Training BCE | Validation BCE |      Gap |
-| ----: | -----------: | -------------: | -------: |
-|     3 |         0.43 |           0.47 | **0.04** |
-|     5 |         0.27 |           0.34 | **0.07** |
-|     7 |         0.14 |           0.32 | **0.18** |
-|    10 |         0.02 |           0.50 | **0.48** |
-
-The gap grows substantially as overtraining occurs.
-
-A large positive gap indicates that the model performs much better on training data than validation data, which is evidence of poor generalization.
-
----
-
-## Part 7 — Recognizing overtraining from graphs
-
-* Training curve: continually decreasing curve.
-* Validation curve: initially decreasing, then increasing.
-* Overtraining begins around the point where validation BCE reaches its minimum and starts rising.
-* Stop training based on validation performance rather than training loss alone.
-
----
-
-## Part 8 — Dropout
-
-Dropout randomly disables neurons during training.
-
-Purpose:
-
-* Prevent excessive dependence on particular neurons.
-* Encourage more distributed/robust representations.
-* Reduce overfitting.
-
-Too little dropout may have little regularization effect.
-
-Too much dropout can make learning difficult and cause underfitting.
-
----
-
-## Part 9 — Dropout calculation
-
-20 neurons with:
-
-$$
-p=0.3
-$$
-
-Expected neurons dropped:
-
-$$
-20(0.3)=\boxed{6}
-$$
-
-Expected active neurons:
-
-$$
-20-6=\boxed{14}
-$$
-
-A new random set of neurons is normally dropped at the next training step.
-
-With $p=0.7$:
-
-$$
-20(0.7)=\boxed{14}
-$$
-
-would be dropped on average, leaving approximately **6 active**.
-
----
-
-## Part 10 — Comparing networks
-
-At epoch 8:
-
-### Network A
-
-$$
-L_{\text{train}}=0.02,\qquad
-L_{\text{validation}}=0.48
-$$
-
-$$
-\text{Gap}=0.48-0.02=\boxed{0.46}
-$$
-
-### Network B
-
-$$
-L_{\text{train}}=0.25,\qquad
-L_{\text{validation}}=0.35
-$$
-
-$$
-\text{Gap}=0.35-0.25=\boxed{0.10}
-$$
-
-|                    | Network A | Network B |
-| :----------------- | --------: | --------: |
-| Training BCE       |  **0.02** |      0.25 |
-| Validation BCE     |      0.48 |  **0.35** |
-| Generalization gap |      0.46 |  **0.10** |
-
-Network A has the lower training loss but substantially worse validation performance and a much larger gap.
-
-Network B's higher training loss is consistent with the regularizing effect of dropout.
-
----
-
-## Part 11 — Early stopping
-
-* Early stopping terminates training when validation performance stops improving.
-* In Part 4, stop around **epoch 6**.
-* Continuing beyond epoch 6 increases validation BCE.
-* Dropout changes how the network learns; early stopping changes **when training stops**.
-* Both techniques can be used together.
-
----
-
-## Part 12 — Interpreting different models
-
-### Model A
-
-$$
-0.62-0.60=\boxed{0.02}
-$$
-
-Both losses are relatively high → **underfitting**.
-
-### Model B
-
-$$
-0.23-0.20=\boxed{0.03}
-$$
-
-Low and similar losses → **good generalization** in this simplified example.
-
-### Model C
-
-$$
-0.45-0.01=\boxed{0.44}
-$$
-
-Very large gap → **strong evidence of overfitting**.
-
-Model C's extremely low training BCE is misleading because its validation loss is much higher.
-
----
-
-## Part 13 — Practical regularization problem
-
-| Model | Dropout | Training BCE | Validation BCE | Generalization gap |
-| :---- | ------: | -----------: | -------------: | -----------------: |
-| A     |     0.0 |         0.03 |           0.45 |           **0.42** |
-| B     |     0.2 |         0.12 |           0.28 |           **0.16** |
-| C     |     0.5 |         0.25 |           0.30 |           **0.05** |
-| D     |     0.8 |         0.50 |           0.49 |          **-0.01** |
-
-Interpretation:
-
-* **A:** strong evidence of overfitting.
-* **B/C:** regularization reduces the gap.
-* **D:** very high dropout makes the training problem substantially harder and may indicate underfitting.
-* Regularization involves balancing fitting the training data with maintaining good generalization.
-
----
-
-## Part 14 — Final challenge
-
-### Early training
-
-Both training and validation BCE decrease:
-
-$$
-L_{\text{train}}\downarrow,
-\qquad
-L_{\text{validation}}\downarrow
-$$
-
-The network is learning useful patterns.
-
-### Later training
-
-$$
-L_{\text{train}}\downarrow,
-\qquad
-L_{\text{validation}}\uparrow
-$$
-
-The network is increasingly fitting training-specific information.
-
-### Generalization gap
-
-The gap generally increases:
-
-$$
-L_{\text{validation}}-L_{\text{training}}\uparrow
-$$
-
-### Remedies
-
-**Early stopping:** stop around the minimum validation loss.
-
-**Dropout:** randomly disable neurons during training to reduce reliance on specific internal representations.
-
-Dropout can increase training BCE while improving validation performance. This is acceptable because the objective is **generalization**, not the lowest possible training loss.
-
----
-
-# Summary answers
-
-| Statement                               | Answer                                 |
-| :-------------------------------------- | :------------------------------------- |
-| BCE compares true labels with predicted | **probabilities**                      |
-| During overtraining, training loss      | **decreases**                          |
-| During overtraining, validation loss    | **increases**                          |
-| Generalization gap                      | **Validation loss - Training loss**    |
-| Large positive gap can indicate         | **overfitting**                        |
-| Dropout randomly                        | **disables/drops neurons**             |
-| Dropout is a form of                    | **regularization**                     |
-| Early stopping prevents                 | **continued overtraining**             |
-| Final objective                         | **Good generalization to unseen data** |
-
-## Central teaching point
-
-The key pattern students should recognize is:
-
-$$
-\boxed{
-\underbrace{L_{\text{training}}\downarrow}_{\text{model keeps fitting training data}}
-\qquad
-\underbrace{L_{\text{validation}}\uparrow}_{\text{generalization gets worse}}
-}
-$$
-
-This divergence is the central signal of **overtraining/overfitting** in this exercise.
-
-Dropout and early stopping are two different tools that can help address it.
-
+Use $f(x)=(x-3)^2$, $x_0=m_0=v_0=0$, $\alpha=0.1$, $\beta_1=0.9$, $\beta_2=0.999$ and $\epsilon=10^{-8}$. All iterations below carry the unrounded values forward. Displayed decimals are rounded; the positive $\epsilon$ is retained in the updates.
+
+# Solution 1 - Iteration 1
+
+1.  **Gradient.** $g_1=2(0-3)=-6$.
+2.  **First moment.** $m_1=0.9(0)+0.1(-6)=-0.6$.
+3.  **Second moment.** $v_1=0.999(0)+0.001(-6)^2=0.036$.
+4.  **Bias correction.** The initial shrinkage is removed:
+    $$\hat m_1=\frac{-0.6}{0.1}=-6\qquad
+      \hat v_1=\frac{0.036}{0.001}=36$$
+5.  **Parameter update.** The negative gradient makes $x$ increase:
+    $$x_1=0-0.1\frac{-6}{6+10^{-8}}\approx0.099999999833$$
+
+To six decimals, $x_1\approx0.100000$. It is slightly smaller than 0.1 because $\epsilon>0$. Ordinary gradient descent at the same learning rate would instead give $x_1=0-0.1(-6)=0.6$; Adam rescales the gradient using its moment estimates.
+
+# Solution 2 - Iteration 2
+
+The gradient is evaluated at the updated parameter $x_1$. The moment estimates retain their previous values:
+
+$$\begin{split}
+g_2&=2(x_1-3)\approx-5.800000000333\\
+m_2&=0.9(-0.6)+0.1g_2\approx-1.120000000033\\
+v_2&=0.999(0.036)+0.001g_2^2\approx0.069604000004
+\end{split}$$
+
+The correction denominators are $1-0.9^2=0.19$ and $1-0.999^2=0.001999$:
+
+$$\begin{split}
+\hat m_2&=\frac{m_2}{0.19}\approx-5.894736842281\\
+\hat v_2&=\frac{v_2}{0.001999}\approx34.819409706787\\
+x_2&=x_1-0.1\frac{\hat m_2}{\sqrt{\hat v_2}+10^{-8}}\approx0.199897292585
+\end{split}$$
+
+Both corrected moments reflect the gradient history; $\hat m_2$ need not equal the current gradient $g_2$.
+
+# Solution 3 - Iteration 3
+
+Starting with $x_2\approx0.199897292585$:
+
+$$\begin{split}
+g_3&=2(x_2-3)\approx-5.600205414830\\
+m_3&=0.9m_2+0.1g_3\approx-1.568020541513\\
+v_3&=0.999v_2+0.001g_3^2\approx0.100896696692
+\end{split}$$
+
+Now $1-0.9^3=0.271$ and $1-0.999^3=0.002997001$, so
+
+$$\begin{split}
+\hat m_3&=\frac{m_3}{0.271}\approx-5.786053658719\\
+\hat v_3&=\frac{v_3}{0.002997001}\approx33.665886895650\\
+x_3&=x_2-0.1\frac{\hat m_3}{\sqrt{\hat v_3}+10^{-8}}\approx0.299618476549
+\end{split}$$
+
+The completed results, rounded to six decimal places, are:
+
+::: center
+::: {.course-table columns="@{}p{0.234\\linewidth}p{0.234\\linewidth}p{0.234\\linewidth}p{0.234\\linewidth}@{}" font-size="normal" tabcolsep="3pt"}
+| Quantity           | Iteration 1 | Iteration 2 | Iteration 3 |
+|:-------------------|:------------|:------------|:------------|
+| Previous $x_{t-1}$ | 0.000000    | 0.100000    | 0.199897    |
+| $g_t$              | -6.000000   | -5.800000   | -5.600205   |
+| $m_t$              | -0.600000   | -1.120000   | -1.568021   |
+| $v_t$              | 0.036000    | 0.069604    | 0.100897    |
+| $\hat m_t$         | -6.000000   | -5.894737   | -5.786054   |
+| $\hat v_t$         | 36.000000   | 34.819410   | 33.665887   |
+| Updated $x_t$      | 0.100000    | 0.199897    | 0.299618    |
+:::
+:::
+
+As a check, the objective decreases from $f(x_0)=9$ to approximately $8.410000$, $7.840575$ and $7.292060$. The three iterates move toward the minimum at 3. These three steps illustrate the update; they do not establish a general convergence guarantee for Adam.
+
+# Solutions - Conceptual questions
+
+1.  **Answer b: exponentially weighted moving average of the gradients.** Recent gradients receive more weight than older ones. The signed first moment smooths the direction of the update and retains information from preceding iterations.
+2.  **Answer b: exponentially weighted moving average of the squared gradients.** This is a second **raw** moment, not a variance: it does not subtract the squared mean. It records gradient magnitude without cancellation between positive and negative gradients.
+3.  Squaring makes both signs contribute positively and gives large gradient magnitudes a larger contribution to $v_t$. For a fixed numerator, a larger $\sqrt{\hat v_t}+\epsilon$ reduces the magnitude of the update. The actual update depends on the numerator as well, so a large current gradient does not automatically imply a smaller step. In the first iteration, ignoring $\epsilon$, the normalized direction is $g_1/|g_1|$ for $g_1\neq0$.
+4.  Starting at zero makes the early uncorrected moving averages too small in magnitude for a constant gradient. Expanding the recurrences gives
+    $$\begin{split}
+      m_t&=(1-\beta_1)\sum_{k=1}^t\beta_1^{t-k}g_k\\
+      v_t&=(1-\beta_2)\sum_{k=1}^t\beta_2^{t-k}g_k^2
+      \end{split}$$
+
+    Their weights sum to $1-\beta_1^t$ and $1-\beta_2^t$. Dividing by these sums removes the effect of the zero initialization. For a constant gradient $g$, the corrected values are exactly $g$ and $g^2$. For a changing gradient, they remain weighted averages of the history, rather than exact values of the current gradient and its square.
+
+# Key concepts
+
+::: center
+::: {.course-table columns="@{}p{0.328\\linewidth}p{0.638\\linewidth}@{}" font-size="normal" tabcolsep="3pt"}
+| Concept             | Meaning                                                  |
+|:-----------------------|:---------------------------------------------|
+| Gradient evaluation | Use $x_{t-1}$ before updating the parameter              |
+| First moment        | Smoothed signed gradient                                 |
+| Second raw moment   | Smoothed squared gradient                                |
+| Bias correction     | Normalize the finite history's exponential weights       |
+| Adaptive rescaling  | Divide the first moment by the square root of the second |
+| Stabilizer          | Add $\epsilon$ outside the square root                   |
+:::
+:::

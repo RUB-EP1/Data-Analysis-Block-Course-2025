@@ -8,7 +8,6 @@ on:
 jobs:
   compile-latex:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -16,130 +15,31 @@ jobs:
       - name: Install Pandoc and TeX Live
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
-            pandoc \
-            latexmk \
-            texlive-full
+          sudo apt-get install -y python3 pandoc latexmk texlive-latex-extra texlive-fonts-recommended texlive-pictures lmodern
 
-      - name: Render attendance sheets from Markdown to LaTeX
-        shell: bash
-        run: |
-          set -euo pipefail
+      - name: Check Markdown conversion
+        run: python3 scripts/test_render_tex.py
 
-          # attendance_exercises/*.md and attendance_solutions/*.md are the
-          # source of truth; scripts/render_tex.sh regenerates the matching
-          # .tex from each via pandoc + templates/course-sheet.latex, so the
-          # committed .tex files (removed from the repo) never drift out of
-          # sync with the Markdown. See attendance_solutions/5_neural_network_solution.tex
-          # for the one known exception (no .md source yet).
-          shopt -s nullglob
-          md_files=(attendance_exercises/*.md attendance_solutions/*.md)
-
-          if [ "${#md_files[@]}" -eq 0 ]; then
-            echo "No attendance Markdown files found."
-            exit 0
-          fi
-
-          for md_file in "${md_files[@]}"; do
-            scripts/render_tex.sh "$md_file"
-          done
-
-      - name: Find and compile all LaTeX files
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          mkdir -p build
-
-          # course_sheet.cls (and the 2026-SoSe.tex/course-info.tex it loads)
-          # is shared by every sheet directory, but not colocated with all of
-          # them, and has already moved once (attendance_exercises/ -> repo
-          # root). Locate it dynamically so a future move doesn't silently
-          # break this lookup again.
-          class_dir="$(dirname "$(find . -maxdepth 2 -name 'course_sheet.cls' -not -path './.git/*' | head -n1)")"
-          if [ -z "$class_dir" ] || [ ! -f "$class_dir/course_sheet.cls" ]; then
-            echo "course_sheet.cls not found anywhere under the repo (searched 2 levels deep)." >&2
-            exit 1
-          fi
-          echo "Found course_sheet.cls in: $class_dir"
-          export TEXINPUTS="$(pwd)/$class_dir:${TEXINPUTS:-}"
-
-          mapfile -d '' tex_files < <(
-            find . \
-              -type f \
-              -name '*.tex' \
-              -not -path './.git/*' \
-              -not -name '2026-SoSe.tex' \
-              -not -name 'course-info.tex' \
-              -print0
-          )
-
-          if [ "${#tex_files[@]}" -eq 0 ]; then
-            echo "No LaTeX files found."
-            exit 0
-          fi
-
-          failed=0
-
-          for tex_file in "${tex_files[@]}"; do
-            echo ""
-            echo "========================================"
-            echo "Compiling: $tex_file"
-            echo "========================================"
-
-            # Remove leading "./"
-            relative="${tex_file#./}"
-
-            # Put each document's output in its own directory.
-            output_dir="$(pwd)/build/$(dirname "$relative")"
-            mkdir -p "$output_dir"
-
-            # No -cd here: course_sheet.cls hardcodes its logo paths as
-            # ./img/... (relative to the repo root, where the .cls itself
-            # now lives), not relative to each sheet's own directory. Compile
-            # with cwd fixed at the repo root instead, using the tex file's
-            # path relative to it; TEXINPUTS (above) covers finding the class
-            # itself regardless of where a sheet's .tex lives.
-            # xelatex: handles UTF-8 content (e.g. arrows, em dashes) in the
-            # Markdown sources without extra LaTeX-side font packages.
-            if latexmk \
-              -xelatex \
-              -interaction=nonstopmode \
-              -halt-on-error \
-              -outdir="$output_dir" \
-              "$tex_file"; then
-
-              echo "Successfully compiled: $tex_file"
-            else
-              echo "Failed to compile: $tex_file"
-              failed=1
-            fi
-          done
-
-          exit "$failed"
-
-      - name: List generated PDFs
-        if: always()
-        run: |
-          echo "Generated PDFs:"
-          find build -type f -name '*.pdf' -print
+      - name: Render and compile all active Markdown sheets
+        run: python3 scripts/build_attendance.py
 
       - name: Upload compiled PDFs
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: exercise-sheet-pdfs
-          path: build/**/*.pdf
-          if-no-files-found: warn
+          path: |
+            build/attendance_exercises/*.pdf
+            build/attendance_solutions/*.pdf
+          if-no-files-found: error
 
-      - name: Upload compilation logs
+      - name: Upload generated LaTeX and compilation logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: latex-build-logs
           path: |
-            build/**/*.log
-            build/**/*.aux
-            build/**/*.fls
-            build/**/*.fdb_latexmk
+            build/tex/**/*.tex
+            build/attendance_exercises/*.log
+            build/attendance_solutions/*.log
           if-no-files-found: ignore

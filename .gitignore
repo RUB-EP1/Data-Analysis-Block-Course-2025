@@ -1,15 +1,8 @@
-# attendance_exercises/*.md and attendance_solutions/*.md are the source of
-# truth for the exercise sheets; the corresponding .tex is regenerated from
-# them by scripts/render_tex.sh (see .github/workflows/latex.yml) and should
-# not be committed, to avoid drifting out of sync with the .md content.
-# course_sheet.cls, course-info.tex and 2026-SoSe.tex are hand-maintained and
-# don't start with a digit, so they are unaffected by this pattern.
-# attendance_solutions/5_neural_network_solution.tex is a known exception:
-# it currently has no corresponding .md source and is kept as committed,
-# hand-maintained LaTeX until that is resolved.
+# Markdown is authoritative. TeX previews are regenerated on every render.
 attendance_exercises/[0-9]*.tex
 attendance_solutions/[0-9]*.tex
-!attendance_solutions/5_neural_network_solution.tex
+attendance_exercises/[0-9]*.pdf
+attendance_solutions/[0-9]*.pdf
 
 # LaTeX build byproducts, in case anyone compiles locally without -outdir.
 *.aux
@@ -20,3 +13,6 @@ attendance_solutions/[0-9]*.tex
 
 # Generated PDFs and LaTeX build files.
 build/
+
+# Python build helpers.
+__pycache__/

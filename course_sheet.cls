@@ -150,7 +150,7 @@
         \end{tabular*}\\[0.5em]
 
         % Main header section with logos and course info
-        \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lccr}
+        \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}l@{}c@{}r@{}}
             % Left: agmikhasenko logo
             \begin{minipage}[c]{0.22\textwidth}
                 \centering
