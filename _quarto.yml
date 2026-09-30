@@ -23,6 +23,7 @@ project:
 
 website:
   title: "Statistics & Machine Learning"
+  favicon: site/favicon.png
   site-url: https://rub-ep1.github.io/Data-Analysis-Block-Course-2025/
   repo-url: https://github.com/RUB-EP1/Data-Analysis-Block-Course-2025
   page-footer:

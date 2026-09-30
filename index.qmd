@@ -18,6 +18,9 @@ listing:
 ---
 
 ::: {.hero}
+![](site/course-logo.jpg){.hero-logo fig-alt="Stat & ML course logo"}
+
+::: {.hero-copy}
 [Data Analysis Block Course · 21 Sep – 2 Oct 2026]{.hero-kicker}
 
 # Statistics & Machine Learning {.hero-title}
@@ -33,14 +36,38 @@ week 2 covers machine learning, from automatic differentiation to transformers a
 :::
 :::
 
+```{=html}
+<div class="hero-group">
+  <img src="site/ep1-logo.png" alt="EP1 group logo" width="46" height="46">
+  <span class="group-name">Mikhasenko group<br>Experimental Physics I · Ruhr-Universität Bochum</span>
+</div>
+```
+:::
+
+## Statistics {.section-title}
+
+```{=html}
+<article class="course-card stats-card">
+  <a class="card-head" href="https://indico.global/event/18022/">
+    <span class="card-tag">Week 1 · Mon 21 – Thu 24 Sep</span>
+    <h3 class="card-title">Statistical Data Analysis</h3>
+    <p class="card-meta"><span>Instructor: Michael Schmelling</span><span>Tutor: Lorenzo Nisi</span></p>
+    <p class="card-text">Probability, error propagation, confidence intervals, least squares,
+    maximum likelihood, bootstrap, MCMC, sWeights and unfolding, with exercises every day.
+    Slides, exercises and the schedule are on Indico.</p>
+  </a>
+  <div class="card-actions">
+    <a class="btn-main" href="https://indico.global/event/18022/">Materials on Indico →</a>
+  </div>
+</article>
+```
+
 ## Lectures {.section-title}
 
 ::: {.section-note}
-Machine-learning block, lectures by Prof. Dr. Mikhail Mikhasenko. The slides run in the
+Week 2 · Machine learning, lectures by Prof. Dr. Mikhail Mikhasenko. The slides run in the
 browser; press <kbd>F</kbd> for full screen and <kbd>Esc</kbd> for the slide overview.
 Interactive panels load when their slide is reached.
-The statistics block (21–24 Sep, M. Schmelling and L. Nisi) is on
-[Indico](https://indico.global/event/18022/).
 :::
 
 ::: {#lectures}

@@ -1,12 +1,20 @@
-/* Landing page. Palette follows the slide decks (slides/styles.css). */
+/* Landing page. RUB corporate colours:
+   https://services.ruhr-uni-bochum.de/de/rub-farben
+   Blue carries text and buttons; green (low contrast on white) is used
+   only for accents such as rules, tags and hover states. */
 :root {
-  --ink: #111418;
-  --muted: #71787f;
-  --line: #dfe3e7;
-  --accent: #007dc5;
-  --accent-soft: #e8f3fa;
+  --rub-blue: #17365c;
+  --rub-green: #8dae10;
+  --rub-grey: #e7e7e7;
+  --ink: #17365c;
+  --text: #3c3c3c;
+  --muted: #6b7280;
+  --line: #e7e7e7;
+  --accent: #17365c;
+  --accent-hover: #0f2542;
+  --accent-soft: #eef3e0;
   --card: #ffffff;
-  --page: #f6f8fa;
+  --page: #f4f4f4;
   --marimo: #1c7c54;
   --pluto: #7b4bb3;
   --site-font: "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
@@ -14,22 +22,43 @@
 
 body {
   background: var(--page);
-  color: var(--ink);
+  color: var(--text);
   font-family: var(--site-font);
 }
+a { color: var(--rub-blue); text-decoration-color: var(--rub-green); }
+a:hover { color: var(--accent-hover); }
 
 main.content { max-width: 1180px; margin: 0 auto; }
 
 /* Hero */
 .hero {
+  align-items: center;
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 20px;
+  border-top: 6px solid var(--rub-green);
+  display: grid;
+  gap: 1rem 2.2rem;
+  grid-template-columns: 190px 1fr;
   margin: 1.5rem 0 2.5rem;
-  padding: 2.5rem 2.5rem 2rem;
+  padding: 2.2rem 2.5rem 1.8rem;
 }
+.hero p.hero-logo, .hero .hero-logo { margin: 0; }
+.hero img.hero-logo, .hero .hero-logo img { display: block; height: auto; width: 190px; }
+.hero-copy { min-width: 0; }
+.hero-group {
+  align-items: center;
+  border-top: 1px solid var(--line);
+  display: flex;
+  gap: 0.8rem;
+  grid-column: 1 / -1;
+  padding-top: 1rem;
+}
+.hero-group p { margin: 0; }
+.hero-group img { height: 46px; width: 46px; }
+.group-name { color: var(--muted); font-size: 0.85rem; line-height: 1.3; }
 .hero-kicker {
-  color: var(--accent);
+  color: var(--rub-blue);
   font-size: 0.85rem;
   font-weight: 600;
   letter-spacing: 0.06em;
@@ -39,6 +68,7 @@ main.content { max-width: 1180px; margin: 0 auto; }
   border: 0;
   font-size: clamp(2rem, 5vw, 3.2rem);
   font-weight: 700;
+  color: var(--rub-blue);
   letter-spacing: -0.02em;
   margin: 0.4rem 0 0.8rem;
 }
@@ -48,6 +78,7 @@ main.content { max-width: 1180px; margin: 0 auto; }
 /* Section headings */
 h2.section-title {
   border: 0;
+  color: var(--rub-blue);
   font-size: 1.6rem;
   font-weight: 700;
   margin: 2.5rem 0 0.4rem;
@@ -79,11 +110,15 @@ kbd {
   transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
 }
 .course-card:hover {
-  border-color: var(--accent);
-  box-shadow: 0 6px 22px rgba(0, 125, 197, 0.12);
+  border-color: var(--rub-green);
+  box-shadow: 0 6px 22px rgba(23, 54, 92, 0.12);
   transform: translateY(-2px);
 }
-.course-card:target { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.course-card:target { border-color: var(--rub-green); box-shadow: 0 0 0 3px var(--accent-soft); }
+.course-card { border-top: 4px solid var(--rub-blue); }
+.exercise-card { border-top-color: var(--rub-green); }
+.stats-card { max-width: 680px; }
+.card-text { color: var(--text); font-size: 0.95rem; margin: 0.7rem 0 0; }
 
 .card-head {
   color: inherit;
@@ -93,7 +128,7 @@ kbd {
 }
 .card-head:hover { color: inherit; }
 .card-tag {
-  color: var(--accent);
+  color: var(--muted);
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -103,6 +138,7 @@ kbd {
   border: 0;
   font-size: 1.3rem;
   font-weight: 700;
+  color: var(--rub-blue);
   line-height: 1.25;
   margin: 0.3rem 0 0.5rem;
 }
@@ -131,9 +167,9 @@ kbd {
   text-decoration: none;
 }
 .btn-main { background: var(--accent); border: 1px solid var(--accent); color: #fff; }
-.btn-main:hover { background: #00669f; color: #fff; }
+.btn-main:hover { background: var(--accent-hover); border-color: var(--accent-hover); color: #fff; }
 .chip { background: var(--card); border: 1px solid var(--line); color: var(--ink); }
-.chip:hover { border-color: var(--accent); color: var(--accent); }
+.chip:hover { border-color: var(--rub-green); color: var(--rub-blue); }
 
 /* Attached notebooks */
 .materials {
@@ -165,7 +201,8 @@ kbd {
 .kind-marimo { background: #e6f4ec; color: var(--marimo); }
 .kind-pluto { background: #f1eafa; color: var(--pluto); }
 
-@media (max-width: 600px) {
-  .hero { padding: 1.6rem 1.3rem 1.4rem; }
+@media (max-width: 700px) {
+  .hero { grid-template-columns: 1fr; justify-items: start; padding: 1.6rem 1.3rem 1.4rem; }
+  .hero img.hero-logo, .hero .hero-logo img { width: 130px; }
   .materials li { flex-wrap: wrap; }
 }
