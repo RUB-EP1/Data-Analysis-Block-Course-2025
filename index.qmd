@@ -25,7 +25,7 @@ listing:
 
 # Statistics & Machine Learning {.hero-title}
 
-A hands-on block course for master students at TU Dortmund and
+A hands-on block course for master and PhD students at TU Dortmund and
 Ruhr-Universität Bochum. Week 1 covers statistical inference;
 week 2 covers machine learning, from automatic differentiation to transformers and agents.
 
