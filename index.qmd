@@ -29,7 +29,7 @@ week 2 covers machine learning, from automatic differentiation to transformers a
 ::: {.hero-links}
 [Timetable on Indico](https://indico.global/event/18022/){.btn-main}
 [Moodle](https://moodle.ruhr-uni-bochum.de/course/view.php?id=71934){.chip}
-[GitHub](https://github.com/ctoennis/Data-Analysis-Block-Course-2026){.chip}
+[GitHub](https://github.com/RUB-EP1/Data-Analysis-Block-Course-2025){.chip}
 :::
 :::
 

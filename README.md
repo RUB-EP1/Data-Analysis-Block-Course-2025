@@ -3,7 +3,7 @@
 Exercise notebooks and attendance sheets for the data analysis block course at
 TU Dortmund and Ruhr-University Bochum.
 
-- Website: https://ctoennis.github.io/Data-Analysis-Block-Course-2026/
+- Website: https://rub-ep1.github.io/Data-Analysis-Block-Course-2025/
 - Timetable: https://indico.global/event/18022/
 
 ## Website

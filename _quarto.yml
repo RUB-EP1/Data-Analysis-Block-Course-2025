@@ -23,12 +23,12 @@ project:
 
 website:
   title: "Statistics & Machine Learning"
-  site-url: https://ctoennis.github.io/Data-Analysis-Block-Course-2026/
-  repo-url: https://github.com/ctoennis/Data-Analysis-Block-Course-2026
+  site-url: https://rub-ep1.github.io/Data-Analysis-Block-Course-2025/
+  repo-url: https://github.com/RUB-EP1/Data-Analysis-Block-Course-2025
   page-footer:
     left: "Data Analysis Block Course 2026 · TU Dortmund & Ruhr-Universität Bochum"
     right:
       - text: Indico
         href: https://indico.global/event/18022/
       - text: GitHub
-        href: https://github.com/ctoennis/Data-Analysis-Block-Course-2026
+        href: https://github.com/RUB-EP1/Data-Analysis-Block-Course-2025
