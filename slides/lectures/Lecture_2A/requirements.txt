@@ -1,0 +1,6 @@
+marimo>=0.25.0
+gymnasium[classic-control]
+scikit-learn
+numpy
+matplotlib
+pillow

@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="864pt" height="518.4pt" viewBox="0 0 864 518.4" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-09-28T15:53:36.776149</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 518.4 
+L 864 518.4 
+L 864 0 
+L 0 0 
+L 0 518.4 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 62.18 482.944 
+L 847.8 482.944 
+L 847.8 36.01 
+L 62.18 36.01 
+L 62.18 482.944 
+z
+" style="fill: none"/>
+   </g>
+   <g clip-path="url(#p6306fb27c5)">
+    <image xlink:href="data:image/png;base64,
+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" id="imaged1ef423450" transform="scale(1 -1) translate(0 -447.12)" x="61.92" y="-36" width="786.24" height="447.12"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1"/>
+     <g id="text_1">
+      <text style="font-size: 14px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #617484" x="140.742" y="29.528" transform="rotate(-0 140.742 29.528)">The</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_2"/>
+     <g id="text_2">
+      <text style="font-size: 14px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #617484" x="297.866" y="29.528" transform="rotate(-0 297.866 29.528)"> electron</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_3"/>
+     <g id="text_3">
+      <text style="font-size: 14px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #617484" x="454.99" y="29.528" transform="rotate(-0 454.99 29.528)"> has</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_4"/>
+     <g id="text_4">
+      <text style="font-size: 14px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #617484" x="612.114" y="29.528" transform="rotate(-0 612.114 29.528)"> a</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_5"/>
+     <g id="text_5">
+      <text style="font-size: 14px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #617484" x="769.238" y="29.528" transform="rotate(-0 769.238 29.528)"> negative</text>
+     </g>
+    </g>
+    <g id="text_6">
+     <text style="font-size: 13px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="454.99" y="499.32" transform="rotate(-0 454.99 499.32)">input position (each cell: most likely NEXT token read out from the residual stream)</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_6"/>
+     <g id="text_7">
+      <text style="font-size: 12px; font-family: 'Helvetica Neue'; text-anchor: end; fill: #617484" x="58.68" y="58.911769" transform="rotate(-0 58.68 58.911769)">embed</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_7"/>
+     <g id="text_8">
+      <text style="font-size: 12px; font-family: 'Helvetica Neue'; text-anchor: end; fill: #617484" x="58.68" y="93.291308" transform="rotate(-0 58.68 93.291308)">layer 1</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_8"/>
+     <g id="text_9">
+      <text style="font-size: 12px; font-family: 'Helvetica Neue'; text-anchor: end; fill: #617484" x="58.68" y="127.670846" transform="rotate(-0 58.68 127.670846)">layer 2</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_9"/>
+     <g id="text_10">
+      <text style="font-size: 12px; font-family: 'Helvetica Neue'; text-anchor: end; fill: #617484" x="58.68" y="162.050385" transform="rotate(-0 58.68 162.050385)">layer 3</text>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_10"/>
+     <g id="text_11">
+      <text style="font-size: 12px; font-family: 'Helvetica Neue'; text-anchor: end; fill: #617484" x="58.68" y="196.429923" transform="rotate(-0 58.68 196.429923)">layer 4</text>
+     </g>
+    </g>
+    <g id="ytick_6">
+     <g id="line2d_11"/>
+     <g id="text_12">
+      <text style="font-size: 12px; font-family: 'Helvetica Neue'; text-anchor: end; fill: #617484" x="58.68" y="230.809462" transform="rotate(-0 58.68 230.809462)">layer 5</text>
+     </g>
+    </g>
+    <g id="ytick_7">
+     <g id="line2d_12"/>
+     <g id="text_13">
+      <text style="font-size: 12px; font-family: 'Helvetica Neue'; text-anchor: end; fill: #617484" x="58.68" y="265.189" transform="rotate(-0 58.68 265.189)">layer 6</text>
+     </g>
+    </g>
+    <g id="ytick_8">
+     <g id="line2d_13"/>
+     <g id="text_14">
+      <text style="font-size: 12px; font-family: 'Helvetica Neue'; text-anchor: end; fill: #617484" x="58.68" y="299.568538" transform="rotate(-0 58.68 299.568538)">layer 7</text>
+     </g>
+    </g>
+    <g id="ytick_9">
+     <g id="line2d_14"/>
+     <g id="text_15">
+      <text style="font-size: 12px; font-family: 'Helvetica Neue'; text-anchor: end; fill: #617484" x="58.68" y="333.948077" transform="rotate(-0 58.68 333.948077)">layer 8</text>
+     </g>
+    </g>
+    <g id="ytick_10">
+     <g id="line2d_15"/>
+     <g id="text_16">
+      <text style="font-size: 12px; font-family: 'Helvetica Neue'; text-anchor: end; fill: #617484" x="58.68" y="368.327615" transform="rotate(-0 58.68 368.327615)">layer 9</text>
+     </g>
+    </g>
+    <g id="ytick_11">
+     <g id="line2d_16"/>
+     <g id="text_17">
+      <text style="font-size: 12px; font-family: 'Helvetica Neue'; text-anchor: end; fill: #617484" x="58.68" y="402.707154" transform="rotate(-0 58.68 402.707154)">layer 10</text>
+     </g>
+    </g>
+    <g id="ytick_12">
+     <g id="line2d_17"/>
+     <g id="text_18">
+      <text style="font-size: 12px; font-family: 'Helvetica Neue'; text-anchor: end; fill: #617484" x="58.68" y="437.086692" transform="rotate(-0 58.68 437.086692)">layer 11</text>
+     </g>
+    </g>
+    <g id="ytick_13">
+     <g id="line2d_18"/>
+     <g id="text_19">
+      <text style="font-size: 12px; font-family: 'Helvetica Neue'; text-anchor: end; fill: #617484" x="58.68" y="471.466231" transform="rotate(-0 58.68 471.466231)">layer 12</text>
+     </g>
+    </g>
+   </g>
+   <g id="text_20">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #ffffff" x="140.742" y="57.449019" transform="rotate(-0 140.742 57.449019)">theless</text>
+   </g>
+   <g id="text_21">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #ffffff" x="297.866" y="57.449019" transform="rotate(-0 297.866 57.449019)">electron</text>
+   </g>
+   <g id="text_22">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #ffffff" x="454.99" y="57.449019" transform="rotate(-0 454.99 57.449019)">livest</text>
+   </g>
+   <g id="text_23">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #ffffff" x="612.114" y="57.449019" transform="rotate(-0 612.114 57.449019)">mathemat</text>
+   </g>
+   <g id="text_24">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #ffffff" x="769.238" y="57.449019" transform="rotate(-0 769.238 57.449019)">negative</text>
+   </g>
+   <g id="text_25">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="140.742" y="91.828558" transform="rotate(-0 140.742 91.828558)">ories</text>
+   </g>
+   <g id="text_26">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #ffffff" x="297.866" y="91.828558" transform="rotate(-0 297.866 91.828558)">electron</text>
+   </g>
+   <g id="text_27">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #ffffff" x="454.99" y="91.828558" transform="rotate(-0 454.99 91.828558)">been</text>
+   </g>
+   <g id="text_28">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="612.114" y="91.828558" transform="rotate(-0 612.114 91.828558)">few</text>
+   </g>
+   <g id="text_29">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="769.238" y="91.828558" transform="rotate(-0 769.238 91.828558)">negative</text>
+   </g>
+   <g id="text_30">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="140.742" y="126.208096" transform="rotate(-0 140.742 126.208096)">latest</text>
+   </g>
+   <g id="text_31">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #ffffff" x="297.866" y="126.208096" transform="rotate(-0 297.866 126.208096)">electron</text>
+   </g>
+   <g id="text_32">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #ffffff" x="454.99" y="126.208096" transform="rotate(-0 454.99 126.208096)">been</text>
+   </g>
+   <g id="text_33">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="612.114" y="126.208096" transform="rotate(-0 612.114 126.208096)">lot</text>
+   </g>
+   <g id="text_34">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="769.238" y="126.208096" transform="rotate(-0 769.238 126.208096)">negative</text>
+   </g>
+   <g id="text_35">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="140.742" y="160.587635" transform="rotate(-0 140.742 160.587635)">latest</text>
+   </g>
+   <g id="text_36">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #ffffff" x="297.866" y="160.587635" transform="rotate(-0 297.866 160.587635)">electron</text>
+   </g>
+   <g id="text_37">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #ffffff" x="454.99" y="160.587635" transform="rotate(-0 454.99 160.587635)">been</text>
+   </g>
+   <g id="text_38">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="612.114" y="160.587635" transform="rotate(-0 612.114 160.587635)">lot</text>
+   </g>
+   <g id="text_39">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="769.238" y="160.587635" transform="rotate(-0 769.238 160.587635)">pressure</text>
+   </g>
+   <g id="text_40">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="140.742" y="194.967173" transform="rotate(-0 140.742 194.967173)">latest</text>
+   </g>
+   <g id="text_41">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #ffffff" x="297.866" y="194.967173" transform="rotate(-0 297.866 194.967173)">electron</text>
+   </g>
+   <g id="text_42">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #ffffff" x="454.99" y="194.967173" transform="rotate(-0 454.99 194.967173)">been</text>
+   </g>
+   <g id="text_43">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="612.114" y="194.967173" transform="rotate(-0 612.114 194.967173)">lot</text>
+   </g>
+   <g id="text_44">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="769.238" y="194.967173" transform="rotate(-0 769.238 194.967173)">spiral</text>
+   </g>
+   <g id="text_45">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="140.742" y="229.346712" transform="rotate(-0 140.742 229.346712)">resa</text>
+   </g>
+   <g id="text_46">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #ffffff" x="297.866" y="229.346712" transform="rotate(-0 297.866 229.346712)">electron</text>
+   </g>
+   <g id="text_47">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #ffffff" x="454.99" y="229.346712" transform="rotate(-0 454.99 229.346712)">been</text>
+   </g>
+   <g id="text_48">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="612.114" y="229.346712" transform="rotate(-0 612.114 229.346712)">lot</text>
+   </g>
+   <g id="text_49">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="769.238" y="229.346712" transform="rotate(-0 769.238 229.346712)">spiral</text>
+   </g>
+   <g id="text_50">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="140.742" y="263.72625" transform="rotate(-0 140.742 263.72625)">resa</text>
+   </g>
+   <g id="text_51">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="297.866" y="263.72625" transform="rotate(-0 297.866 263.72625)">microscope</text>
+   </g>
+   <g id="text_52">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #ffffff" x="454.99" y="263.72625" transform="rotate(-0 454.99 263.72625)">been</text>
+   </g>
+   <g id="text_53">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="612.114" y="263.72625" transform="rotate(-0 612.114 263.72625)">lot</text>
+   </g>
+   <g id="text_54">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="769.238" y="263.72625" transform="rotate(-0 769.238 263.72625)">impact</text>
+   </g>
+   <g id="text_55">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #ffffff" x="140.742" y="298.105788" transform="rotate(-0 140.742 298.105788)">resa</text>
+   </g>
+   <g id="text_56">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="297.866" y="298.105788" transform="rotate(-0 297.866 298.105788)">microscope</text>
+   </g>
+   <g id="text_57">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #ffffff" x="454.99" y="298.105788" transform="rotate(-0 454.99 298.105788)">been</text>
+   </g>
+   <g id="text_58">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="612.114" y="298.105788" transform="rotate(-0 612.114 298.105788)">tendency</text>
+   </g>
+   <g id="text_59">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="769.238" y="298.105788" transform="rotate(-0 769.238 298.105788)">impact</text>
+   </g>
+   <g id="text_60">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #ffffff" x="140.742" y="332.485327" transform="rotate(-0 140.742 332.485327)">resa</text>
+   </g>
+   <g id="text_61">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="297.866" y="332.485327" transform="rotate(-0 297.866 332.485327)">microscope</text>
+   </g>
+   <g id="text_62">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #ffffff" x="454.99" y="332.485327" transform="rotate(-0 454.99 332.485327)">been</text>
+   </g>
+   <g id="text_63">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #ffffff" x="612.114" y="332.485327" transform="rotate(-0 612.114 332.485327)">tendency</text>
+   </g>
+   <g id="text_64">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="769.238" y="332.485327" transform="rotate(-0 769.238 332.485327)">value</text>
+   </g>
+   <g id="text_65">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="140.742" y="366.864865" transform="rotate(-0 140.742 366.864865)">resa</text>
+   </g>
+   <g id="text_66">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #ffffff" x="297.866" y="366.864865" transform="rotate(-0 297.866 366.864865)">microscope</text>
+   </g>
+   <g id="text_67">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #ffffff" x="454.99" y="366.864865" transform="rotate(-0 454.99 366.864865)">been</text>
+   </g>
+   <g id="text_68">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #ffffff" x="612.114" y="366.864865" transform="rotate(-0 612.114 366.864865)">tendency</text>
+   </g>
+   <g id="text_69">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #ffffff" x="769.238" y="366.864865" transform="rotate(-0 769.238 366.864865)">value</text>
+   </g>
+   <g id="text_70">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="140.742" y="401.244404" transform="rotate(-0 140.742 401.244404)">resa</text>
+   </g>
+   <g id="text_71">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #ffffff" x="297.866" y="401.244404" transform="rotate(-0 297.866 401.244404)">microscope</text>
+   </g>
+   <g id="text_72">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #ffffff" x="454.99" y="401.244404" transform="rotate(-0 454.99 401.244404)">been</text>
+   </g>
+   <g id="text_73">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="612.114" y="401.244404" transform="rotate(-0 612.114 401.244404)">resonance</text>
+   </g>
+   <g id="text_74">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="769.238" y="401.244404" transform="rotate(-0 769.238 401.244404)">value</text>
+   </g>
+   <g id="text_75">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="140.742" y="435.623942" transform="rotate(-0 140.742 435.623942)">following</text>
+   </g>
+   <g id="text_76">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="297.866" y="435.623942" transform="rotate(-0 297.866 435.623942)">microscope</text>
+   </g>
+   <g id="text_77">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #ffffff" x="454.99" y="435.623942" transform="rotate(-0 454.99 435.623942)">been</text>
+   </g>
+   <g id="text_78">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="612.114" y="435.623942" transform="rotate(-0 612.114 435.623942)">magnetic</text>
+   </g>
+   <g id="text_79">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="769.238" y="435.623942" transform="rotate(-0 769.238 435.623942)">spin</text>
+   </g>
+   <g id="text_80">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="140.742" y="470.003481" transform="rotate(-0 140.742 470.003481)">first</text>
+   </g>
+   <g id="text_81">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="297.866" y="470.003481" transform="rotate(-0 297.866 470.003481)">microscope</text>
+   </g>
+   <g id="text_82">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="454.99" y="470.003481" transform="rotate(-0 454.99 470.003481)">been</text>
+   </g>
+   <g id="text_83">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="612.114" y="470.003481" transform="rotate(-0 612.114 470.003481)">high</text>
+   </g>
+   <g id="text_84">
+    <text style="font-size: 11.5px; font-family: 'Helvetica Neue'; text-anchor: middle; fill: #172635" x="769.238" y="470.003481" transform="rotate(-0 769.238 470.003481)">charge</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p6306fb27c5">
+   <rect x="62.18" y="36.01" width="785.62" height="446.934"/>
+  </clipPath>
+ </defs>
+</svg>

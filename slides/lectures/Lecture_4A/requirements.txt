@@ -1,0 +1,7 @@
+marimo>=0.25.0
+torch
+transformers
+tiktoken
+numpy
+matplotlib
+scikit-learn

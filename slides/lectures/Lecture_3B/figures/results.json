@@ -1,0 +1,121 @@
+{
+ "kernel_match_idx": 9,
+ "kernel_match": [
+  8.968376159667969,
+  0.0,
+  38.588504791259766
+ ],
+ "faces_ch174_peak": {
+  "astronaut": 14.470474243164062,
+  "covered": 0.7944204211235046,
+  "cameraman": 14.45093822479248,
+  "cat": 5.844167709350586
+ },
+ "embedding": {
+  "pixels_same_image": 0.3394864797592163,
+  "fc7_same_image": 0.8250304460525513
+ },
+ "predictions": {
+  "astronaut": [
+   [
+    "dumbbell",
+    0.268
+   ],
+   [
+    "puck",
+    0.062
+   ],
+   [
+    "neck brace",
+    0.052
+   ]
+  ],
+  "camera": [
+   [
+    "tripod",
+    0.718
+   ],
+   [
+    "crutch",
+    0.16
+   ],
+   [
+    "swab",
+    0.025
+   ]
+  ],
+  "chelsea": [
+   [
+    "Egyptian cat",
+    0.797
+   ],
+   [
+    "tiger cat",
+    0.128
+   ],
+   [
+    "tabby",
+    0.068
+   ]
+  ],
+  "coffee": [
+   [
+    "espresso",
+    0.973
+   ],
+   [
+    "consomme",
+    0.017
+   ],
+   [
+    "cup",
+    0.004
+   ]
+  ],
+  "rocket": [
+   [
+    "mosque",
+    0.634
+   ],
+   [
+    "drilling platform",
+    0.168
+   ],
+   [
+    "obelisk",
+    0.064
+   ]
+  ]
+ },
+ "occlusion": [
+  "Egyptian cat",
+  0.7974758744239807,
+  0.5125367641448975
+ ],
+ "feature_vis": [
+  [
+   "conv1",
+   9
+  ],
+  [
+   "conv2",
+   94
+  ],
+  [
+   "conv3",
+   150
+  ],
+  [
+   "conv4",
+   60
+  ],
+  [
+   "conv5",
+   174
+  ],
+  [
+   "fc8",
+   1
+  ]
+ ]
+}

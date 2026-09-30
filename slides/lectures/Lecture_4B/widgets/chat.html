@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What the model actually sees</title>
+<link rel="stylesheet" href="lab.css">
+<style>
+body{overflow:hidden}
+.controls{gap:14px;flex-wrap:nowrap}input[type=range]{width:120px}select{max-width:200px}
+.main{flex:1 1 0;min-height:0;display:grid;grid-template-columns:1fr 1.05fr 1fr;gap:20px}
+.panel{min-height:0;display:flex;flex-direction:column;border:1px solid #dbe3ea;border-radius:8px;padding:10px 12px}
+.panel h2{font-size:19px;margin:0 0 8px;color:#087bb9}
+.msgs{flex:1 1 0;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:8px}
+.msg{display:grid;grid-template-columns:96px 1fr;gap:8px;align-items:start}
+.msg select{font-size:15px;padding:3px}
+.msg textarea{font:15px/1.3 "Helvetica Neue",Arial;border:1px solid #adbfcc;border-radius:5px;padding:5px;resize:vertical;min-height:40px}
+.stream{flex:1 1 0;min-height:0;overflow:auto;font:14.5px/1.45 Menlo,"SF Mono",monospace;white-space:pre-wrap;word-break:break-word}
+.sp{background:#172635;color:#fff;border-radius:3px;padding:0 3px}
+.r-system{color:#7a4fb3}.r-tools{color:#9c6b00}.r-user{color:#087bb9}.r-assistant{color:#3c8d52}.r-tool{color:#c74842}
+.gen{background:#fff1cf;outline:2px dashed #d99700}
+canvas{flex:1 1 0;min-height:0}
+</style>
+</head>
+<body>
+<header><h1>What the model actually sees</h1><span class="legend">≈ tokens estimated as characters / 4</span></header>
+<p class="subtitle">A chat is one long text with role markers. The model has no memory between turns: every new turn resends the whole conversation.</p>
+<div class="controls">
+  <label for="preset">Conversation <select id="preset"><option value="chat">simple chat</option><option value="tools">with a tool call</option></select></label>
+  <label for="window">Context window <select id="window"><option value="4096">4 k (2022)</option><option value="128000">128 k</option><option value="200000" selected>200 k</option><option value="1000000">1 M</option></select></label>
+  <label for="turns">Simulate turns <input id="turns" type="range" min="1" max="200" step="1" value="40"><output id="turns-value"></output></label>
+  <label for="per">tokens per turn <input id="per" type="range" min="100" max="20000" step="100" value="2000"><output id="per-value"></output></label>
+</div>
+<div class="main">
+  <div class="panel"><h2>Conversation</h2><div id="msgs" class="msgs"></div><button id="add" style="margin-top:8px">+ user turn</button></div>
+  <div class="panel"><h2>The single token stream</h2><div id="stream" class="stream" aria-live="polite"></div></div>
+  <div class="panel"><h2>Context and cost</h2><canvas id="plot" width="480" height="470" role="img" aria-label="Context window fill and cumulative input tokens over turns"></canvas></div>
+</div>
+<div id="stats" class="stats" aria-live="polite"></div>
+<script src="plot.js"></script>
+<script>
+'use strict';
+const C = $('plot'), ctx = C.getContext('2d');
+const SYSTEM = 'You are a helpful assistant for a physics course at Ruhr University Bochum. Answer concisely and use SI units.';
+const TOOLS = '[{"name": "calculator", "description": "Evaluate an arithmetic expression", "input_schema": {"type": "object", "properties": {"expression": {"type": "string"}}, "required": ["expression"]}}]';
+const PRESETS = {
+  chat: [
+    ['system', SYSTEM],
+    ['user', 'What is the rest energy of an electron?'],
+    ['assistant', 'E = m c² = 9.109 × 10⁻³¹ kg × (2.998 × 10⁸ m/s)² ≈ 8.19 × 10⁻¹⁴ J ≈ 0.511 MeV.'],
+    ['user', 'And of a proton?'],
+  ],
+  tools: [
+    ['system', SYSTEM], ['tools', TOOLS],
+    ['user', 'How many seconds are in a year, times the speed of light?'],
+    ['assistant', 'I will compute it. [tool call] calculator({"expression": "365.25*24*3600*299792458"})'],
+    ['tool', '9460730472580800'],
+    ['assistant', 'About 9.46 × 10¹⁵ m: that is one light year.'],
+    ['user', 'And in parsecs?'],
+  ]
+};
+let msgs = PRESETS.chat.map(m => m.slice());
+const tok = s => Math.max(1, Math.round(s.length / 4));
+
+function renderEditor() {
+  $('msgs').innerHTML = msgs.map(([r, t], i) => `<div class="msg"><select data-i="${i}">${['system', 'tools', 'user', 'assistant', 'tool'].map(o => `<option${o === r ? ' selected' : ''}>${o}</option>`).join('')}</select><textarea data-i="${i}" rows="2">${t.replace(/</g, '&lt;')}</textarea></div>`).join('');
+  $('msgs').querySelectorAll('select').forEach(e => e.oninput = () => { msgs[+e.dataset.i][0] = e.value; draw(); });
+  $('msgs').querySelectorAll('textarea').forEach(e => e.oninput = () => { msgs[+e.dataset.i][1] = e.value; draw(); });
+}
+function draw() {
+  syncOutputs();
+  const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  $('stream').innerHTML = msgs.map(([r, t]) => `<span class="sp">&lt;|${r}|&gt;</span><span class="r-${r}">${esc(t)}</span><span class="sp">&lt;|end|&gt;</span>\n`).join('')
+    + '<span class="sp">&lt;|assistant|&gt;</span><span class="gen"> ← the model continues from here</span>';
+  const by = { system: 0, tools: 0, conversation: 0 };
+  msgs.forEach(([r, t]) => { const n = tok(t) + 3; if (r === 'system') by.system += n; else if (r === 'tools') by.tools += n; else by.conversation += n; });
+  const now = by.system + by.tools + by.conversation, W = +$('window').value;
+
+  // Simulated long conversation
+  const T = +$('turns').value, per = +$('per').value, fixed = by.system + by.tools;
+  let cum = 0, cumCached = 0, overflow = null; const ctxLen = [], billed = [], billedCached = [];
+  for (let k = 1; k <= T; k++) {
+    const c = fixed + k * per;
+    if (c > W && overflow === null) overflow = k;
+    cum += c; cumCached += per + 0.1 * (c - per);        // cached prefix billed at ~10 %
+    ctxLen.push(c); billed.push(cum); billedCached.push(cumCached);
+  }
+  ctx.clearRect(0, 0, C.width, C.height);
+  text(ctx, 'This conversation in the window', 6, 22, 19, PAL.ink, 'left', '600');
+  const bx = 6, bw = 466, by0 = 36;
+  ctx.fillStyle = '#eef1f4'; ctx.fillRect(bx, by0, bw, 28);
+  let x = bx;
+  [['system', '#7a4fb3'], ['tools', PAL.gold], ['conversation', PAL.accent]].forEach(([k, c]) => {
+    const w = Math.max(by[k] ? 2 : 0, bw * by[k] / W); ctx.fillStyle = c; ctx.fillRect(x, by0, w, 28); x += w;
+  });
+  text(ctx, `${now} of ${W.toLocaleString()} tokens (${(100 * now / W).toFixed(2)}%)`, bx, by0 + 52, 17, PAL.muted);
+
+  const P = new Panel(ctx, 62, 140, 400, 250, [0, T], [0, Math.max(...billed) * 1.05]);
+  P.frame(`Input tokens over ${T} turns`, 'turn', '', [0, Math.round(T / 2), T], [], v => String(v));
+  const ymax = P.yr[1];
+  [0, 0.5, 1].forEach(f => text(ctx, (f * ymax / 1e6).toFixed(ymax > 5e6 ? 0 : 1) + ' M', P.x - 6, P.Y(f * ymax) + 5, 16, PAL.muted, 'right'));
+  P.line(billed.map((v, i) => [i + 1, v]), PAL.red, 3);
+  P.line(billedCached.map((v, i) => [i + 1, v]), PAL.green, 3, [8, 5]);
+  P.line(ctxLen.map((v, i) => [i + 1, v]), PAL.accent, 2.5);
+  if (overflow) { P.vline(overflow, PAL.red, 2, [4, 4]); text(ctx, 'window full', P.X(overflow) + 5, P.y + 18, 16, PAL.red); }
+  text(ctx, '— total input billed', P.x + 10, P.y + 42, 16, PAL.red);
+  text(ctx, '- - with prompt caching', P.x + 10, P.y + 64, 16, PAL.green);
+  text(ctx, '— current context length', P.x + 10, P.y + 86, 16, PAL.accent);
+  stats([
+    ['Tokens in this chat', now],
+    [`Context after ${T} turns`, (fixed + T * per).toLocaleString()],
+    ['Total input billed', `${(billed[T - 1] / 1e6).toFixed(2)} M tokens`],
+    ['With caching', `${(billedCached[T - 1] / 1e6).toFixed(2)} M`],
+    ['Window full at turn', overflow || '—']
+  ]);
+}
+$('preset').oninput = () => { msgs = PRESETS[$('preset').value].map(m => m.slice()); renderEditor(); draw(); };
+$('add').onclick = () => { msgs.push(['user', '']); renderEditor(); draw(); };
+['window', 'turns', 'per'].forEach(id => $(id).addEventListener('input', draw));
+renderEditor(); draw();
+</script>
+</body>
+</html>

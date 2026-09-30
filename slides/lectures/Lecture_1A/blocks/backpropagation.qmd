@@ -1,0 +1,300 @@
+## Backpropagation, step by step {#bp-start .addition}
+
+We want the derivative of one loss with respect to every parameter.
+
+$$
+L(\boldsymbol\theta),\qquad
+\nabla_{\boldsymbol\theta}L
+=\left(\frac{\partial L}{\partial\theta_1},\ldots,
+\frac{\partial L}{\partial\theta_n}\right)
+$$
+
+Evaluate the program forwards and retain the values needed for derivatives.
+
+Then propagate sensitivities backwards, using one local derivative at a time.
+
+::: {.subtle}
+We will compute every step by hand before running the demonstration.
+:::
+
+## One graph, two paths {#bp-graph .addition}
+
+$$a=wx,\qquad b=a^2,\qquad c=b+a,\qquad L=\tfrac12(c-t)^2$$
+
+![](figures/backpropagation/graph-0.svg){.graph alt="Computation graph: w and x feed a=wx; a feeds b=a squared and c=b+a; c feeds the loss. The target t also feeds the loss."}
+
+The value $a$ affects the loss through **two paths**.
+
+We train $w$. The input $x=2$ and target $t=5$ stay fixed.
+
+::: {.notes}
+Trace both paths from a to the loss. This shared intermediate is why the
+reverse pass must accumulate derivatives. The graph is an illustrative scalar
+program; the neural-network connection follows later in the block.
+:::
+
+## 1. Forward pass {#bp-forward .addition}
+
+Start with $w=1$, $x=2$, and $t=5$.
+
+![](figures/backpropagation/graph-1.svg){.graph alt="Forward values: a=2, b=4, c=6, loss=0.5."}
+
+$$a=1\cdot2=2,\quad b=2^2=4,\quad c=4+2=6$$
+$$L=\tfrac12(6-5)^2=0.5$$
+
+Keep the intermediate values. The backward pass will use them.
+
+## 2. What travels backwards? {#bp-adjoint .addition}
+
+The **adjoint** of an intermediate $v$ is its sensitivity:
+
+$$\bar v\equiv\frac{\partial L}{\partial v}$$
+
+For a small perturbation, $\Delta L\approx\bar v\,\Delta v$.
+
+::: {.two-col}
+::: {}
+[Forward value]{.blue}
+
+“What number did this operation produce?”
+:::
+::: {}
+[Backward sensitivity]{.red}
+
+“How does this number affect the loss?”
+:::
+:::
+
+$$\bar L=\frac{\partial L}{\partial L}=1$$
+
+::: {.notes}
+The seed is one because the loss changes by one unit per unit change of itself.
+The number travelling backwards is a derivative, not simply the numerical loss.
+:::
+
+## Local backward rules {#bp-local-rules .addition}
+
+For an incoming sensitivity $\bar z$:
+
+::: {.three-rules}
+::: {.rule}
+**Addition**
+
+$$z=u+v$$
+$$\bar u\mathrel{+}=\bar z$$
+$$\bar v\mathrel{+}=\bar z$$
+Send the sensitivity to both inputs.
+:::
+::: {.rule}
+**Multiplication**
+
+$$z=uv$$
+$$\bar u\mathrel{+}=v\bar z$$
+$$\bar v\mathrel{+}=u\bar z$$
+Use the other input's forward value.
+:::
+::: {.rule}
+**Squaring**
+
+$$z=u^2$$
+$$\bar u\mathrel{+}=2u\bar z$$
+Use the local slope at the stored value.
+:::
+:::
+
+The notation $\mathrel{+}=$ means **add this contribution** to the adjoint.
+
+## 3. Backwards through the loss {#bp-loss .addition}
+
+$$L=\tfrac12(c-t)^2,\qquad c=6,\quad t=5$$
+
+![](figures/backpropagation/graph-2.svg){.graph alt="The reverse pass starts at loss with adjoint one and produces c adjoint one."}
+
+$$\bar c=\bar L\,\frac{\partial L}{\partial c}
+=1\cdot(c-t)=1$$
+
+At this point, increasing $c$ slightly would increase the loss.
+
+## 4. Backwards through the sum {#bp-sum .addition}
+
+$$c=b+a,\qquad\bar c=1$$
+
+![](figures/backpropagation/graph-3.svg){.graph alt="The addition sends adjoint one to b and a. The a adjoint is not complete yet."}
+
+$$\bar b\mathrel{+}=\bar c\cdot1=1,\qquad
+\bar a\mathrel{+}=\bar c\cdot1=1$$
+
+This is only the **direct-path contribution** to $\bar a$.
+
+## 5. Backwards through the square {#bp-square .addition}
+
+$$b=a^2,\qquad a=2,\quad\bar b=1$$
+
+![](figures/backpropagation/graph-4.svg){.graph alt="The squared path contributes 2a times b adjoint = four to a."}
+
+$$\bar a\mathrel{+}=\bar b\,\frac{\partial b}{\partial a}
+=1\cdot2a=4$$
+
+::: {.prompt}
+Is $\bar a$ now 1, 4, or 5?
+:::
+
+::: {.notes}
+Pause here. Ask students to justify whether to overwrite the stored derivative
+or add to it. Do not reveal the next slide until the two paths are identified.
+:::
+
+## 6. Accumulation at a shared node {#bp-accumulate .addition}
+
+$$\bar a=
+\underbrace{\bar c\frac{\partial c}{\partial a}}_{\text{direct path}}
++\underbrace{\bar c\frac{\partial c}{\partial b}
+\frac{\partial b}{\partial a}}_{\text{path through }b}
+=1+4=5$$
+
+![](figures/backpropagation/graph-5.svg){.graph alt="Both reverse paths meet at a, giving total sensitivity five."}
+
+**Multiply** derivatives along each path. **Add** contributions from different paths.
+
+Only propagate further once all contributions to the node have arrived.
+
+## 7. Backwards to the parameter {#bp-parameter .addition}
+
+$$a=wx,\qquad w=1,\quad x=2,\quad\bar a=5$$
+
+![](figures/backpropagation/graph-6.svg){.graph alt="Backpropagation through multiplication gives w adjoint ten and x adjoint five."}
+
+$$\bar w=\bar a\,x=5\cdot2=10,\qquad
+\bar x=\bar a\,w=5\cdot1=5$$
+
+The derivative with respect to the trainable parameter is $\partial L/\partial w=10$.
+We can also compute $\bar x$, even though $x$ is fixed during this update.
+
+## 8. A parameter update {#bp-update .addition}
+
+Backpropagation has finished. Now apply gradient descent with $\eta=0.01$.
+
+$$w_{\mathrm{new}}=w-\eta\bar w=1-0.01\cdot10=0.9$$
+
+| | Before | After |
+|:--|--:|--:|
+| Parameter $w$ | 1 | 0.9 |
+| Prediction $c$ | 6 | 5.04 |
+| Loss $L$ | 0.5 | 0.0008 |
+
+The new loss requires a **new forward pass**. A larger step may increase it.
+
+::: {.notes}
+With w=0.9: a=1.8, b=3.24, c=5.04, L=0.0008.
+Keep the roles separate: reverse mode calculates the gradient; the optimizer
+chooses and applies the parameter update. The fixed target remains five.
+:::
+
+## A neuron uses the same rules {#bp-neuron .addition}
+
+$$z=w_1x_1+w_2x_2+b,\qquad h=\sigma(z),\qquad L=\tfrac12(h-t)^2$$
+
+Work backwards, starting at the scalar loss:
+
+$$\bar h=h-t,\qquad\bar z=\bar h\,\sigma'(z)$$
+$$\bar w_1=\bar z\,x_1,\qquad
+\bar w_2=\bar z\,x_2,\qquad\bar b=\bar z$$
+
+For a sigmoid, $\sigma'(z)=h(1-h)$: reuse the activation from the forward pass.
+
+## Backpropagation through layers {#bp-layers .addition}
+
+$$\mathbf z^{(\ell)}=W^{(\ell)}\mathbf h^{(\ell-1)}+\mathbf b^{(\ell)},
+\qquad \mathbf h^{(\ell)}=\sigma(\mathbf z^{(\ell)})$$
+
+Given the incoming sensitivity $\bar{\mathbf h}^{(\ell)}$:
+
+$$\bar{\mathbf z}^{(\ell)}=
+\bar{\mathbf h}^{(\ell)}\odot\sigma'(\mathbf z^{(\ell)})$$
+$$\bar W^{(\ell)}=\bar{\mathbf z}^{(\ell)}
+\big(\mathbf h^{(\ell-1)}\big)^T,\qquad
+\bar{\mathbf b}^{(\ell)}=\bar{\mathbf z}^{(\ell)}$$
+$$\bar{\mathbf h}^{(\ell-1)}=
+\big(W^{(\ell)}\big)^T\bar{\mathbf z}^{(\ell)}$$
+
+Repeat for the previous layer. Here $\odot$ denotes elementwise multiplication.
+
+::: {.notes}
+These equations are for one sample and a componentwise activation. For a batch,
+sum or average according to the loss definition. Shared parameters accumulate
+contributions from every use. No full network Jacobian needs to be constructed.
+:::
+
+## The reverse sweep in code {#bp-code .addition}
+
+```python
+# Forward: record operations and their needed input values.
+value = evaluate_in_dependency_order(graph)
+
+# Backward: start with zero contributions everywhere.
+adjoint = {node: 0.0 for node in graph}
+adjoint[loss] = 1.0
+
+for node in reversed(dependency_order):
+    for input_edge in node.input_edges:
+        parent = input_edge.source
+        adjoint[parent] += (
+            adjoint[node] * local_derivative(input_edge, value)
+        )
+```
+
+Process **edges**, including repeated inputs. For $z=u\cdot u$, both edges contribute.
+
+::: {.notes}
+This is scalar pseudocode, not a framework API. The saved order must respect
+dependencies; reversing it ensures all downstream contributions are available.
+For vector operations the local derivative action is a vector-Jacobian product.
+:::
+
+## Checking a gradient {#bp-check .addition}
+
+For our example, compute an independent central finite difference:
+
+$$g_{\mathrm{FD}}=\frac{L(w+\varepsilon)-L(w-\varepsilon)}{2\varepsilon}$$
+
+At $w=1$, $x=2$, $t=5$, and $\varepsilon=10^{-5}$:
+
+$$g_{\mathrm{FD}}\approx10.000000004,\qquad g_{\mathrm{backprop}}=10$$
+
+Use this as a diagnostic on a small, smooth example.
+
+::: {.subtle}
+Very small finite-difference steps amplify roundoff. At a nondifferentiable
+point, the comparison needs special care.
+:::
+
+## One reverse pass, many parameters {#bp-cost .addition}
+
+For one scalar loss, the reverse sweep computes all parameter derivatives.
+
+Each operation sends sensitivities to its inputs. The work scales with the
+computation graph, with a constant-factor overhead for standard operations.
+
+The tradeoff is **memory**: backward rules need values from the forward pass.
+
+Checkpointing saves selected values and recomputes others.
+
+::: {.notes}
+This prepares the original Jacobian-cost and memory slides that immediately
+follow the demonstration. Distinguish a scalar-output gradient from a full
+multi-output Jacobian. The precise factor depends on operations and implementation.
+:::
+
+## Backpropagation demonstration {#bp-demo .addition}
+
+::: {.widget data-src="widgets/backpropagation/index.html"
+             data-poster="widgets/backpropagation/poster.png"
+             data-alt="Complete worked backward pass: a=2, b=4, c=6, L=0.5; sensitivities c=1, b=1, a=5, w=10, x=5."}
+:::
+
+::: {.notes}
+First step through the preset example. Ask for the next value before revealing
+it. Then change w, repeat, and try a larger learning rate. The final step compares
+the old and new loss but does not silently update w. Reset restores all defaults.
+The PDF shows the fully worked default example.
+:::

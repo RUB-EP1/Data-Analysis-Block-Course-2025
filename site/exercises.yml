@@ -1,0 +1,73 @@
+# Exercise cards on the landing page (rendered by site/exercise-cards.ejs).
+# `sheet`/`solution` are PDFs built from attendance_*/*.md by
+# scripts/build_attendance.py; `homework`/`homework_solution` are marimo notebooks.
+# Remove a `solution` or `homework_solution` line to hide it from the page.
+- number: 1
+  title: Forward and Reverse Automatic Differentiation by Hand
+  when: Fri 25 Sep · 10:45
+  instructor: Hendric Jonas
+  lecture: 1A
+  sheet: build/attendance_exercises/1_automatic_differentiation.pdf
+  solution: build/attendance_solutions/1_automatic_differentiation_solution.pdf
+  homework: homework_exercises/python/1_automatic_differentiation.py
+  homework_solution: homework_solutions/python/1_automatic_differentiation_solution.py
+
+- number: 2
+  title: Diagnosing an Infection with Temperature
+  when: Fri 25 Sep · 15:15
+  instructor: Christoph Tönnis
+  lecture: 1B
+  sheet: build/attendance_exercises/2_samples_fom_roc.pdf
+  solution: build/attendance_solutions/2_samples_fom_roc.pdf
+  homework: homework_exercises/python/2_samples_fom_roc.py
+  homework_solution: homework_solutions/python/2_samples_fom_roc.py
+
+- number: 3
+  title: Decision Trees by Hand
+  when: Mon 28 Sep · 10:45
+  instructor: Hendric Jonas
+  lecture: 2A
+  sheet: build/attendance_exercises/3_decision_trees.pdf
+  solution: build/attendance_solutions/3_decision_trees_solution.pdf
+  homework: homework_exercises/python/3_decision_trees.py
+  homework_solution: homework_solutions/python/3_decision_trees_solution.py
+
+- number: 4
+  title: AdaBoost and Gradient Boosting
+  when: Mon 28 Sep · 15:15
+  instructor: Christoph Tönnis
+  lecture: 2B
+  sheet: build/attendance_exercises/4_boosting.pdf
+  solution: build/attendance_solutions/4_boosting_olution.pdf
+  homework: homework_exercises/python/4_boosting.py
+  homework_solution: homework_solutions/python/4_boosting.py
+
+- number: 5
+  title: Neural Networks by Hand
+  when: Tue 29 Sep · 10:45
+  instructor: Hendric Jonas
+  lecture: 3A
+  sheet: build/attendance_exercises/5_neural_networks.pdf
+  solution: build/attendance_solutions/5_neural_network_solution.pdf
+  homework: homework_exercises/python/5_neural_networks.py
+  homework_solution: homework_solutions/python/5_neural_networks_solutions.py
+
+- number: 6
+  title: Adam and Convolutional Neural Networks
+  when: Tue 29 Sep · 15:15
+  instructor: Christoph Tönnis
+  lecture: 3B
+  sheet: build/attendance_exercises/6_neural_networks.pdf
+  solution: build/attendance_solutions/6_neural_networks.pdf
+  homework: homework_exercises/python/6_neural_networks.py
+  homework_solution: homework_solutions/python/6_neural_networks.py
+
+- number: 7
+  title: Transformers by Hand
+  when: Wed 30 Sep · 11:15
+  instructor: Marian Stahl
+  lecture: 4A
+  sheet: build/attendance_exercises/7_transformers.pdf
+  solution: build/attendance_solutions/7_transformers_solution.pdf
+  homework: homework_exercises/python/7_transformers.py
+  homework_solution: homework_solutions/python/7_transformers_solution.py

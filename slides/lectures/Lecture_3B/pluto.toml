@@ -1,0 +1,11 @@
+# Pluto notebooks for this deck; served by `make start-julia-server DECK=Lecture_3B`.
+# The id is fixed so slide URLs (edit?id=...&isolated_cell_id=...) stay valid across restarts.
+# Both notebooks use the environment in pluto/ (Project.toml + Manifest.toml).
+
+[[notebook]]
+path = "pluto/mnist-draw.jl"
+id = "3b0a7000-0000-4000-8000-0000000d4a01"
+
+[[notebook]]
+path = "pluto/mnist-trees.jl"
+id = "3b0a7000-0000-4000-8000-00000074ee02"

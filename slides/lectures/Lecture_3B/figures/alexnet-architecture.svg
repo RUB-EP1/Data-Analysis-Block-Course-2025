@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1515.2144091823818 575" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" fill="#172635">
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+<polygon points="30.0,251.4 127.3,154.1 141.3,154.1 44.0,251.4" fill="#f3f6f8" stroke="#7d8f9e" stroke-width="1.8" stroke-linejoin="round"/>
+<polygon points="44.0,251.4 141.3,154.1 141.3,348.6 44.0,445.9" fill="#d3dbe3" stroke="#7d8f9e" stroke-width="1.8" stroke-linejoin="round"/>
+<polygon points="30.0,251.4 44.0,251.4 44.0,445.9 30.0,445.9" fill="#e6ebf0" stroke="#7d8f9e" stroke-width="1.8" stroke-linejoin="round"/>
+<text x="85.6" y="125.0" font-size="22" text-anchor="middle" fill="#7d8f9e" font-weight="bold">input</text>
+<text x="85.6" y="465.0" font-size="19" text-anchor="middle" fill="#172635" font-weight="normal">224×224×3</text>
+<text x="85.6" y="492.0" font-size="16" text-anchor="middle" fill="#617484" font-weight="normal">RGB image</text>
+<polygon points="179.3,275.9 227.5,227.7 269.3,227.7 221.1,275.9" fill="#e7f3fc" stroke="#087bb9" stroke-width="1.8" stroke-linejoin="round"/>
+<polygon points="221.1,275.9 269.3,227.7 269.3,324.1 221.1,372.3" fill="#b5d7ef" stroke="#087bb9" stroke-width="1.8" stroke-linejoin="round"/>
+<polygon points="179.3,275.9 221.1,275.9 221.1,372.3 179.3,372.3" fill="#cfe6f7" stroke="#087bb9" stroke-width="1.8" stroke-linejoin="round"/>
+<text x="224.3" y="125.0" font-size="22" text-anchor="middle" fill="#087bb9" font-weight="bold">conv1</text>
+<text x="224.3" y="465.0" font-size="19" text-anchor="middle" fill="#172635" font-weight="normal">55×55×64</text>
+<text x="224.3" y="492.0" font-size="16" text-anchor="middle" fill="#617484" font-weight="normal">11×11, stride 4</text>
+<polygon points="307.3,283.1 341.1,249.3 383.0,249.3 349.2,283.1" fill="#fbe9e8" stroke="#c74842" stroke-width="1.8" stroke-linejoin="round"/>
+<polygon points="349.2,283.1 383.0,249.3 383.0,316.9 349.2,350.7" fill="#efc0bd" stroke="#c74842" stroke-width="1.8" stroke-linejoin="round"/>
+<polygon points="307.3,283.1 349.2,283.1 349.2,350.7 307.3,350.7" fill="#f7d6d4" stroke="#c74842" stroke-width="1.8" stroke-linejoin="round"/>
+<text x="345.1" y="125.0" font-size="22" text-anchor="middle" fill="#c74842" font-weight="bold">pool</text>
+<text x="345.1" y="465.0" font-size="19" text-anchor="middle" fill="#172635" font-weight="normal">27×27×64</text>
+<text x="345.1" y="492.0" font-size="16" text-anchor="middle" fill="#617484" font-weight="normal">3×3, stride 2</text>
+<polygon points="421.0,283.1 454.7,249.3 508.9,249.3 475.1,283.1" fill="#e7f3fc" stroke="#087bb9" stroke-width="1.8" stroke-linejoin="round"/>
+<polygon points="475.1,283.1 508.9,249.3 508.9,316.9 475.1,350.7" fill="#b5d7ef" stroke="#087bb9" stroke-width="1.8" stroke-linejoin="round"/>
+<polygon points="421.0,283.1 475.1,283.1 475.1,350.7 421.0,350.7" fill="#cfe6f7" stroke="#087bb9" stroke-width="1.8" stroke-linejoin="round"/>
+<text x="464.9" y="125.0" font-size="22" text-anchor="middle" fill="#087bb9" font-weight="bold">conv2</text>
+<text x="464.9" y="465.0" font-size="19" text-anchor="middle" fill="#172635" font-weight="normal">27×27×192</text>
+<text x="464.9" y="492.0" font-size="16" text-anchor="middle" fill="#617484" font-weight="normal">5×5</text>
+<polygon points="546.9,288.3 570.4,264.8 624.5,264.8 601.1,288.3" fill="#fbe9e8" stroke="#c74842" stroke-width="1.8" stroke-linejoin="round"/>
+<polygon points="601.1,288.3 624.5,264.8 624.5,311.7 601.1,335.2" fill="#efc0bd" stroke="#c74842" stroke-width="1.8" stroke-linejoin="round"/>
+<polygon points="546.9,288.3 601.1,288.3 601.1,335.2 546.9,335.2" fill="#f7d6d4" stroke="#c74842" stroke-width="1.8" stroke-linejoin="round"/>
+<text x="585.7" y="125.0" font-size="22" text-anchor="middle" fill="#c74842" font-weight="bold">pool</text>
+<text x="585.7" y="465.0" font-size="19" text-anchor="middle" fill="#172635" font-weight="normal">13×13×192</text>
+<polygon points="662.5,288.3 686.0,264.8 748.1,264.8 724.6,288.3" fill="#e7f3fc" stroke="#087bb9" stroke-width="1.8" stroke-linejoin="round"/>
+<polygon points="724.6,288.3 748.1,264.8 748.1,311.7 724.6,335.2" fill="#b5d7ef" stroke="#087bb9" stroke-width="1.8" stroke-linejoin="round"/>
+<polygon points="662.5,288.3 724.6,288.3 724.6,335.2 662.5,335.2" fill="#cfe6f7" stroke="#087bb9" stroke-width="1.8" stroke-linejoin="round"/>
+<text x="705.3" y="125.0" font-size="22" text-anchor="middle" fill="#087bb9" font-weight="bold">conv3</text>
+<text x="705.3" y="465.0" font-size="19" text-anchor="middle" fill="#172635" font-weight="normal">13×13×384</text>
+<text x="705.3" y="492.0" font-size="16" text-anchor="middle" fill="#617484" font-weight="normal">3×3</text>
+<polygon points="786.1,288.3 809.5,264.8 866.9,264.8 843.5,288.3" fill="#e7f3fc" stroke="#087bb9" stroke-width="1.8" stroke-linejoin="round"/>
+<polygon points="843.5,288.3 866.9,264.8 866.9,311.7 843.5,335.2" fill="#b5d7ef" stroke="#087bb9" stroke-width="1.8" stroke-linejoin="round"/>
+<polygon points="786.1,288.3 843.5,288.3 843.5,335.2 786.1,335.2" fill="#cfe6f7" stroke="#087bb9" stroke-width="1.8" stroke-linejoin="round"/>
+<text x="826.5" y="125.0" font-size="22" text-anchor="middle" fill="#087bb9" font-weight="bold">conv4</text>
+<text x="826.5" y="465.0" font-size="19" text-anchor="middle" fill="#172635" font-weight="normal">13×13×256</text>
+<text x="826.5" y="492.0" font-size="16" text-anchor="middle" fill="#617484" font-weight="normal">3×3</text>
+<polygon points="904.9,288.3 928.4,264.8 985.8,264.8 962.4,288.3" fill="#e7f3fc" stroke="#087bb9" stroke-width="1.8" stroke-linejoin="round"/>
+<polygon points="962.4,288.3 985.8,264.8 985.8,311.7 962.4,335.2" fill="#b5d7ef" stroke="#087bb9" stroke-width="1.8" stroke-linejoin="round"/>
+<polygon points="904.9,288.3 962.4,288.3 962.4,335.2 904.9,335.2" fill="#cfe6f7" stroke="#087bb9" stroke-width="1.8" stroke-linejoin="round"/>
+<text x="945.4" y="125.0" font-size="22" text-anchor="middle" fill="#087bb9" font-weight="bold">conv5</text>
+<text x="945.4" y="465.0" font-size="19" text-anchor="middle" fill="#172635" font-weight="normal">13×13×256</text>
+<text x="945.4" y="492.0" font-size="16" text-anchor="middle" fill="#617484" font-weight="normal">3×3</text>
+<polygon points="1023.8,292.0 1039.8,276.1 1097.2,276.1 1081.3,292.0" fill="#fbe9e8" stroke="#c74842" stroke-width="1.8" stroke-linejoin="round"/>
+<polygon points="1081.3,292.0 1097.2,276.1 1097.2,308.0 1081.3,323.9" fill="#efc0bd" stroke="#c74842" stroke-width="1.8" stroke-linejoin="round"/>
+<polygon points="1023.8,292.0 1081.3,292.0 1081.3,323.9 1023.8,323.9" fill="#f7d6d4" stroke="#c74842" stroke-width="1.8" stroke-linejoin="round"/>
+<text x="1060.5" y="125.0" font-size="22" text-anchor="middle" fill="#c74842" font-weight="bold">pool</text>
+<text x="1060.5" y="465.0" font-size="19" text-anchor="middle" fill="#172635" font-weight="normal">6×6×256</text>
+<polygon points="1135.2,235.6 1145.2,225.6 1161.2,225.6 1151.2,235.6" fill="#ecf8ec" stroke="#3c8d52" stroke-width="1.8" stroke-linejoin="round"/>
+<polygon points="1151.2,235.6 1161.2,225.6 1161.2,364.4 1151.2,374.4" fill="#c0e3c2" stroke="#3c8d52" stroke-width="1.8" stroke-linejoin="round"/>
+<polygon points="1135.2,235.6 1151.2,235.6 1151.2,374.4 1135.2,374.4" fill="#d8efd9" stroke="#3c8d52" stroke-width="1.8" stroke-linejoin="round"/>
+<text x="1148.2" y="125.0" font-size="22" text-anchor="middle" fill="#3c8d52" font-weight="bold">fc6</text>
+<text x="1148.2" y="465.0" font-size="19" text-anchor="middle" fill="#172635" font-weight="normal">4096</text>
+<polygon points="1195.2,235.6 1205.2,225.6 1221.2,225.6 1211.2,235.6" fill="#ecf8ec" stroke="#3c8d52" stroke-width="1.8" stroke-linejoin="round"/>
+<polygon points="1211.2,235.6 1221.2,225.6 1221.2,364.4 1211.2,374.4" fill="#c0e3c2" stroke="#3c8d52" stroke-width="1.8" stroke-linejoin="round"/>
+<polygon points="1195.2,235.6 1211.2,235.6 1211.2,374.4 1195.2,374.4" fill="#d8efd9" stroke="#3c8d52" stroke-width="1.8" stroke-linejoin="round"/>
+<text x="1208.2" y="125.0" font-size="22" text-anchor="middle" fill="#3c8d52" font-weight="bold">fc7</text>
+<text x="1208.2" y="465.0" font-size="19" text-anchor="middle" fill="#172635" font-weight="normal">4096</text>
+<polygon points="1255.2,262.0 1265.2,252.0 1281.2,252.0 1271.2,262.0" fill="#ecf8ec" stroke="#3c8d52" stroke-width="1.8" stroke-linejoin="round"/>
+<polygon points="1271.2,262.0 1281.2,252.0 1281.2,338.0 1271.2,348.0" fill="#c0e3c2" stroke="#3c8d52" stroke-width="1.8" stroke-linejoin="round"/>
+<polygon points="1255.2,262.0 1271.2,262.0 1271.2,348.0 1255.2,348.0" fill="#d8efd9" stroke="#3c8d52" stroke-width="1.8" stroke-linejoin="round"/>
+<text x="1268.2" y="125.0" font-size="22" text-anchor="middle" fill="#3c8d52" font-weight="bold">fc8</text>
+<text x="1268.2" y="465.0" font-size="19" text-anchor="middle" fill="#172635" font-weight="normal">1000</text>
+<text x="1268.2" y="492.0" font-size="16" text-anchor="middle" fill="#617484" font-weight="normal">softmax</text>
+<line x1="30.0" y1="520.0" x2="1200.0" y2="520.0" stroke="#617484" stroke-width="2"/>
+<text x="615.0" y="552.0" font-size="22" text-anchor="middle" fill="#617484" font-weight="normal">5 convolutional layers (+ ReLU): features</text>
+<line x1="1290.0" y1="520.0" x2="1295.2" y2="520.0" stroke="#617484" stroke-width="2"/>
+<text x="1292.6" y="552.0" font-size="22" text-anchor="middle" fill="#617484" font-weight="normal">3 dense layers: classifier</text>
+<text x="1355.2" y="308.0" font-size="22" text-anchor="start" fill="#172635" font-weight="normal">→ 1000 class</text>
+<text x="1355.2" y="336.0" font-size="22" text-anchor="start" fill="#172635" font-weight="normal">probabilities</text>
+</svg>

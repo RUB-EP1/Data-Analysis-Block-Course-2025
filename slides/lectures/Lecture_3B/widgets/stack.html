@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stack and repeat: from edges to corners</title>
+<link rel="stylesheet" href="lab.css">
+<style>.controls{gap:22px}</style>
+</head>
+<body>
+<header><h1>Stack and repeat: from edges to corners</h1><span class="legend">draw on the input · hover a corner map to see its receptive field</span></header>
+<p class="subtitle">Layer 1 finds edges. Its four maps are stacked into a 4-channel input for layer 2, whose kernels combine two edge types into corners.</p>
+<div class="controls">
+  <label for="image">Image <select id="image"></select></label>
+  <label for="bias">Layer-2 bias <input id="bias" type="range" min="-2" max="0" step="0.05" value="-1.2"><output id="bias-value"></output></label>
+  <button id="clear">Clear</button>
+</div>
+<canvas id="plot" width="1600" height="560" role="img" aria-label="Input, four edge maps, pooled maps, four corner maps and their maxima"></canvas>
+<div id="stats" class="stats" aria-live="polite"></div>
+<p class="prompt">The square lights up exactly one unit in each corner map. Draw a new shape: which corners does it have? A plain edge is not enough to pass the bias.</p>
+<script src="plot.js"></script>
+<script src="images.js"></script>
+<script>
+'use strict';
+const C = $('plot'), ctx = C.getContext('2d');
+const third = k => k.map(r => r.map(v => v / 3)), neg = k => k.map(r => r.map(v => -v)), tr = k => k[0].map((_, i) => k.map(r => r[i]));
+const TOP = third([[-1, -1, -1], [0, 0, 0], [1, 1, 1]]);
+const CH = ['top', 'bottom', 'left', 'right'];
+const L1 = { top: TOP, bottom: neg(TOP), left: tr(TOP), right: neg(tr(TOP)) };
+const Z = () => [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+function corner(h, v, cols, rows) {
+  const k = { top: Z(), bottom: Z(), left: Z(), right: Z() };
+  cols.forEach(c => k[h][1][c] = 0.5); rows.forEach(r => k[v][r][1] = 0.5);
+  return k;
+}
+const L2 = [
+  { name: 'top-left ⌜', k: corner('top', 'left', [1, 2], [1, 2]) },
+  { name: 'top-right ⌝', k: corner('top', 'right', [0, 1], [1, 2]) },
+  { name: 'bottom-left ⌞', k: corner('bottom', 'left', [1, 2], [0, 1]) },
+  { name: 'bottom-right ⌟', k: corner('bottom', 'right', [0, 1], [0, 1]) }
+];
+let img = IMAGES['square'](), hover = null;
+const G = { x: 30, y: 78, cell: 15 };
+
+function conv(im, n, k) {
+  const o = n - 2, out = new Float32Array(o * o);
+  for (let y = 0; y < o; y++) for (let x = 0; x < o; x++) {
+    let s = 0;
+    for (let a = 0; a < 3; a++) for (let b = 0; b < 3; b++) s += k[a][b] * im[(y + a) * n + x + b];
+    out[y * o + x] = Math.max(0, s);
+  }
+  return out;
+}
+function pool(m, n) {
+  const o = n >> 1, out = new Float32Array(o * o);
+  for (let y = 0; y < o; y++) for (let x = 0; x < o; x++)
+    out[y * o + x] = Math.max(m[2 * y * n + 2 * x], m[2 * y * n + 2 * x + 1], m[(2 * y + 1) * n + 2 * x], m[(2 * y + 1) * n + 2 * x + 1]);
+  return out;
+}
+function layer2(P, k, bias) {
+  const out = new Float32Array(121);
+  for (let y = 0; y < 11; y++) for (let x = 0; x < 11; x++) {
+    let s = bias;
+    CH.forEach(c => { for (let a = 0; a < 3; a++) for (let b = 0; b < 3; b++) s += k[c][a][b] * P[c][(y + a) * 13 + x + b]; });
+    out[y * 11 + x] = Math.max(0, s);
+  }
+  return out;
+}
+function map(m, n, x, y, size, vmax, colourFn = viridis) {
+  const c = size / n;
+  for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) {
+    ctx.fillStyle = colourFn(m[j * n + i] / vmax); ctx.fillRect(x + i * c, y + j * c, c + .3, c + .3);
+  }
+}
+function box(x, y, w, h, colour = PAL.red, lw = 3) { ctx.strokeStyle = colour; ctx.lineWidth = lw; ctx.strokeRect(x, y, w, h); }
+function kernelIcon(k, x, y, s) {
+  for (let a = 0; a < 3; a++) for (let b = 0; b < 3; b++) { ctx.fillStyle = signedColour(k[a][b], 0.34); ctx.fillRect(x + b * s, y + a * s, s - 1, s - 1); }
+  ctx.strokeStyle = PAL.grid; ctx.lineWidth = 1; ctx.strokeRect(x, y, 3 * s, 3 * s);
+}
+
+function draw() {
+  syncOutputs({ bias: v => v.toFixed(2) });
+  const bias = +$('bias').value;
+  const A = {}, P = {};
+  CH.forEach(c => { A[c] = conv(img, 28, L1[c]); P[c] = pool(A[c], 26); });
+  const Q = L2.map(u => layer2(P, u.k, bias)), peaks = Q.map(q => Math.max(...q));
+  ctx.clearRect(0, 0, C.width, C.height);
+
+  // Input
+  text(ctx, 'Input', G.x, 44, 23, PAL.ink, 'left', '600');
+  for (let y = 0; y < 28; y++) for (let x = 0; x < 28; x++) {
+    ctx.fillStyle = mix('#ffffff', '#172635', img[y * 28 + x]); ctx.fillRect(G.x + x * G.cell, G.y + y * G.cell, G.cell - .5, G.cell - .5);
+  }
+  box(G.x, G.y, 28 * G.cell, 28 * G.cell, PAL.grid, 1);
+
+  // Layer 1: kernels, edge maps (26 × 26), pooled maps (13 × 13)
+  const rowY = i => 78 + i * 118, S = 108;
+  text(ctx, 'Layer 1: edges + ReLU', 490, 44, 23, PAL.ink, 'left', '600');
+  text(ctx, 'max-pool 2×2', 790, 44, 23, PAL.ink, 'left', '600');
+  CH.forEach((c, i) => {
+    kernelIcon(L1[c], 490, rowY(i) + 26, 18);
+    text(ctx, c, 517, rowY(i) + 18, 17, PAL.muted, 'center');
+    map(A[c], 26, 575, rowY(i), S, 1);
+    arrow(ctx, 692, rowY(i) + S / 2, 776, rowY(i) + S / 2, PAL.muted, 2, 10);
+    map(P[c], 13, 790, rowY(i), S, 1);
+  });
+
+  // Layer 2: corner maps (11 × 11)
+  text(ctx, 'Layer 2: corners', 1060, 44, 23, PAL.ink, 'left', '600');
+  const vmax = Math.max(0.3, ...peaks);
+  L2.forEach((u, i) => {
+    map(Q[i], 11, 1060, rowY(i), S, vmax);
+  });
+  // stack arrows: every pooled map feeds every corner map
+  ctx.strokeStyle = 'rgba(97,116,132,.28)'; ctx.lineWidth = 1.2;
+  CH.forEach((_, i) => L2.forEach((__, j) => { ctx.beginPath(); ctx.moveTo(904, rowY(i) + S / 2); ctx.lineTo(1054, rowY(j) + S / 2); ctx.stroke(); }));
+
+  // Global maximum per corner type
+  text(ctx, 'Largest response', 1250, 44, 23, PAL.ink, 'left', '600');
+  L2.forEach((u, i) => {
+    const y = rowY(i) + 34, w = 250 * Math.min(1, peaks[i] / 0.8);
+    ctx.fillStyle = '#eef3f7'; ctx.fillRect(1250, y, 250, 40);
+    ctx.fillStyle = peaks[i] > 0 ? PAL.gold : '#eef3f7'; ctx.fillRect(1250, y, w, 40);
+    text(ctx, u.name, 1250, y - 8, 19, PAL.ink);
+    text(ctx, peaks[i].toFixed(2), 1512, y + 28, 21, PAL.ink, 'left', '600');
+  });
+
+  // Receptive field of the hovered layer-2 unit
+  if (hover) {
+    const { i, x, y } = hover, s11 = S / 11, s13 = S / 13, s26 = S / 26;
+    box(1060 + x * s11, rowY(i) + y * s11, s11, s11, PAL.red, 3);
+    CH.forEach((_, r) => { box(790 + x * s13, rowY(r) + y * s13, 3 * s13, 3 * s13); box(575 + 2 * x * s26, rowY(r) + 2 * y * s26, 6 * s26, 6 * s26); });
+    box(G.x + 2 * x * G.cell, G.y + 2 * y * G.cell, 8 * G.cell, 8 * G.cell, PAL.red, 4);
+  }
+  stats([
+    ['Largest corner responses', L2.map((u, i) => peaks[i].toFixed(2)).join('  ')],
+    ['Receptive field of a corner unit', '8 × 8 pixels'],
+    ['Weights', 'layer 1: 4 × 9 · layer 2: 4 × (4 × 9) + 4']
+  ]);
+}
+
+C.addEventListener('pointermove', ev => {
+  const [px, py] = canvasPoint(C, ev), S = 108;
+  let h = null;
+  for (let i = 0; i < 4; i++) {
+    const y0 = 78 + i * 118;
+    if (px >= 1060 && px < 1060 + S && py >= y0 && py < y0 + S) h = { i, x: Math.floor((px - 1060) / (S / 11)), y: Math.floor((py - y0) / (S / 11)) };
+  }
+  if (JSON.stringify(h) !== JSON.stringify(hover)) { hover = h; draw(); }
+});
+Object.keys(IMAGES).filter(n => n !== 'blank').forEach(n => $('image').add(new Option(n, n)));
+$('image').value = 'square';
+$('image').addEventListener('input', () => { img = IMAGES[$('image').value](); draw(); });
+$('bias').addEventListener('input', draw);
+$('clear').onclick = () => { img = IMAGES.blank(); draw(); };
+paintable(C, G, () => img, draw);
+draw();
+if (new URLSearchParams(location.search).has('demo')) {
+  // Point at the strongest top-left unit so the poster shows a receptive field.
+  const P = {}; CH.forEach(c => P[c] = pool(conv(img, 28, L1[c]), 26));
+  const q = layer2(P, L2[0].k, +$('bias').value), k = q.indexOf(Math.max(...q));
+  hover = { i: 0, x: k % 11, y: Math.floor(k / 11) }; draw();
+}
+</script>
+</body>
+</html>

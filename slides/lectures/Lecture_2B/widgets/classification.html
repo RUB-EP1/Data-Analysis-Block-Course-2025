@@ -1,0 +1,64 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Boosting a classifier with BCE</title><link rel="stylesheet" href="lab.css"></head>
+<body>
+<header><h1>Boosting a classifier with binary cross-entropy</h1><span class="legend"><span class="signal">● signal y = 1</span> &nbsp; <span class="background">● background y = 0</span></span></header>
+<p class="subtitle">Trees add to the log-odds F(x); p = σ(F). Point area ∝ |y − p|, the size of the pseudo-residual. Leaf penalty λ = 1; 300 training, 1000 validation events; up to 200 trees.</p>
+<div class="controls">
+  <label for="shape">Data <select id="shape"><option value="disk">disk</option><option value="xor">xor</option><option value="diagonal">diagonal</option></select></label>
+  <label for="round">Tree m <input id="round" type="range" min="1" max="200" step="1" value="1" style="width:190px"><output id="round-value" for="round">1</output></label>
+  <label for="eta">η <input id="eta" type="range" min="0.05" max="1" step="0.05" value="0.3" data-digits="2" style="width:130px"><output id="eta-value" for="eta">0.30</output></label>
+  <label for="depth">Depth <input id="depth" type="range" min="1" max="4" step="1" value="2" style="width:90px"><output id="depth-value" for="depth">2</output></label>
+  <label for="mode">Leaf <select id="mode"><option value="newton">Newton h = p(1−p)</option><option value="gradient">gradient h = 1</option></select></label>
+  <button id="next">Next →</button><button id="reset" title="Reset" aria-label="Reset">↺</button>
+</div>
+<canvas id="plot" width="1600" height="540" role="img" aria-label="Predicted probability map, contribution of tree m, and training and validation cross-entropy versus number of trees"></canvas>
+<div id="stats" class="stats" aria-live="polite"></div>
+<p class="prompt">Try “xor” with depth 1: a single cut cannot see the pattern, so stumps barely help. Depth 2 solves it.</p>
+<script src="gb.js"></script>
+<script>
+'use strict';
+const $ = (id) => document.getElementById(id), P = makeCanvas('plot'), M = 200;
+let model = null, key = '', train = null, val = null;
+function fit() {
+  const k = [$('shape').value, $('eta').value, $('depth').value, $('mode').value].join('/');
+  if (k === key) return;
+  train = GB.clsData($('shape').value, 21, 300); val = GB.clsData($('shape').value, 22, 1000);
+  model = GB.boost(train, val, 'bce', { rounds: M, eta: +$('eta').value, maxDepth: +$('depth').value, lambda: 1, newton: $('mode').value === 'newton' });
+  key = k;
+}
+const acc = (d, m) => d.y.reduce((n, y, i) => n + ((model.F(d.X[i], m) > 0 ? 1 : 0) === y), 0) / d.y.length;
+function points(f, F) {
+  train.X.forEach((x, i) => {
+    const y = train.y[i], p = GB.sigmoid(F[i]);
+    P.dot(f, x[0], x[1], y ? COL.gold : COL.blue, 2 + 9 * Math.sqrt(Math.abs(y - p)), 'white');
+  });
+}
+function draw() {
+  syncOutputs(); fit(); P.clear();
+  const m = +$('round').value, t = model.trees[m - 1], eta = model.eta;
+  const Fm = train.X.map((x) => model.F(x, m));
+  // (a) probability map after m trees
+  const a = P.frame(90, 50, 400, 380, `p(x) = σ(F${sub(m)}(x))`, 'feature 1', 'feature 2', [0, 1], [0, 1]);
+  P.field(a, (x) => diverge(2 * GB.sigmoid(model.F(x, m)) - 1), 60);
+  points(a, Fm);
+  // (b) the contribution of tree m, drawn on the pseudo-residuals it was fitted to
+  const vals = GB.leaves(t).map((l) => eta * l.value), S = Math.max(1e-6, ...vals.map(Math.abs));
+  const b = P.frame(620, 50, 400, 380, `Tree ${m}: η·γ${sub(m)}(x), max |·| = ${S.toFixed(2)}`, 'feature 1', 'feature 2', [0, 1], [0, 1]);
+  P.field(b, (x) => diverge((eta * GB.predict(t, x)) / S), 60);
+  points(b, model.before[m - 1]);
+  // (c) loss curves
+  const top = 0.8;
+  const c = P.frame(1170, 50, 390, 380, 'Cross-entropy versus trees', 'trees', 'mean BCE', [0, M], [0, top], 1);
+  P.line(c, model.trainLoss.map((v, k) => [k, v]), COL.accent, 3);
+  P.line(c, model.valLoss.map((v, k) => [k, v]), COL.red, 3);
+  P.line(c, [[m, 0], [m, top]], COL.blue, 1.5);
+  P.text('train', c.x + c.w - 60, c.Y(model.trainLoss[M]) - 10, 18, COL.accent);
+  P.text('validation', c.x + c.w - 100, c.Y(model.valLoss[M]) - 12, 18, COL.red);
+  const best = model.valLoss.indexOf(Math.min(...model.valLoss));
+  stat([['Train BCE', model.trainLoss[m].toFixed(3)], ['Validation BCE', model.valLoss[m].toFixed(3)], ['Validation accuracy', (100 * acc(val, m)).toFixed(1) + '%'], ['Best validation BCE', `${model.valLoss[best].toFixed(3)} at m = ${best}`], ['F₀ = log(ȳ/(1−ȳ))', model.F0.toFixed(3)]]);
+}
+function sub(n) { return String(n).split('').map((d) => '₀₁₂₃₄₅₆₇₈₉'[+d]).join(''); }
+document.querySelectorAll('input,select').forEach((e) => e.addEventListener('input', draw));
+$('next').addEventListener('click', () => { $('round').value = Math.min(M, +$('round').value + 1); draw(); });
+$('reset').addEventListener('click', () => { document.querySelectorAll('input').forEach((e) => (e.value = e.defaultValue)); document.querySelectorAll('select').forEach((e) => (e.selectedIndex = 0)); draw(); });
+draw();
+</script></body></html>

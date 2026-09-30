@@ -1,0 +1,19 @@
+## Several ways to get derivative {#original-a-06 .original-slide}
+
+```{=html}
+<div class="source-page" aria-label="Original Lecture 1A, slide 6">
+<img class="source-art" src="figures/original/original-06.svg" alt="Several ways to get derivative" loading="eager" />
+
+</div>
+```
+
+::: {.notes}
+Original Lecture-1A, slide 6. Visual source: Keynote PDF export.
+
+Several ways to get derivative
+Symbolic, Numeric, Automatic
+f(x)=f(x)=
+df
+dx=?
+Symbolic Numeric “Automatic"
+:::

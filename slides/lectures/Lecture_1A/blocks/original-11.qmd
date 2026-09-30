@@ -1,0 +1,21 @@
+## Reverse Diff {#original-a-11 .original-slide}
+
+```{=html}
+<div class="source-page" aria-label="Original Lecture 1A, slide 11">
+<img class="source-art" src="figures/original/original-11.svg" alt="Reverse Diff" loading="eager" />
+
+</div>
+```
+
+::: {.notes}
+Original Lecture-1A, slide 11. Visual source: Keynote PDF export.
+
+Reverse Diff
+•Operate with a computation graph, pulling back 
+eﬀects on the ﬁnal computation node to the leaves.
+•Two operations to understand: 
+* for the chain rule 
++ node combination 
+•Not expression tree but computation graph
+
+:::

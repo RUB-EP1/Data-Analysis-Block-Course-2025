@@ -1,0 +1,36 @@
+<%
+const molab = "https://molab.marimo.io/github/ctoennis/Data-Analysis-Block-Course-2026/blob/main/";
+const fileName = (p) => p.split("/").pop();
+%>
+```{=html}
+<div class="card-grid">
+<% for (const item of items) { %>
+  <article class="course-card lecture-card" id="lecture-<%= item.id %>" <%= metadataAttrs(item) %>>
+    <a class="card-head" href="<%- item.slides %>">
+      <span class="card-tag">Lecture <%= item.id %></span>
+      <h3 class="card-title"><%= item.title %></h3>
+      <p class="card-meta"><span><%= item.instructor %></span><span><%= item.when %></span></p>
+    </a>
+    <div class="card-actions">
+      <a class="btn-main" href="<%- item.slides %>">Open slides →</a>
+      <% if (item.exercise) { %><a class="chip" href="#exercise-<%= item.exercise %>">Exercise <%= item.exercise %></a><% } %>
+    </div>
+    <% if (item.materials && item.materials.length) { %>
+    <ul class="materials">
+      <% for (const m of item.materials) { %>
+      <li>
+        <span class="kind kind-<%= m.kind %>"><%= m.kind %></span>
+        <span class="label"><%= m.label %></span>
+        <span class="links">
+          <% if (m.view) { %><a href="<%- m.view %>">view</a><% } %>
+          <% if (m.kind === "marimo") { %><a href="<%- molab + m.src %>" target="_blank" rel="noopener">molab</a><% } %>
+          <a href="<%- m.src %>" download="<%= fileName(m.src) %>">.<%= m.kind === "pluto" ? "jl" : "py" %></a>
+        </span>
+      </li>
+      <% } %>
+    </ul>
+    <% } %>
+  </article>
+<% } %>
+</div>
+```

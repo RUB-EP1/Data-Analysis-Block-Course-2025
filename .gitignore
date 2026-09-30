@@ -16,3 +16,11 @@ build/
 
 # Python build helpers.
 __pycache__/
+
+/.quarto/
+**/*.quarto_ipynb
+
+# Quarto website output.
+_site/
+.quarto/
+**/*.quarto_ipynb

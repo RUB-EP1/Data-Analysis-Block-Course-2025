@@ -1,0 +1,103 @@
+{
+ "base_model": {
+  "Can you explain what an electron is?": "\n\nAn electron is a molecule of hydrogen, oxygen, and nitrogen. It is a molecule of hydrogen, oxygen, and nitrogen. It is a molecule of hydrogen, oxygen, and nitrogen. It",
+  "Question: What is the capital of France?\nAnswer:": " The capital of France is the capital of France.\nThe capital of France is the capital of France.\nThe capital of France is the capital of France.\nThe capital of France is the capital"
+ },
+ "latency": {
+  "lengths": [
+   16,
+   64,
+   128,
+   256,
+   384,
+   512,
+   768,
+   1000
+  ],
+  "prefill_s": [
+   0.019271708006272092,
+   0.0357874589972198,
+   0.05873049999354407,
+   0.18948008300503716,
+   0.15607333299703896,
+   0.22569112500059418,
+   0.2952112499915529,
+   0.34160008298931643
+  ],
+  "decode_s_per_token": [
+   0.011314582981867716,
+   0.011226957984035835,
+   0.011533459008205682,
+   0.012735458003589883,
+   0.01278962500509806,
+   0.015024708991404623,
+   0.013332667003851384,
+   0.013667666993569583
+  ],
+  "prefill_tok_per_s": [
+   830.232587313626,
+   1788.3359644218365,
+   2179.4467953460357,
+   1351.065483717328,
+   2460.3818770711155,
+   2268.5872118305583,
+   2601.526872780002,
+   2927.3997571929017
+  ],
+  "decode_tok_per_s": [
+   88.38151627881989,
+   89.07132291952543,
+   86.70425752487024,
+   78.52092949606673,
+   78.18837531212924,
+   66.55702952863065,
+   75.00374829065571,
+   73.16537639309503
+  ]
+ },
+ "context_windows": [
+  [
+   2019.1,
+   1024,
+   "GPT-2"
+  ],
+  [
+   2020.4,
+   2048,
+   "GPT-3"
+  ],
+  [
+   2022.9,
+   4096,
+   "ChatGPT (GPT-3.5)"
+  ],
+  [
+   2023.2,
+   32768,
+   "GPT-4 (32k)"
+  ],
+  [
+   2023.4,
+   100000,
+   "Claude (100k)"
+  ],
+  [
+   2023.9,
+   200000,
+   "Claude 2.1"
+  ],
+  [
+   2024.1,
+   1000000,
+   "Gemini 1.5 Pro"
+  ],
+  [
+   2026.3,
+   1000000,
+   "Claude Opus 5, Sonnet 5"
+  ]
+ ],
+ "token_references": {
+  "all slides of this course": 46652
+ }
+}

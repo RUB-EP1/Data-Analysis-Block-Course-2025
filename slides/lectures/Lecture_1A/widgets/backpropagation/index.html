@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Backpropagation step by step</title>
+<style>
+*{box-sizing:border-box}body{margin:0;padding:20px 25px;color:#111;background:white;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:clamp(16px,1.9vw,32px)}
+.controls{display:flex;align-items:center;gap:24px;flex-wrap:wrap}label{display:flex;align-items:center;gap:12px}input{font:inherit;width:105px;border:1px solid #aaa;border-radius:6px;padding:5px 10px}button{font:inherit;padding:8px 23px;border:2px solid #007dc5;border-radius:10px;background:white;color:#007dc5;cursor:pointer}button:disabled{opacity:.35;cursor:default}button:hover:enabled{background:#eef8ff}button:focus-visible,input:focus-visible{outline:3px solid #ed220d;outline-offset:3px}.formula{font-size:1.15em;margin:22px 0 0;letter-spacing:.015em}#graph{width:100%;margin-top:15px}#graph svg{width:100%;height:auto;display:block}h2{font-size:1.3em;margin:16px 0 10px}#explanation{min-height:2.7em;margin:0;line-height:1.35}.navigation{display:flex;align-items:center;gap:18px;margin-top:15px}.fixed{color:#5e5e5e;font-size:.85em}.poster .controls,.poster .navigation{display:none}.poster #explanation{min-height:0}.poster{padding:30px}
+</style></head><body>
+<div class="controls"><label>Weight w <input id="weight" type="number" value="1" min="-3" max="3" step="0.1"></label><label>Learning rate η <input id="rate" type="number" value="0.01" min="0" max="1" step="0.01"></label><span class="fixed">Fixed input x = 2, target t = 5</span><button id="reset">Reset</button></div>
+<p class="formula">a = wx &nbsp;&nbsp; b = a² &nbsp;&nbsp; c = b + a &nbsp;&nbsp; L = ½(c − t)²</p>
+<div id="graph"></div>
+<div aria-live="polite"><h2 id="stage-title"></h2><p id="explanation"></p></div>
+<div class="navigation"><button id="previous">Previous</button><button id="next">Next step</button><span id="progress"></span></div>
+<script src="model.js"></script><script>
+const poster=new URLSearchParams(location.search).has('poster');let stage=poster?6:0;
+if(poster)document.body.classList.add('poster');
+const weight=document.getElementById('weight'),rate=document.getElementById('rate');
+function render(){const v=Backprop.compute(Number(weight.value),2,5,Number(rate.value));document.getElementById('graph').innerHTML=Backprop.svgFor(stage,v);const [title,explanation]=Backprop.description(stage,v);document.getElementById('stage-title').textContent=title;document.getElementById('explanation').textContent=explanation;document.getElementById('previous').disabled=stage===0;document.getElementById('next').disabled=stage===7;document.getElementById('progress').textContent=`${stage} / 7`;}
+document.getElementById('next').onclick=()=>{stage=Math.min(7,stage+1);render()};document.getElementById('previous').onclick=()=>{stage=Math.max(0,stage-1);render()};document.getElementById('reset').onclick=()=>{weight.value=1;rate.value=.01;stage=0;render()};
+for(const input of [weight,rate])input.addEventListener('change',()=>{if(!input.checkValidity()||input.value==='')input.value=input===weight?1:.01;stage=0;render()});
+render();
+</script></body></html>

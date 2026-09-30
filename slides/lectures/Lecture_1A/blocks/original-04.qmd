@@ -1,0 +1,15 @@
+## What held the progress? {#original-a-04 .original-slide}
+
+```{=html}
+<div class="source-page" aria-label="Original Lecture 1A, slide 4">
+<img class="source-art" src="figures/original/original-04.svg" alt="What held the progress?" loading="eager" />
+
+</div>
+```
+
+::: {.notes}
+Original Lecture-1A, slide 4. Visual source: Keynote PDF export.
+
+What held the progress?
+Data Compute Algorithms
+:::

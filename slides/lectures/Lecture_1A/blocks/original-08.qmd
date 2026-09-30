@@ -1,0 +1,22 @@
+## Finite Diff {#original-a-08 .original-slide}
+
+```{=html}
+<div class="source-page" aria-label="Original Lecture 1A, slide 8">
+<img class="source-art" src="figures/original/original-08.svg" alt="Finite Diff" loading="eager" />
+
+</div>
+```
+
+::: {.notes}
+Original Lecture-1A, slide 8. Visual source: Keynote PDF export.
+
+Finite Diff
+Choose right answer
+A
+B
+C
+D
+df
+dx≈fx+Δx−f(x−Δx)
+2Δx
+:::

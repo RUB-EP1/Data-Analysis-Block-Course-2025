@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Choosing the next token</title>
+<link rel="stylesheet" href="lab.css">
+<style>
+.controls{gap:18px}input[type=range]{width:150px}
+.gen{flex-shrink:0;font:19px/1.45 Georgia,serif;border-top:1px solid #dbe3ea;padding-top:10px;min-height:66px}
+.gen b{font-family:"Helvetica Neue",Arial;color:#087bb9;font-size:17px;margin-right:8px}
+.gen .p{color:#617484}
+</style>
+</head>
+<body>
+<header><h1>Choosing the next token</h1><span class="legend">real GPT-2 (124 M) next-token probabilities</span></header>
+<p class="subtitle">The model returns a logit <i>z<sub>i</sub></i> for all 50 257 tokens. Sampling uses <i>p<sub>i</sub></i> ∝ exp(<i>z<sub>i</sub></i>/<i>T</i>), optionally keeping only the top-<i>k</i> tokens or the smallest set with probability ≥ <i>p</i>.</p>
+<div class="controls">
+  <label for="prompt">Prompt <select id="prompt"></select></label>
+  <label for="T">Temperature T <input id="T" type="range" min="0" max="2" step="0.05" value="1"><output id="T-value"></output></label>
+  <label for="k">top-k <input id="k" type="range" min="1" max="200" step="1" value="200"><output id="k-value"></output></label>
+  <label for="p">top-p <input id="p" type="range" min="0.05" max="1" step="0.01" value="1"><output id="p-value"></output></label>
+  <button id="draw">Sample 50</button>
+</div>
+<canvas id="plot" width="1600" height="470" role="img" aria-label="Probabilities of the 20 most likely next tokens and sampled counts"></canvas>
+<div id="stats" class="stats" aria-live="polite"></div>
+<div id="gen" class="gen" aria-live="polite"></div>
+<script src="plot.js"></script>
+<script src="data_sampler.js"></script>
+<script>
+'use strict';
+const C = $('plot'), ctx = C.getContext('2d'), D = window.DATA_SAMPLER.prompts;
+let counts = null, r = rng(3);
+D.forEach((d, i) => $('prompt').add(new Option(d.prompt + ' …', i)));
+
+function distribution() {
+  const d = D[+$('prompt').value], T = Math.max(+$('T').value, 1e-3), K = +$('k').value, P = +$('p').value;
+  const top = d.logits.map(z => z / T), m = top[0];
+  // Exact normalization: the top-200 logits plus a histogram of all other logits.
+  let Z = top.reduce((s, z) => s + Math.exp(z - m), 0);
+  d.restLogit.forEach((z, b) => Z += d.restCount[b] * Math.exp(z / T - m));
+  let probs = top.map(z => Math.exp(z - m) / Z);
+  const full = probs.slice(), restMass = 1 - full.reduce((a, b) => a + b, 0);
+  // Truncation (applied to the 200 stored tokens).
+  let keep = probs.map((_, i) => i < K);
+  let cum = 0;
+  keep = keep.map((k, i) => { const ok = k && cum < P; cum += probs[i]; return ok; });
+  keep[0] = true;
+  const truncated = K < 200 || P < 1;
+  let q = probs.map((x, i) => keep[i] ? x : 0);
+  if (truncated) { const s = q.reduce((a, b) => a + b, 0); q = q.map(x => x / s); }
+  if (+$('T').value === 0) q = probs.map((_, i) => i === 0 ? 1 : 0);
+  const H = -q.reduce((s, x) => s + (x > 0 ? x * Math.log2(x) : 0), 0);
+  return { d, full, q, restMass: truncated || +$('T').value === 0 ? 0 : restMass, kept: q.filter(x => x > 0).length, H };
+}
+function sample(q) { let u = r(), s = 0; for (let i = 0; i < q.length; i++) { s += q[i]; if (u <= s) return i; } return -1; }
+
+function draw() {
+  syncOutputs({ T: v => v === 0 ? '0 (greedy)' : v.toFixed(2), p: v => v.toFixed(2) });
+  const { d, q, restMass, kept, H } = distribution();
+  ctx.clearRect(0, 0, C.width, C.height);
+  const n = 20, x0 = 250, w = 1200, y0 = 20, bh = 20.5;
+  text(ctx, `“${d.prompt} …”`, 20, y0 + 4, 20, PAL.ink, 'left', '600');
+  const other = q.slice(n).reduce((a, b) => a + b, 0) + restMass;
+  const maxp = Math.max(...q.slice(0, n), other, 0.02);
+  for (let i = 0; i < n; i++) {
+    const y = y0 + 26 + i * bh;
+    text(ctx, JSON.stringify(d.tokens[i]).slice(1, -1).replace(/ /g, '·'), x0 - 12, y + 15, 17, q[i] > 0 ? PAL.ink : '#b7c3cd', 'right');
+    ctx.fillStyle = q[i] > 0 ? PAL.accent : '#e3e8ed'; ctx.fillRect(x0, y + 2, w * 0.62 * q[i] / maxp, bh - 5);
+    text(ctx, (100 * q[i]).toFixed(q[i] < 0.01 ? 2 : 1) + '%', x0 + w * 0.62 * q[i] / maxp + 8, y + 15, 15, PAL.muted);
+    if (counts) {
+      ctx.fillStyle = PAL.gold; ctx.fillRect(x0 + w * 0.8, y + 2, 4.5 * counts[i], bh - 5);
+      if (counts[i]) text(ctx, counts[i], x0 + w * 0.8 + 4.5 * counts[i] + 6, y + 15, 15, '#9c6b00');
+    }
+  }
+  const yr = y0 + 26 + n * bh;
+  text(ctx, `all other ${50257 - n} tokens`, x0 - 12, yr + 15, 17, PAL.muted, 'right', 'italic');
+  ctx.fillStyle = '#b7c3cd'; ctx.fillRect(x0, yr + 2, w * 0.62 * other / maxp, bh - 5);
+  text(ctx, (100 * other).toFixed(1) + '%', x0 + w * 0.62 * other / maxp + 8, yr + 15, 15, PAL.muted);
+  if (counts) {
+    text(ctx, 'samples out of 50', x0 + w * 0.8, y0 + 16, 16, '#9c6b00', 'left', '600');
+    ctx.fillStyle = PAL.gold; ctx.fillRect(x0 + w * 0.8, yr + 2, 4.5 * counts[n], bh - 5);
+    if (counts[n]) text(ctx, counts[n], x0 + w * 0.8 + 4.5 * counts[n] + 6, yr + 15, 15, '#9c6b00');
+  }
+  stats([
+    ['Tokens that can be drawn', kept + (restMass > 0 ? ' + ~50 000' : '')],
+    ['Most likely', `${JSON.stringify(d.tokens[0])} ${(100 * q[0]).toFixed(1)}%`],
+    ['Entropy (top 200)', H.toFixed(2) + ' bits'],
+    ['Unmodified p at T = 1', `${JSON.stringify(d.tokens[0])} ${(100 * d.p[0]).toFixed(1)}%`]
+  ]);
+  const T = +$('T').value, key = T === 0 ? '0.0' : T <= 0.85 ? '0.7' : T <= 1.25 ? '1.0' : '1.5';
+  $('gen').innerHTML = `<b>GPT-2 continuation, T = ${key === '0.0' ? '0 (greedy)' : key}:</b><span class="p">${d.prompt}</span>${d.gens[key].replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/\n/g, ' ↵ ')}`;
+}
+$('draw').onclick = () => {
+  const { q, restMass } = distribution();
+  counts = new Array(21).fill(0);
+  for (let s = 0; s < 50; s++) { const i = r() < restMass ? -1 : sample(q.map(x => x / (1 - restMass))); counts[i >= 0 && i < 20 ? i : 20]++; }
+  draw();
+};
+document.querySelectorAll('input,select').forEach(e => e.addEventListener('input', () => { counts = null; draw(); }));
+if (new URLSearchParams(location.search).has('demo')) { $('prompt').value = 1; draw(); $('draw').click(); }
+draw();
+</script>
+</body>
+</html>

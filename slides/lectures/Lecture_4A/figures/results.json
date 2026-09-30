@@ -1,0 +1,483 @@
+{
+ "gpt2_parameters": {
+  "total": 124439808,
+  "token embedding (50257 × 768)": 38597376,
+  "position embedding (1024 × 768)": 786432,
+  "attention, 12 layers × (4·768² + biases)": 28348416,
+  "MLP, 12 layers × (2·768·3072 + biases)": 56669184,
+  "layer norms": 38400
+ },
+ "tokens_per_sentence": {
+  "texts": {
+   "English": "The electron and the proton attract each other, and the energy of the atom is quantized.",
+   "German": "Das Elektron und das Proton ziehen sich an, und die Energie des Atoms ist quantisiert.",
+   "Russian": "Электрон и протон притягиваются друг к другу, а энергия атома квантована.",
+   "Chinese": "电子和质子相互吸引，原子的能量是量子化的。",
+   "Python": "def energy(mass, p):\n    return (mass**2 + p**2) ** 0.5\n"
+  },
+  "counts": {
+   "GPT-2 (2019), 50 257": [
+    20,
+    31,
+    80,
+    37,
+    26
+   ],
+   "GPT-4 (2023), 100 277": [
+    19,
+    24,
+    39,
+    24,
+    24
+   ],
+   "GPT-4o (2024), 200 019": [
+    19,
+    20,
+    21,
+    19,
+    24
+   ]
+  }
+ },
+ "token_examples": {
+  " strawberry": {
+   "gpt2": [
+    " strawberry"
+   ],
+   "o200k": [
+    " strawberry"
+   ]
+  },
+  "strawberry": {
+   "gpt2": [
+    "st",
+    "raw",
+    "berry"
+   ],
+   "o200k": [
+    "st",
+    "raw",
+    "berry"
+   ]
+  },
+  " Bochum": {
+   "gpt2": [
+    " Bo",
+    "ch",
+    "um"
+   ],
+   "o200k": [
+    " Boch",
+    "um"
+   ]
+  },
+  " Heisenberg": {
+   "gpt2": [
+    " He",
+    "isen",
+    "berg"
+   ],
+   "o200k": [
+    " He",
+    "isen",
+    "berg"
+   ]
+  },
+  " Energieerhaltungssatz": {
+   "gpt2": [
+    " E",
+    "ner",
+    "gie",
+    "er",
+    "h",
+    "alt",
+    "ung",
+    "ss",
+    "atz"
+   ],
+   "o200k": [
+    " Energie",
+    "er",
+    "haltung",
+    "ss",
+    "atz"
+   ]
+  },
+  " 12345678": {
+   "gpt2": [
+    " 123",
+    "45",
+    "678"
+   ],
+   "o200k": [
+    " ",
+    "123",
+    "456",
+    "78"
+   ]
+  },
+  " 2026": {
+   "gpt2": [
+    " 20",
+    "26"
+   ],
+   "o200k": [
+    " ",
+    "202",
+    "6"
+   ]
+  },
+  " SolidGoldMagikarp": {
+   "gpt2": [
+    " SolidGoldMagikarp"
+   ],
+   "o200k": [
+    " Solid",
+    "Gold",
+    "Mag",
+    "ik",
+    "arp"
+   ]
+  },
+  " transformer": {
+   "gpt2": [
+    " transformer"
+   ],
+   "o200k": [
+    " transformer"
+   ]
+  },
+  " Transformer": {
+   "gpt2": [
+    " Trans",
+    "former"
+   ],
+   "o200k": [
+    " Transformer"
+   ]
+  }
+ },
+ "attention_flag": {
+  "next": [
+   [
+    " blue",
+    0.934
+   ],
+   [
+    " green",
+    0.01
+   ],
+   [
+    " yellow",
+    0.009
+   ],
+   [
+    " red",
+    0.008
+   ],
+   [
+    " black",
+    0.007
+   ]
+  ]
+ },
+ "attention_names": {
+  "next": [
+   [
+    " Mary",
+    0.677
+   ],
+   [
+    " them",
+    0.128
+   ],
+   [
+    " the",
+    0.048
+   ],
+   [
+    " John",
+    0.023
+   ],
+   [
+    " her",
+    0.014
+   ]
+  ]
+ },
+ "attention_repeat": {
+  "next": [
+   [
+    " quantum",
+    0.311
+   ],
+   [
+    "\n",
+    0.11
+   ],
+   [
+    " Quantum",
+    0.038
+   ],
+   [
+    " (",
+    0.013
+   ],
+   [
+    ",",
+    0.01
+   ]
+  ]
+ },
+ "attention_physics": {
+  "next": [
+   [
+    " was",
+    0.349
+   ],
+   [
+    "'s",
+    0.068
+   ],
+   [
+    " accelerated",
+    0.02
+   ],
+   [
+    " is",
+    0.016
+   ],
+   [
+    " moved",
+    0.013
+   ]
+  ]
+ },
+ "induction_loss": {
+  "first": 11.803333333333333,
+  "second": 0.7316666666666666
+ },
+ "logit_lens": {
+  "prompt": "The electron has a negative",
+  "target": " charge",
+  "p_target_by_layer": [
+   1.4698378832972901e-24,
+   0.00023290931130759418,
+   7.579047814942896e-05,
+   0.00014693406410515308,
+   0.0005097201210446656,
+   0.0022504841908812523,
+   0.0019904724322259426,
+   0.0004295015532989055,
+   0.000552079698536545,
+   0.0001470664283260703,
+   0.0010046818060800433,
+   0.17733050882816315,
+   0.4743328094482422
+  ],
+  "top_last": [
+   " negative",
+   " negative",
+   " negative",
+   " pressure",
+   " spiral",
+   " spiral",
+   " impact",
+   " impact",
+   " value",
+   " value",
+   " value",
+   " spin",
+   " charge"
+  ]
+ },
+ "embedding_words": 151,
+ "sampler": {
+  "The American flag is red, white, and": {
+   "top": [
+    [
+     " blue",
+     0.9261
+    ],
+    [
+     " green",
+     0.0099
+    ],
+    [
+     " black",
+     0.009
+    ],
+    [
+     " yellow",
+     0.0089
+    ],
+    [
+     " gold",
+     0.0076
+    ]
+   ],
+   "covered_by_top200": 0.9953,
+   "gens": {
+    "0.0": " blue. The American flag is blue, white, and blue.\n\nThe American flag is red, white, and blue. The American",
+    "0.7": " blue. The American flag is indigo, green, and blue. The American flag is yellow, blue, and red. I don't",
+    "1.0": " blue, while down between them each hollered else. Encircling this flag symbolizes an enduring truth of voting laws. Voting rights",
+    "1.5": " bluewear to captures how inalienably Close Brothers values being known has stood united since 1939?, sans Private Territory Number of transplocate sett ell"
+   }
+  },
+  "The capital of France is": {
+   "top": [
+    [
+     " the",
+     0.0846
+    ],
+    [
+     " now",
+     0.0479
+    ],
+    [
+     " a",
+     0.0462
+    ],
+    [
+     " France",
+     0.0324
+    ],
+    [
+     " Paris",
+     0.0322
+    ]
+   ],
+   "covered_by_top200": 0.7003,
+   "gens": {
+    "0.0": " the capital of the French Republic, and the capital of the French Republic is the capital of the French Republic.\n\nThe French Republic is",
+    "0.7": " still the biggest producer of oil and gas. (Reuters)\n\nThere was an odd, brief, silent moment in the French government's",
+    "1.0": " also the largest city in the world.\n\nAbout half of France is now part of the EU, one fifth is part of the EU",
+    "1.5": " Barville ,\"A vice801 noted.\"Mr Wallace wanted ahead standpoint file La Celavalarchment .\"spellscribe InterpretedWorld demanded but action prevailed"
+   }
+  },
+  "The electron and the": {
+   "top": [
+    [
+     " electron",
+     0.1163
+    ],
+    [
+     " photon",
+     0.0574
+    ],
+    [
+     " hydrogen",
+     0.0437
+    ],
+    [
+     " posit",
+     0.0228
+    ],
+    [
+     " prot",
+     0.0217
+    ]
+   ],
+   "covered_by_top200": 0.7432,
+   "gens": {
+    "0.0": " electron are the two most important elements in the universe. The electron is the most important element in the universe, and the electron is the most",
+    "0.7": " neutrino have been working together to make the first superluminal particle, a single electron which has been made possible through the fusion",
+    "1.0": " repulsion force of bosons—we don't think it's possible to take them to perform a two-pass reaction without assuming only that",
+    "1.5": " violet here represent one Operatorselves. (dotol gene 106 advantage height ten AAA bodies Chevron)\n\nnames exist KaḴ 215 Bul"
+   }
+  },
+  "Once upon a": {
+   "top": [
+    [
+     " time",
+     0.1766
+    ],
+    [
+     " certain",
+     0.0845
+    ],
+    [
+     " moment",
+     0.0312
+    ],
+    [
+     " visit",
+     0.0289
+    ],
+    [
+     " while",
+     0.0163
+    ]
+   ],
+   "covered_by_top200": 0.6777,
+   "gens": {
+    "0.0": " time, the world was a place of great beauty and great danger. The world was a place of great danger, and the world was a",
+    "0.7": " time, we had a recipe that pitted tomato paste with carrots. I don't know how I got the idea to do that, but I",
+    "1.0": " lengthy stop, Walk in the Sonic-centric world of progressive company. There are a few humanity problems at Chromaticus, and last I",
+    "1.5": " playoff use you trail XY cards back here this inconvenient 5acious sample seller nestles below free space Zyzerstem ham balls run through the allowing"
+   }
+  },
+  "In particle physics, the Higgs boson": {
+   "top": [
+    [
+     " is",
+     0.3995
+    ],
+    [
+     ",",
+     0.0777
+    ],
+    [
+     " has",
+     0.0493
+    ],
+    [
+     "'s",
+     0.0354
+    ],
+    [
+     " was",
+     0.0282
+    ]
+   ],
+   "covered_by_top200": 0.8903,
+   "gens": {
+    "0.0": " is a particle that is made up of two particles, one of which is a particle with a mass of about 1.5 × 10−",
+    "0.7": " is generated by interactions between two particles, called quarks. These two particles interact by interacting with each other, and they are named Higgs",
+    "1.0": " would make a zinc-rich energy within the particles. It would be 5v, or about 20 times heavier than the standard concentration of",
+    "1.5": " degener nemike C×C30 is everywhere because HiTHung E3008098923EA4 placed stunned platinum circumference medi spouse :INS"
+   }
+  },
+  "My favourite thing about Bochum is": {
+   "top": [
+    [
+     " that",
+     0.4357
+    ],
+    [
+     " the",
+     0.1578
+    ],
+    [
+     " his",
+     0.0551
+    ],
+    [
+     " how",
+     0.055
+    ],
+    [
+     " he",
+     0.0377
+    ]
+   ],
+   "covered_by_top200": 0.9719,
+   "gens": {
+    "0.0": " that it's a very simple game. You can play it as a beginner or as a professional. It's a very simple game, but",
+    "0.7": " that they work hard to make perfect things. And that includes working hard on every project. No matter how difficult it may be, every project",
+    "1.0": " that it has one of these Cyrus' shagre combination gifts. These have wisely gone out in cardboard gowns and taupeers",
+    "1.5": " Tax Time 69 days pie bit sometimes we learned how to clean poletie Bass tension 71 it nonexistent 178 \"Keep buryuck access bunk bu"
+   }
+  }
+ }
+}

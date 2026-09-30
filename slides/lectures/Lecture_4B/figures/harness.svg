@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 775" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" fill="#172635">
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+<rect x="15.0" y="10.0" width="1410.0" height="755.0" rx="24" fill="#fcfdfe" stroke="#c3d0da" stroke-width="2" stroke-dasharray="10 8"/>
+<path d="M720,680 L720,380" fill="none" stroke="#c3d0da" stroke-width="3"/>
+<path d="M1235,525 L720,380" fill="none" stroke="#c3d0da" stroke-width="3"/>
+<path d="M205,525 L720,380" fill="none" stroke="#c3d0da" stroke-width="3"/>
+<path d="M1235,255 L720,380" fill="none" stroke="#c3d0da" stroke-width="3"/>
+<path d="M205,255 L720,380" fill="none" stroke="#c3d0da" stroke-width="3"/>
+<path d="M720,100 L720,380" fill="none" stroke="#c3d0da" stroke-width="3"/>
+<rect x="550.0" y="305.0" width="340.0" height="150.0" rx="18" fill="#f1eafa" stroke="#7a4fb3" stroke-width="4"/>
+<text x="720.0" y="372.0" font-size="38" text-anchor="middle" fill="#7a4fb3" font-weight="bold">Model</text>
+<text x="720.0" y="412.0" font-size="22" text-anchor="middle" fill="#617484" font-weight="normal">text in → text out</text>
+<rect x="555.0" y="30.0" width="330.0" height="140.0" rx="12" fill="#f3f6f8" stroke="#617484" stroke-width="3"/>
+<text x="720.0" y="66.0" font-size="25" text-anchor="middle" fill="#617484" font-weight="bold">Permissions &amp; sandbox</text>
+<text x="720.0" y="102.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal">ask / allow / deny,</text>
+<text x="720.0" y="132.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal">no secrets, no rm -rf</text>
+<rect x="40.0" y="185.0" width="330.0" height="140.0" rx="12" fill="#e9f5fd" stroke="#087bb9" stroke-width="3"/>
+<text x="205.0" y="221.0" font-size="25" text-anchor="middle" fill="#087bb9" font-weight="bold">Instructions &amp; memory</text>
+<text x="205.0" y="257.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal">system prompt,</text>
+<text x="205.0" y="287.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal">CLAUDE.md, AGENTS.md, skills</text>
+<rect x="1070.0" y="185.0" width="330.0" height="140.0" rx="12" fill="#fff1cf" stroke="#d99700" stroke-width="3"/>
+<text x="1235.0" y="221.0" font-size="25" text-anchor="middle" fill="#d99700" font-weight="bold">Tools</text>
+<text x="1235.0" y="257.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal">read, grep, edit, bash,</text>
+<text x="1235.0" y="287.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal">web search, MCP servers</text>
+<rect x="40.0" y="455.0" width="330.0" height="140.0" rx="12" fill="#e6f3e8" stroke="#3c8d52" stroke-width="3"/>
+<text x="205.0" y="491.0" font-size="25" text-anchor="middle" fill="#3c8d52" font-weight="bold">Context management</text>
+<text x="205.0" y="527.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal">compaction, subagents,</text>
+<text x="205.0" y="557.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal">prompt caching</text>
+<rect x="1070.0" y="455.0" width="330.0" height="140.0" rx="12" fill="#fbeceb" stroke="#c74842" stroke-width="3"/>
+<text x="1235.0" y="491.0" font-size="25" text-anchor="middle" fill="#c74842" font-weight="bold">Validation</text>
+<text x="1235.0" y="527.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal">linters, tests, builds,</text>
+<text x="1235.0" y="557.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal">screenshots</text>
+<rect x="555.0" y="610.0" width="330.0" height="140.0" rx="12" fill="#eef1f4" stroke="#172635" stroke-width="3"/>
+<text x="720.0" y="646.0" font-size="25" text-anchor="middle" fill="#172635" font-weight="bold">Interface</text>
+<text x="720.0" y="682.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal">chat, CLI, desktop,</text>
+<text x="720.0" y="712.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal">IDE, cloud</text>
+<text x="1405.0" y="44.0" font-size="26" text-anchor="end" fill="#617484" font-weight="bold">harness</text>
+</svg>

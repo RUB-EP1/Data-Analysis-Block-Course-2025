@@ -1,0 +1,38 @@
+## Diff: Problem formulation {#original-a-05 .original-slide}
+
+```{=html}
+<div class="source-page" aria-label="Original Lecture 1A, slide 5">
+<img class="source-art" src="figures/original/original-05.svg" alt="Diff: Problem formulation" loading="eager" />
+
+</div>
+```
+
+::: {.notes}
+Original Lecture-1A, slide 5. Visual source: Keynote PDF export.
+
+Diff: Problem formulation
+f1(x): ⃗x∈Rnf1
+R(scalar)
+Rnf
+Rm f1(x),…,fm(x)(multiple)
+f1,…,fm
+x1
+⋅
+⋅
+⋅
+xn
+•Function
+•Derivative
+•Gradient
+•Jacobian
+∂(f1,…,fm)
+∂(x1,…,xn)
+∂f1
+∂x1
+(∂f1
+∂x1
+,∂f1
+∂x2
+,…,∂f1
+∂xn)
+:::

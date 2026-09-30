@@ -1,0 +1,17 @@
+## Julia AD: Enzyme {#original-a-21 .original-slide}
+
+```{=html}
+<div class="source-page" aria-label="Original Lecture 1A, slide 21">
+<img class="source-art" src="figures/original/original-21.svg" alt="Julia AD: Enzyme" loading="eager" />
+
+</div>
+```
+
+::: {.notes}
+Original Lecture-1A, slide 21. Visual source: Keynote PDF export.
+
+Julia AD: Enzyme
+•LLVM plug-in; diﬀerentiates after compiler optimizations
+•Handles mutation & C/Fortran kernels; cross-language
+•Benchmarks: gradient ≈ 4.5× faster vs unoptimized source-level AD
+:::

@@ -1,0 +1,137 @@
+---
+pagetitle: Lecture 1A
+format:
+  revealjs:
+    theme: simple
+    controls: false
+    slide-number: true
+    chalkboard: false
+    preview-links: auto
+    css: [../../styles.css, ../../lecture-styles.css]
+    width: 1920
+    height: 1080
+    margin: 0.05
+    min-scale: 0.2
+    max-scale: 2.0
+    auto-stretch: false
+    html-math-method: mathml
+    include-in-header:
+      - file: ../../scripts/frames.html
+      - file: ../../scripts/widget.html
+      - text: |
+          <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll(".reveal .slides > section").forEach((s) => {
+              if (s.classList.contains("section-title") ||
+                  s.classList.contains("title-card") ||
+                  s.id === "title-slide" ||
+                  s.querySelector(":scope > .slide-body")) return;
+              const head = [];
+              let n = s.firstElementChild;
+              while (n && (n.tagName === "H2" ||
+                           n.classList.contains("slide-refs") ||
+                           n.classList.contains("subtitle"))) {
+                head.push(n);
+                n = n.nextElementSibling;
+              }
+              const rest = [];
+              while (n) { rest.push(n); n = n.nextElementSibling; }
+              if (!rest.length) return;
+              const body = document.createElement("div");
+              body.className = "slide-body";
+              rest.forEach((el) => body.appendChild(el));
+              s.appendChild(body);
+            });
+          });
+          </script>
+          <script>
+          if (new URLSearchParams(location.search).has("export")) {
+            document.documentElement.classList.add("export-pdf");
+            window.addEventListener("load", async () => {
+              if (window.Reveal) {
+                Reveal.configure({ minScale: 1, maxScale: 1 });
+              }
+              document.querySelectorAll("img[data-src]").forEach((img) => {
+                img.src = img.getAttribute("data-src");
+              });
+              try {
+                if (window.MathJax?.startup?.promise) await MathJax.startup.promise;
+                if (window.MathJax?.typesetPromise) await MathJax.typesetPromise();
+              } catch (e) {}
+              await Promise.all([...document.images].map((img) => {
+                if (img.complete) return Promise.resolve();
+                return new Promise((res) => { img.onload = img.onerror = res; });
+              }));
+              document.documentElement.classList.add("export-ready");
+            });
+          }
+          </script>
+---
+
+{{< include blocks/original-01.qmd >}}
+
+## Why automatic differentiation? {.section-title}
+
+::: {.subtitle}
+From early neural networks to the need for reliable derivatives
+:::
+
+{{< include blocks/original-02.qmd >}}
+{{< include blocks/original-03.qmd >}}
+{{< include blocks/original-04.qmd >}}
+
+## Ways to compute derivatives {.section-title}
+
+::: {.subtitle}
+Problem formulation, symbolic differentiation, and finite differences
+:::
+
+{{< include blocks/original-05.qmd >}}
+{{< include blocks/original-06.qmd >}}
+{{< include blocks/original-07.qmd >}}
+{{< include blocks/original-08.qmd >}}
+
+## Forward mode {.section-title}
+
+::: {.subtitle}
+Propagate values and derivative components together
+:::
+
+{{< include blocks/original-09.qmd >}}
+{{< include blocks/original-10.qmd >}}
+
+## Reverse mode and backpropagation {.section-title}
+
+::: {.subtitle}
+Evaluate forwards, then propagate sensitivities backwards
+:::
+
+{{< include blocks/original-11.qmd >}}
+{{< include blocks/backpropagation.qmd >}}
+{{< include blocks/original-12.qmd >}}
+{{< include blocks/original-13.qmd >}}
+{{< include blocks/original-14.qmd >}}
+
+## Automatic differentiation in practice {.section-title}
+
+::: {.subtitle}
+Frameworks, transformations, compilers, and implementation trade-offs
+:::
+
+{{< include blocks/original-15.qmd >}}
+{{< include blocks/original-16.qmd >}}
+{{< include blocks/python-ecosystem.qmd >}}
+{{< include blocks/original-17.qmd >}}
+{{< include blocks/original-18.qmd >}}
+{{< include blocks/original-19.qmd >}}
+
+## Historical and conceptual epilogue {.section-title}
+
+::: {.subtitle}
+An old algorithm, modern scale, and the cheap-gradient principle
+:::
+
+{{< include blocks/story.qmd >}}
+{{< include blocks/original-20.qmd >}}
+{{< include blocks/original-21.qmd >}}
+{{< include blocks/original-22.qmd >}}

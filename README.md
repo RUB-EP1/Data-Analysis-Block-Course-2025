@@ -3,7 +3,30 @@
 Exercise notebooks and attendance sheets for the data analysis block course at
 TU Dortmund and Ruhr-University Bochum.
 
-https://indico.global/event/14058/
+- Website: https://ctoennis.github.io/Data-Analysis-Block-Course-2026/
+- Timetable: https://indico.global/event/18022/
+
+## Website
+
+The course website is a Quarto project (`_quarto.yml`). Its landing page
+`index.qmd` lists the lectures and exercises from two data files:
+
+- `site/lectures.yml`: one card per lecture deck, with the notebooks attached to it;
+- `site/exercises.yml`: one card per attendance sheet, with its solution and homework.
+
+The Reveal.js decks live in `slides/` (see [`slides/README.md`](slides/README.md)).
+Widgets and notebooks the decks load at runtime are copied through
+`resources:` in `_quarto.yml`; a new kind of file needs a glob there.
+
+`.github/workflows/site.yml` builds the sheet PDFs, renders the site and deploys
+it to GitHub Pages on every push to `main` (Settings → Pages → Source: GitHub Actions).
+Build it locally with:
+
+```sh
+python3 scripts/build_attendance.py
+quarto render
+python3 -m http.server --directory _site
+```
 
 ## Attendance sheets
 

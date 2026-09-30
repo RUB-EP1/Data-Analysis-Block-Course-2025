@@ -1,0 +1,19 @@
+## From Source to Machine Code {#original-a-19 .original-slide}
+
+```{=html}
+<div class="source-page" aria-label="Original Lecture 1A, slide 19">
+<img class="source-art" src="figures/original/original-19.svg" alt="From Source to Machine Code" loading="eager" />
+
+</div>
+```
+
+::: {.notes}
+Original Lecture-1A, slide 19. Visual source: Keynote PDF export.
+
+From Source to Machine Code
+XLA & LLVM
+•Pipeline 
+Source (Julia/Python) → Front-end IR →  Optimizer  →  Machine Code
+•XLA: linear-algebra-centric compiler used by JAX / TF; IR = HLO
+•LLVM: language-agnostic compiler back-end (Julia, C/C++, Rust)
+:::

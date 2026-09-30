@@ -1,0 +1,17 @@
+## Mark I Perceptron {#original-a-02 .original-slide}
+
+```{=html}
+<div class="source-page" aria-label="Original Lecture 1A, slide 2">
+<img class="source-art" src="figures/original/original-02.svg" alt="Mark I Perceptron" loading="eager" />
+
+</div>
+```
+
+::: {.notes}
+Original Lecture-1A, slide 2. Visual source: Keynote PDF export.
+
+Mark I Perceptron
+to reporters by Frank Rosenblatt. July 7, 1958
+1958, The New York Times
+
+:::

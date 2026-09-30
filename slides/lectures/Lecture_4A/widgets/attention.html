@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Attention by hand: which bank?</title>
+<link rel="stylesheet" href="lab.css">
+<style>
+.controls{gap:20px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:2px 0 10px;flex-shrink:0}
+.chip{font:22px "Helvetica Neue",Arial;padding:6px 12px;border:2px solid #dbe3ea;border-radius:8px;cursor:pointer;background:#fff;position:relative}
+.chip.sel{border-color:#d99700;background:#fff1cf;font-weight:600}
+.chip.masked{color:#b7c3cd;border-style:dashed}
+.chip small{position:absolute;left:0;right:0;bottom:-7px;height:5px;background:#087bb9;border-radius:3px;transform-origin:left}
+</style>
+</head>
+<body>
+<header><h1>Attention by hand: which bank?</h1><span class="legend">click a word to make it the query</span></header>
+<p class="subtitle">Each word has a query <b>q</b>, a key <b>k</b> and a value <b>v</b>. The query of “bank” looks for topic words; their values say <i>river</i> or <i>money</i>.</p>
+<div class="controls">
+  <label for="sentence">Sentence <select id="sentence"></select></label>
+  <label for="beta">Query strength |q| <input id="beta" type="range" min="0" max="8" step="0.1" value="3"><output id="beta-value"></output></label>
+  <label><input type="checkbox" id="causal"> causal mask (decoder)</label>
+</div>
+<div id="chips" class="chips"></div>
+<canvas id="plot" width="1600" height="500" role="img" aria-label="Attention matrix, the computation for the selected query, and the value vectors in a two-dimensional meaning plane"></canvas>
+<div id="stats" class="stats" aria-live="polite"></div>
+<p class="prompt" id="prompt">Compare the river and the loan sentences. Then switch on the causal mask for “the bank of the river”: “bank” can no longer see “river”.</p>
+<script src="plot.js"></script>
+<script>
+'use strict';
+const C = $('plot'), ctx = C.getContext('2d');
+// Two key/query features: [is a topic word, is a function word]. Two value features: [river, money].
+const FN = { k: [0, 1], q: [0, 1], v: [0, 0] };
+const NATURE = { k: [1, 0], q: [0.3, 0.3], v: [1, 0] };
+const MONEY = { k: [1, 0], q: [0.3, 0.3], v: [0, 1] };
+const LEX = {
+  bank: { k: [0.5, 0.3], q: null, v: [0.45, 0.45] },
+  river: NATURE, muddy: NATURE, boat: NATURE, fish: NATURE, water: NATURE, swam: NATURE,
+  interest: MONEY, rates: MONEY, loan: MONEY, money: MONEY, raised: MONEY, account: MONEY
+};
+const SENTENCES = [
+  'the bank of the river was muddy',
+  'the bank raised interest rates',
+  'I sat on the bank and watched the boat',
+  'the bank gave me a loan',
+  'fish swam near the bank',
+  'the bank'
+];
+let sel = 1;
+const words = () => SENTENCES[+$('sentence').value].split(' ');
+function vec(w) {
+  const e = LEX[w] || FN, beta = +$('beta').value;
+  return { k: e.k, v: e.v, q: w === 'bank' ? [beta, 0] : e.q.map(x => x * beta / 3) };
+}
+function attention() {
+  const W = words(), V = W.map(vec), d = 2, causal = $('causal').checked;
+  const S = V.map((a, i) => V.map((b, j) => (causal && j > i) ? -Infinity : (a.q[0] * b.k[0] + a.q[1] * b.k[1]) / Math.sqrt(d)));
+  const A = S.map(row => { const m = Math.max(...row), e = row.map(s => s === -Infinity ? 0 : Math.exp(s - m)), z = e.reduce((a, b) => a + b, 0); return e.map(x => x / z); });
+  const O = A.map(row => [0, 1].map(c => row.reduce((s, a, j) => s + a * V[j].v[c], 0)));
+  return { W, V, S, A, O };
+}
+
+function draw() {
+  syncOutputs({ beta: v => v.toFixed(1) });
+  const { W, V, S, A, O } = attention(), n = W.length;
+  sel = Math.min(sel, n - 1);
+  $('chips').innerHTML = W.map((w, i) => `<span class="chip${i === sel ? ' sel' : ''}${A[sel][i] === 0 ? ' masked' : ''}" data-i="${i}">${w}<small style="transform:scaleX(${A[sel][i].toFixed(3)})"></small></span>`).join('');
+  document.querySelectorAll('.chip').forEach(c => c.onclick = () => { sel = +c.dataset.i; draw(); });
+  ctx.clearRect(0, 0, C.width, C.height);
+
+  // 1. Attention matrix
+  const x0 = 110, y0 = 60, cs = Math.min(42, 360 / n);
+  text(ctx, 'Attention pattern A (rows sum to 1)', 20, 26, 23, PAL.ink, 'left', '600');
+  for (let i = 0; i < n; i++) {
+    text(ctx, W[i], x0 - 8, y0 + i * cs + cs / 2 + 6, 17, i === sel ? PAL.gold : PAL.muted, 'right', i === sel ? '600' : '');
+    ctx.save(); ctx.translate(x0 + i * cs + cs / 2 + 5, y0 + n * cs + 8); ctx.rotate(Math.PI / 3);
+    text(ctx, W[i], 0, 0, 17, PAL.muted); ctx.restore();
+    for (let j = 0; j < n; j++) {
+      ctx.fillStyle = S[i][j] === -Infinity ? '#eef1f4' : mix('#ffffff', '#087bb9', A[i][j]);
+      ctx.fillRect(x0 + j * cs, y0 + i * cs, cs - 2, cs - 2);
+    }
+  }
+  ctx.strokeStyle = PAL.gold; ctx.lineWidth = 3; ctx.strokeRect(x0 - 2, y0 + sel * cs - 2, n * cs + 2, cs + 2);
+  text(ctx, 'query (row) →  key (column)', x0, y0 + n * cs + 92, 16, PAL.muted);
+
+  // 2. Computation for the selected query
+  const tx = 560;
+  text(ctx, `Query “${W[sel]}”: q = (${V[sel].q.map(v => v.toFixed(1)).join(', ')})`, tx, 26, 23, PAL.ink, 'left', '600');
+  const cols = [['key', 0], ['k', 90], ['q·k/√2', 190], ['softmax', 300]];
+  cols.forEach(([h, dx]) => text(ctx, h, tx + dx, 62, 18, PAL.accent, 'left', '600'));
+  const rh = Math.min(38, 400 / n);
+  W.forEach((w, j) => {
+    const y = 92 + j * rh, masked = S[sel][j] === -Infinity;
+    const c = masked ? '#b7c3cd' : PAL.ink;
+    text(ctx, w, tx, y, 19, c, 'left', j === sel ? '600' : '');
+    text(ctx, `(${V[j].k.join(',')})`, tx + 90, y, 17, c);
+    text(ctx, masked ? '−∞' : S[sel][j].toFixed(2), tx + 190, y, 19, c);
+    ctx.fillStyle = mix('#ffffff', '#087bb9', A[sel][j]); ctx.fillRect(tx + 300, y - 17, 120 * A[sel][j] + 1, 22);
+    text(ctx, A[sel][j].toFixed(2), tx + 430, y, 19, c);
+  });
+
+  // 3. Value plane
+  const P = new Panel(ctx, 1130, 50, 380, 380, [-0.1, 1.1], [-0.1, 1.1]);
+  P.frame('Values and output for the query', 'river →', 'money →', [0, 0.5, 1], [0, 0.5, 1]);
+  const drawn = new Set();
+  V.forEach((v, j) => {
+    const key = v.v.join();
+    P.dot(v.v[0], v.v[1], PAL.muted, 6 + 14 * A[sel][j], 'white');
+    if (!drawn.has(key)) { drawn.add(key); }
+  });
+  const labelAt = (v, s, dy, al = 'left') => text(ctx, s, P.X(v[0]) + (al === 'left' ? 12 : -12), P.Y(v[1]) + dy, 16, PAL.muted, al);
+  labelAt([1, 0], 'river, boat, muddy…', -16, 'right'); labelAt([0, 1], 'loan, rates, money…', 20); labelAt([0, 0], 'the, of, was…', -12);
+  if (W[sel] === 'bank') labelAt([0.45, 0.45], 'bank (alone)', -14);
+  const o = O[sel];
+  arrow(ctx, P.X(0), P.Y(0), P.X(o[0]), P.Y(o[1]), PAL.gold, 4, 16);
+  text(ctx, 'Σ aⱼ vⱼ', P.X(o[0]) + 10, P.Y(o[1]) - 10, 20, '#9c6b00', 'left', '600');
+
+  const lean = o[0] - o[1];
+  const meaning = W[sel] !== 'bank' ? '—' : Math.abs(lean) < 0.1 ? 'undecided' : lean > 0 ? 'river bank' : 'money bank';
+  stats([
+    ['Query', W[sel]],
+    ['Output Σ aⱼvⱼ', `(${o[0].toFixed(2)}, ${o[1].toFixed(2)})`],
+    ['Reading of “bank”', meaning],
+    ['Largest weight', `${W[A[sel].indexOf(Math.max(...A[sel]))]} (${Math.max(...A[sel]).toFixed(2)})`]
+  ]);
+}
+SENTENCES.forEach((s, i) => $('sentence').add(new Option(s, i)));
+$('sentence').oninput = () => { sel = words().indexOf('bank'); draw(); };
+['beta', 'causal'].forEach(id => $(id).addEventListener('input', draw));
+if (new URLSearchParams(location.search).has('demo')) $('sentence').value = 0;
+sel = words().indexOf('bank');
+draw();
+</script>
+</body>
+</html>

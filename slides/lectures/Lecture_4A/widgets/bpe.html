@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Byte-pair encoding, merge by merge</title>
+<link rel="stylesheet" href="lab.css">
+<style>
+body{overflow:hidden}
+.controls{gap:18px}
+.main{flex:1 1 0;min-height:0;display:grid;grid-template-columns:1.1fr 1.4fr 1fr;gap:22px}
+.panel{min-height:0;display:flex;flex-direction:column;border:1px solid #dbe3ea;border-radius:8px;padding:12px 14px}
+.panel h2{font-size:20px;margin:0 0 8px;color:#087bb9}
+textarea{flex:1 1 0;min-height:0;font:17px/1.35 "Menlo","SF Mono",monospace;border:1px solid #adbfcc;border-radius:6px;padding:8px;resize:none;color:#172635}
+#test{flex:0 0 auto;height:78px;margin-bottom:10px}
+.tokens{flex:1 1 0;min-height:0;overflow:auto;line-height:2.15;font:20px/2.2 "Menlo","SF Mono",monospace}
+.tok{display:inline-block;padding:0 3px;margin:0 1px 3px 0;border-radius:4px;white-space:pre}
+.tok.unk{background:#f7c8c5!important;outline:2px solid #c74842}
+.merges{flex:1 1 0;min-height:0;overflow:auto;font:16px/1.5 "Menlo","SF Mono",monospace}
+.merges div{display:grid;grid-template-columns:38px 1fr 56px;gap:6px;padding:1px 4px}
+.merges div.new{background:#fff1cf}
+.merges span:last-child{text-align:right;color:#617484}
+.sp{color:#9aa1a8}
+</style>
+</head>
+<body>
+<header><h1>Byte-pair encoding, merge by merge</h1><span class="legend">· marks a space &nbsp; <span style="color:#c74842">red = symbol never seen in training</span></span></header>
+<p class="subtitle">Start from single characters. Repeatedly find the most frequent adjacent pair in the training text and merge it into a new token.</p>
+<div class="controls">
+  <label for="merges">Merges <input id="merges" type="range" min="0" max="300" step="1" value="40"><output id="merges-value"></output></label>
+  <button id="step">+1 merge</button><button id="play">Play</button><button id="reset">Reset</button>
+  <label for="preset">Training text <select id="preset"><option value="en">English physics text</option><option value="de">German text</option><option value="code">Python code</option></select></label>
+</div>
+<div class="main">
+  <div class="panel"><h2>Training text</h2><textarea id="corpus" spellcheck="false"></textarea></div>
+  <div class="panel"><h2>Tokenize new text</h2><textarea id="test" spellcheck="false">The transformer predicts the next token. Thermodynamics of transformers!</textarea><div id="tokens" class="tokens" aria-live="polite"></div></div>
+  <div class="panel"><h2>Learned merges</h2><div id="mergelist" class="merges"></div></div>
+</div>
+<div id="stats" class="stats" aria-live="polite"></div>
+<script src="plot.js"></script>
+<script>
+'use strict';
+const CORPORA = {
+  en: `The electron and the proton attract each other. The energy of the electron in the atom is quantized, and the transition between two energy levels emits a photon. The photon energy equals the difference of the two energies. In the detector, the photon produces a shower, and the shower energy is measured by the calorimeter. The calorimeter measures the energy of electrons and photons; the tracker measures the momentum of charged particles. Together, the tracker and the calorimeter reconstruct the particles that were produced in the collision. The reconstruction of the collision is the first step of the analysis. In the analysis, we select the events, we measure the distributions, and we compare the measured distributions with the predicted distributions. The prediction comes from the theory, and the theory is tested by the measurement.`,
+  de: `Das Elektron und das Proton ziehen sich an. Die Energie des Elektrons im Atom ist quantisiert, und der Übergang zwischen zwei Energieniveaus sendet ein Photon aus. Die Photonenenergie ist gleich der Differenz der beiden Energien. Im Detektor erzeugt das Photon einen Schauer, und die Schauerenergie wird vom Kalorimeter gemessen. Das Kalorimeter misst die Energie der Elektronen und Photonen; der Spurdetektor misst den Impuls geladener Teilchen. Gemeinsam rekonstruieren Spurdetektor und Kalorimeter die Teilchen, die bei der Kollision erzeugt wurden.`,
+  code: `def energy(mass, momentum):
+    return (mass**2 + momentum**2) ** 0.5
+
+def invariant_mass(energy, momentum):
+    return (energy**2 - momentum**2) ** 0.5
+
+for event in events:
+    energy_sum = sum(particle.energy for particle in event.particles)
+    momentum_sum = sum(particle.momentum for particle in event.particles)
+    mass = invariant_mass(energy_sum, momentum_sum)
+    histogram.fill(mass)`
+};
+let merges = [], trainedFor = null, timer = null;
+
+// GPT-2 style pre-tokenization: split into words, a space stays attached to the word that follows it.
+function words(text) { return text.match(/ ?[\p{L}\p{N}_]+| ?[^\s\p{L}\p{N}_]+|\s+(?!\S)|\s+/gu) || []; }
+
+function train(text, n) {
+  const freq = new Map();
+  words(text).forEach(w => freq.set(w, (freq.get(w) || 0) + 1));
+  const seqs = [...freq].map(([w, c]) => ({ s: [...w], c }));
+  const out = [];
+  for (let k = 0; k < n; k++) {
+    const pairs = new Map();
+    seqs.forEach(({ s, c }) => { for (let i = 0; i + 1 < s.length; i++) { const p = s[i] + '\u0000' + s[i + 1]; pairs.set(p, (pairs.get(p) || 0) + c); } });
+    if (!pairs.size) break;
+    let best = null, bc = 0;
+    for (const [p, c] of pairs) if (c > bc || (c === bc && p < best)) { best = p; bc = c; }
+    if (bc < 2) break;
+    const [a, b] = best.split('\u0000');
+    out.push({ a, b, count: bc });
+    seqs.forEach(o => {
+      const s = o.s, r = [];
+      for (let i = 0; i < s.length; i++) { if (i + 1 < s.length && s[i] === a && s[i + 1] === b) { r.push(a + b); i++; } else r.push(s[i]); }
+      o.s = r;
+    });
+  }
+  return out;
+}
+function encode(text, used, alphabet) {
+  const rank = new Map(used.map((m, i) => [m.a + '\u0000' + m.b, i]));
+  const toks = [];
+  words(text).forEach(w => {
+    let s = [...w];
+    for (;;) {
+      let bi = -1, br = Infinity;
+      for (let i = 0; i + 1 < s.length; i++) { const r = rank.get(s[i] + '\u0000' + s[i + 1]); if (r !== undefined && r < br) { br = r; bi = i; } }
+      if (bi < 0) break;
+      s = s.slice(0, bi).concat([s[bi] + s[bi + 1]], s.slice(bi + 2));
+    }
+    toks.push(...s);
+  });
+  return toks.map(t => ({ t, unk: [...t].length === 1 && !alphabet.has(t) }));
+}
+const show = t => t.replace(/ /g, '·').replace(/\n/g, '↵');
+const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+function hue(t) { let h = 0; for (const ch of t) h = (h * 31 + ch.codePointAt(0)) >>> 0; return `hsl(${h % 360} 70% 88%)`; }
+
+function draw() {
+  const corpus = $('corpus').value, n = +$('merges').value;
+  if (trainedFor !== corpus) { merges = train(corpus, 300); trainedFor = corpus; $('merges').max = merges.length; }
+  const k = Math.min(n, merges.length), used = merges.slice(0, k);
+  $('merges-value').textContent = k;
+  const alphabet = new Set([...corpus]);
+  const toks = encode($('test').value, used, alphabet);
+  $('tokens').innerHTML = toks.map(({ t, unk }) => `<span class="tok${unk ? ' unk' : ''}" style="background:${hue(t)}">${esc(show(t))}</span>`).join('');
+  $('mergelist').innerHTML = used.map((m, i) => `<div class="${i === k - 1 ? 'new' : ''}"><span>${i + 1}</span><span>${esc(show(m.a))} + ${esc(show(m.b))} → <b>${esc(show(m.a + m.b))}</b></span><span>${m.count}×</span></div>`).reverse().join('');
+  const chars = [...$('test').value].length, trainToks = encode(corpus, used, alphabet).length;
+  stats([
+    ['Vocabulary', `${alphabet.size} chars + ${k} merges = ${alphabet.size + k}`],
+    ['New text', `${chars} chars → ${toks.length} tokens`],
+    ['Training text', `${[...corpus].length} chars → ${trainToks} tokens`],
+    ['Chars per token (training)', ([...corpus].length / trainToks).toFixed(2)],
+    ['Unknown symbols', toks.filter(x => x.unk).length]
+  ]);
+}
+function stop() { clearInterval(timer); timer = null; $('play').textContent = 'Play'; }
+$('play').onclick = () => {
+  if (timer) return stop();
+  if (+$('merges').value >= +$('merges').max) $('merges').value = 0;
+  $('play').textContent = 'Pause';
+  timer = setInterval(() => { if (+$('merges').value >= +$('merges').max) return stop(); $('merges').value = +$('merges').value + 1; draw(); }, 140);
+};
+$('step').onclick = () => { stop(); $('merges').value = +$('merges').value + 1; draw(); };
+$('reset').onclick = () => { stop(); $('merges').value = 0; draw(); };
+$('preset').oninput = () => { stop(); $('corpus').value = CORPORA[$('preset').value]; draw(); };
+['merges', 'corpus', 'test'].forEach(id => $(id).addEventListener('input', () => { if (id !== 'merges') stop(); draw(); }));
+$('corpus').value = CORPORA.en;
+draw();
+</script>
+</body>
+</html>

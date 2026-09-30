@@ -1,0 +1,17 @@
+## Julia AD: Zygote {#original-a-22 .original-slide}
+
+```{=html}
+<div class="source-page" aria-label="Original Lecture 1A, slide 22">
+<img class="source-art" src="figures/original/original-22.svg" alt="Julia AD: Zygote" loading="eager" />
+
+</div>
+```
+
+::: {.notes}
+Original Lecture-1A, slide 22. Visual source: Keynote PDF export.
+
+Julia AD: Zygote
+•Source-to-source transformation → gradient code compiled by Julia
+•No runtime tape; functional style, uses ChainRules deﬁnitions
+•Call: grads = Zygote.gradient(f, params)
+:::

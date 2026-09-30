@@ -1,0 +1,14 @@
+## EndBackup follows {#original-a-20 .original-slide}
+
+```{=html}
+<div class="source-page" aria-label="Original Lecture 1A, slide 20">
+<img class="source-art" src="figures/original/original-20.svg" alt="EndBackup follows" loading="eager" />
+
+</div>
+```
+
+::: {.notes}
+Original Lecture-1A, slide 20. Visual source: Keynote PDF export.
+
+EndBackup follows
+:::

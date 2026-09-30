@@ -1,0 +1,22 @@
+## Forward Diff {#original-a-09 .original-slide}
+
+```{=html}
+<div class="source-page" aria-label="Original Lecture 1A, slide 9">
+<img class="source-art" src="figures/original/original-09.svg" alt="Forward Diff" loading="eager" />
+
+</div>
+```
+
+::: {.notes}
+Original Lecture-1A, slide 9. Visual source: Keynote PDF export.
+
+Forward Diff
+Dual numbers
+•Augment each number with a derivative component.
+•We use dual numbers: , where  
+•Deﬁne operations on dual numbers
+•For higher dims, one column per pass
+̂x=x+·xε ε2=0
+f(x+·xε)=f(x)+f′ (x)·xε
+J=[f(x1+ε,x2,…,xn)f(x1,x2+ε,…,xn)…]
+:::

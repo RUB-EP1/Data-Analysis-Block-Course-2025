@@ -1,0 +1,17 @@
+## Analytic Diff {#original-a-07 .original-slide}
+
+```{=html}
+<div class="source-page" aria-label="Original Lecture 1A, slide 7">
+<img class="source-art" src="figures/original/original-07.svg" alt="Analytic Diff" loading="eager" />
+
+</div>
+```
+
+::: {.notes}
+Original Lecture-1A, slide 7. Visual source: Keynote PDF export.
+
+Analytic Diff
+Warm up
+•Follow standard rules compute a derivative
+
+:::

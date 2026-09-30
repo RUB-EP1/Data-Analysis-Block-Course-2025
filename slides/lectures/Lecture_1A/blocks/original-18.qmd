@@ -1,0 +1,15 @@
+## Example: differentiating LLVM {#original-a-18 .original-slide}
+
+```{=html}
+<div class="source-page" aria-label="Original Lecture 1A, slide 18">
+<img class="source-art" src="figures/original/original-18.svg" alt="Example: differentiating LLVM" loading="eager" />
+
+</div>
+```
+
+::: {.notes}
+Original Lecture-1A, slide 18. Visual source: Keynote PDF export.
+
+Example: differentiating LLVM
+
+:::

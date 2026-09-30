@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1520 320" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" fill="#172635">
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+<rect x="20.0" y="30.0" width="330.0" height="190.0" rx="12" fill="#e9f5fd" stroke="#087bb9" stroke-width="3"/>
+<text x="185.0" y="66.0" font-size="25" text-anchor="middle" fill="#087bb9" font-weight="bold">1. Pre-training</text>
+<text x="185.0" y="102.0" font-size="22" text-anchor="middle" fill="#172635" font-weight="normal">predict the next token</text>
+<text x="185.0" y="132.0" font-size="22" text-anchor="middle" fill="#172635" font-weight="normal">on trillions of tokens</text>
+<text x="185.0" y="162.0" font-size="22" text-anchor="middle" fill="#172635" font-weight="normal">of web text, books, code</text>
+<text x="185.0" y="262.0" font-size="21" text-anchor="middle" fill="#617484" font-weight="normal">base model: continues text</text>
+<path d="M354,125 H392" fill="none" stroke="#172635" stroke-width="3" marker-end="url(#arr)"/>
+<rect x="396.0" y="30.0" width="330.0" height="190.0" rx="12" fill="#fff1cf" stroke="#d99700" stroke-width="3"/>
+<text x="561.0" y="66.0" font-size="25" text-anchor="middle" fill="#d99700" font-weight="bold">2. Instruction tuning</text>
+<text x="561.0" y="102.0" font-size="22" text-anchor="middle" fill="#172635" font-weight="normal">imitate written answers</text>
+<text x="561.0" y="132.0" font-size="22" text-anchor="middle" fill="#172635" font-weight="normal">user → assistant pairs,</text>
+<text x="561.0" y="162.0" font-size="22" text-anchor="middle" fill="#172635" font-weight="normal">10⁴ – 10⁶ examples</text>
+<text x="561.0" y="262.0" font-size="21" text-anchor="middle" fill="#617484" font-weight="normal">follows the chat format</text>
+<path d="M730,125 H768" fill="none" stroke="#172635" stroke-width="3" marker-end="url(#arr)"/>
+<rect x="772.0" y="30.0" width="330.0" height="190.0" rx="12" fill="#f1eafa" stroke="#7a4fb3" stroke-width="3"/>
+<text x="937.0" y="66.0" font-size="25" text-anchor="middle" fill="#7a4fb3" font-weight="bold">3. Preference learning</text>
+<text x="937.0" y="102.0" font-size="22" text-anchor="middle" fill="#172635" font-weight="normal">people rank answers;</text>
+<text x="937.0" y="132.0" font-size="22" text-anchor="middle" fill="#172635" font-weight="normal">RL towards preferred ones</text>
+<text x="937.0" y="162.0" font-size="22" text-anchor="middle" fill="#172635" font-weight="normal">(RLHF, 2022)</text>
+<text x="937.0" y="262.0" font-size="21" text-anchor="middle" fill="#617484" font-weight="normal">helpful, polite, careful</text>
+<path d="M1106,125 H1144" fill="none" stroke="#172635" stroke-width="3" marker-end="url(#arr)"/>
+<rect x="1148.0" y="30.0" width="330.0" height="190.0" rx="12" fill="#e6f3e8" stroke="#3c8d52" stroke-width="3"/>
+<text x="1313.0" y="66.0" font-size="25" text-anchor="middle" fill="#3c8d52" font-weight="bold">4. Verifiable rewards</text>
+<text x="1313.0" y="102.0" font-size="22" text-anchor="middle" fill="#172635" font-weight="normal">reward only if the answer</text>
+<text x="1313.0" y="132.0" font-size="22" text-anchor="middle" fill="#172635" font-weight="normal">is correct: math, code tests</text>
+<text x="1313.0" y="162.0" font-size="22" text-anchor="middle" fill="#172635" font-weight="normal">(o1 2024, DeepSeek-R1 2025)</text>
+<text x="1313.0" y="262.0" font-size="21" text-anchor="middle" fill="#617484" font-weight="normal">learns to think longer</text>
+<text x="185.0" y="300.0" font-size="19" text-anchor="middle" fill="#087bb9" font-weight="bold">most of the compute</text>
+<text x="937.0" y="300.0" font-size="19" text-anchor="middle" fill="#7a4fb3" font-weight="bold">small data, large change in behaviour</text>
+</svg>

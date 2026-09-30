@@ -1,0 +1,18 @@
+## Expected at ~1960 {#original-a-03 .original-slide}
+
+```{=html}
+<div class="source-page" aria-label="Original Lecture 1A, slide 3">
+<img class="source-art" src="figures/original/original-03.svg" alt="Expected at ~1960" loading="eager" />
+
+</div>
+```
+
+::: {.notes}
+Original Lecture-1A, slide 3. Visual source: Keynote PDF export.
+
+Expected at ~1960
+•Walk, talk, see, and write
+happened in 2025
+chatGPT voice mode
+Robot  Atlas by Boston Dynamics
+:::

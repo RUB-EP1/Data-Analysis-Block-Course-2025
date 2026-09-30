@@ -1,0 +1,72 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Where does the first tree cut?</title><link rel="stylesheet" href="lab.css"></head>
+<body>
+<header><h1>Where does the first tree cut?</h1><span class="legend"><span style="color:#087bb9">● left child x &lt; c</span> &nbsp; <span style="color:#d97a00">● right child x ≥ c</span></span></header>
+<p class="subtitle">Round 1 of MSE boosting: start from the constant F₀ = ȳ and fit a depth-1 tree (a “stump”) to the residuals r<sub>i</sub> = y<sub>i</sub> − F₀.</p>
+<div class="controls">
+  <label for="cut">Cut c <input id="cut" type="range" min="0" max="1" step="any" value="0.25" data-digits="3"><output id="cut-value" for="cut">0.250</output></label>
+  <label for="lambda">Leaf penalty λ <input id="lambda" type="range" min="0" max="30" step="1" value="0"><output id="lambda-value" for="lambda">0</output></label>
+  <button id="best">Find best cut</button><button id="reset">Reset</button>
+</div>
+<canvas id="plot" width="1600" height="540" role="img" aria-label="Residuals with a candidate cut and the resulting leaf values, and split gain versus cut position"></canvas>
+<div id="stats" class="stats" aria-live="polite"></div>
+<p class="prompt">Predict the best cut before pressing the button. Then raise λ: leaf values shrink toward 0, small leaves most.</p>
+<script src="gb.js"></script>
+<script>
+'use strict';
+const $ = (id) => document.getElementById(id), P = makeCanvas('plot'), ctx = P.ctx;
+const D = GB.regData(11, 50), F0 = GB.losses.mse.init(D.y);
+const x = D.X.map((v) => v[0]), r = D.y.map((y) => y - F0);
+const order = x.map((_, i) => i).sort((a, b) => x[a] - x[b]);
+// All candidate cuts: midpoints between consecutive sorted x values.
+const mids = order.slice(1).map((k, j) => (x[order[j]] + x[k]) / 2);
+function split(c, lambda) {
+  let nL = 0, sL = 0, nR = 0, sR = 0;
+  x.forEach((v, i) => { if (v < c) { nL++; sL += r[i]; } else { nR++; sR += r[i]; } });
+  const S = sL + sR, N = nL + nR, t = (s, n) => (s * s) / (n + lambda);
+  const gain = nL && nR ? 0.5 * (t(sL, nL) + t(sR, nR) - t(S, N)) : 0;
+  return { nL, sL, nR, sR, gL: nL ? sL / (nL + lambda) : 0, gR: nR ? sR / (nR + lambda) : 0, gain };
+}
+function tag(t, x, y, color, align) {
+  ctx.font = '24px "Helvetica Neue",Arial'; const w = ctx.measureText(t).width + 16;
+  ctx.fillStyle = 'rgba(255,255,255,.9)'; ctx.fillRect(align === 'left' ? x - 8 : x - w + 8, y - 24, w, 32);
+  P.text(t, x, y, 24, color, align);
+}
+function draw() {
+  syncOutputs(); P.clear();
+  const c = +$('cut').value, lam = +$('lambda').value, s = split(c, lam);
+  const a = P.frame(110, 50, 640, 380, 'Residuals rᵢ = yᵢ − F₀ and leaf values γ', 'feature x', 'residual r', [0, 1], [-2, 2]);
+  P.line(a, [[0, 0], [1, 0]], COL.grid, 1);
+  P.clip(a, () => { ctx.fillStyle = '#e7f3fc'; ctx.fillRect(a.x, a.y, a.X(c) - a.x, a.h); });
+  // Error bars: distance from each residual to its leaf value (what the split tries to shrink).
+  x.forEach((v, i) => { const g = v < c ? s.gL : s.gR; P.line(a, [[v, r[i]], [v, g]], '#d4dde5', 1.5); });
+  P.line(a, [[0, s.gL], [c, s.gL]], COL.accent, 5);
+  P.line(a, [[c, s.gR], [1, s.gR]], COL.orange, 5);
+  P.line(a, [[c, -2], [c, 2]], COL.red, 2, [8, 6]);
+  x.forEach((v, i) => P.dot(a, v, r[i], v < c ? COL.accent : COL.orange, 7));
+  if (s.nL) tag(`γ_L = ${s.gL.toFixed(2)}`, a.x + 12, a.y + a.h - 14, COL.accent, 'left');
+  if (s.nR) tag(`γ_R = ${s.gR.toFixed(2)}`, a.x + a.w - 12, a.y + a.h - 14, COL.orange, 'right');
+
+  const gains = mids.map((m) => split(m, lam).gain), gmax = Math.max(8, ...gains) * 1.1;
+  const b = P.frame(900, 50, 640, 380, 'Split gain for every cut position', 'cut c', 'gain', [0, 1], [0, Math.ceil(gmax)]);
+  const pts = [[0, 0]];
+  mids.forEach((m, j) => { pts.push([m, j ? gains[j - 1] : 0], [m, gains[j]]); });
+  pts.push([1, gains.at(-1)], [1, 0]);
+  P.line(b, pts, COL.accent, 3);
+  mids.forEach((m) => P.line(b, [[m, 0], [m, gmax * 0.03]], COL.muted, 1));
+  P.dot(b, Math.min(Math.max(c, 0), 1), s.gain, COL.red, 9);
+  P.text('ticks: midpoints between neighbouring xᵢ = all distinct candidate cuts', b.x + 10, b.y + 28, 18, COL.muted);
+  stat([
+    ['Left: N_L, Σr', `${s.nL}, ${s.sL.toFixed(2)}`], ['γ_L = Σr / (N_L+λ)', s.gL.toFixed(3)],
+    ['Right: N_R, Σr', `${s.nR}, ${s.sR.toFixed(2)}`], ['γ_R = Σr / (N_R+λ)', s.gR.toFixed(3)],
+    ['Gain', s.gain.toFixed(3)],
+  ]);
+}
+document.querySelectorAll('input').forEach((e) => e.addEventListener('input', draw));
+$('reset').addEventListener('click', () => { document.querySelectorAll('input').forEach((e) => (e.value = e.defaultValue)); draw(); });
+$('best').addEventListener('click', () => {
+  const lam = +$('lambda').value; let best = mids[0], g = -1;
+  mids.forEach((m) => { const v = split(m, lam).gain; if (v > g) { g = v; best = m; } });
+  $('cut').value = best; draw();
+});
+draw();
+</script></body></html>

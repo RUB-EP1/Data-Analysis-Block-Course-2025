@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Train a small network</title>
+<link rel="stylesheet" href="lab.css">
+<style>.controls{gap:16px}input[type=range]{width:130px}label{gap:8px}</style>
+</head>
+<body>
+<header><h1>Train a small network</h1><span class="legend"><span class="signal">● class 1</span> &nbsp; <span class="background">● class 0</span> &nbsp; weights: <span class="signal">positive</span> / <span class="background">negative</span></span></header>
+<p class="subtitle">Every square shows what one unit computes over the whole input plane. Later units combine the patterns of earlier ones.</p>
+<div class="controls">
+  <label for="data">Data <select id="data"><option value="circle">circle</option><option value="xor">XOR</option><option value="gauss">two blobs</option><option value="spiral">spiral</option></select></label>
+  <label for="layers">Hidden layers <select id="layers"><option>1</option><option selected>2</option><option>3</option></select></label>
+  <label for="width">Units <input id="width" type="range" min="1" max="8" step="1" value="4"><output id="width-value"></output></label>
+  <label for="act">h <select id="act"><option value="tanh">tanh</option><option value="relu">ReLU</option><option value="sigmoid">sigmoid</option><option value="linear">linear</option></select></label>
+  <label for="lr">lr <input id="lr" type="range" min="-4" max="0" step="0.1" value="-2"><output id="lr-value"></output></label>
+  <label for="l2">L2 <select id="l2"><option value="0">0</option><option value="0.0001">1e-4</option><option value="0.001">1e-3</option><option value="0.01">1e-2</option><option value="0.1">1e-1</option></select></label>
+  <label for="noise">Noise <input id="noise" type="range" min="0" max="0.5" step="0.05" value="0.1"><output id="noise-value"></output></label>
+  <label><input type="checkbox" id="test"> test points</label>
+  <button id="run">Train</button><button id="reset">Reset</button>
+</div>
+<canvas id="plot" width="1600" height="560" role="img" aria-label="Network diagram with unit activation maps, decision map with data, and loss curves"></canvas>
+<div id="stats" class="stats" aria-live="polite"></div>
+<p class="prompt">Try the spiral with 1 layer of 2 units, then 3 layers of 8. Switch to the linear activation: the depth no longer helps.</p>
+<script src="plot.js"></script>
+<script>
+'use strict';
+const C = $('plot'), ctx = C.getContext('2d');
+const R = 1.2; // input plane is [-R, R]^2
+
+// ---------- data ----------
+function makeData(kind, noise, seed, n = 200) {
+  const r = rng(seed), X = [], y = [];
+  for (let i = 0; i < n; i++) {
+    const c = i % 2;
+    let a, b;
+    if (kind === 'circle') {
+      const rad = c ? 0.5 * Math.sqrt(r()) : 0.75 + 0.3 * r(), t = 2 * Math.PI * r();
+      a = rad * Math.cos(t); b = rad * Math.sin(t);
+    } else if (kind === 'xor') {
+      a = (0.08 + 0.9 * r()) * (r() < .5 ? -1 : 1); b = (0.08 + 0.9 * r()) * (r() < .5 ? -1 : 1);
+      if ((a * b > 0 ? 1 : 0) !== c) b = -b;
+    } else if (kind === 'gauss') {
+      const s = c ? 1 : -1; a = 0.45 * s + 0.22 * gauss(r); b = 0.45 * s + 0.22 * gauss(r);
+    } else {
+      const t = 0.25 + 2.3 * Math.PI * r(), rad = t / (2.55 * Math.PI) * 1.05, ph = c ? Math.PI : 0;
+      a = rad * Math.cos(t + ph); b = rad * Math.sin(t + ph);
+    }
+    X.push([a + noise * gauss(r) * 0.5, b + noise * gauss(r) * 0.5]); y.push(c);
+  }
+  return { X, y };
+}
+
+// ---------- network ----------
+const ACT = {
+  tanh: [Math.tanh, (z, a) => 1 - a * a],
+  relu: [z => z > 0 ? z : 0, z => z > 0 ? 1 : 0],
+  sigmoid: [z => 1 / (1 + Math.exp(-z)), (z, a) => a * (1 - a)],
+  linear: [z => z, () => 1]
+};
+const sig = z => 1 / (1 + Math.exp(-z));
+class MLP {
+  constructor(sizes, act, seed) {
+    const r = rng(seed);
+    this.sizes = sizes; this.act = act; this.t = 0;
+    this.W = []; this.b = []; this.mW = []; this.vW = []; this.mb = []; this.vb = [];
+    for (let l = 1; l < sizes.length; l++) {
+      const gain = act === 'relu' ? 2 : 1, sd = Math.sqrt(gain / sizes[l - 1]);
+      const W = Array.from({ length: sizes[l] }, () => Array.from({ length: sizes[l - 1] }, () => sd * gauss(r)));
+      this.W.push(W); this.b.push(new Array(sizes[l]).fill(act === 'relu' ? 0.1 : 0));
+      this.mW.push(W.map(row => row.map(() => 0))); this.vW.push(W.map(row => row.map(() => 0)));
+      this.mb.push(new Array(sizes[l]).fill(0)); this.vb.push(new Array(sizes[l]).fill(0));
+    }
+  }
+  forward(x) {
+    const h = ACT[this.act][0], A = [x], Z = [];
+    for (let l = 0; l < this.W.length; l++) {
+      const last = l === this.W.length - 1, prev = A[l];
+      const z = this.W[l].map((row, j) => row.reduce((s, w, i) => s + w * prev[i], this.b[l][j]));
+      Z.push(z); A.push(z.map(v => last ? sig(v) : h(v)));
+    }
+    return { A, Z };
+  }
+  predict(x) { const { A } = this.forward(x); return A[A.length - 1][0]; }
+  train(X, y, idx, lr, l2, opt) {
+    const L = this.W.length, dh = ACT[this.act][1];
+    const gW = this.W.map(W => W.map(row => row.map(() => 0))), gb = this.b.map(b => b.map(() => 0));
+    for (const n of idx) {
+      const { A, Z } = this.forward(X[n]);
+      let d = [A[L][0] - y[n]];                  // sigmoid + cross-entropy
+      for (let l = L - 1; l >= 0; l--) {
+        for (let j = 0; j < d.length; j++) {
+          gb[l][j] += d[j];
+          for (let i = 0; i < A[l].length; i++) gW[l][j][i] += d[j] * A[l][i];
+        }
+        if (l > 0) d = A[l].map((a, i) => dh(Z[l - 1][i], a) * d.reduce((s, dj, j) => s + dj * this.W[l][j][i], 0));
+      }
+    }
+    this.t++;
+    const m = idx.length, upd = (P, G, M, V, k, decay) => {
+      const g = G / m + decay * P[k];
+      if (opt === 'sgd') { P[k] -= lr * g; return; }
+      M[k] = 0.9 * M[k] + 0.1 * g; V[k] = 0.999 * V[k] + 0.001 * g * g;
+      P[k] -= lr * (M[k] / (1 - 0.9 ** this.t)) / (Math.sqrt(V[k] / (1 - 0.999 ** this.t)) + 1e-8);
+    };
+    for (let l = 0; l < L; l++) {
+      this.W[l].forEach((row, j) => row.forEach((_, i) => upd(row, gW[l][j][i], this.mW[l][j], this.vW[l][j], i, l2)));
+      this.b[l].forEach((_, j) => upd(this.b[l], gb[l][j], this.mb[l], this.vb[l], j, 0));
+    }
+  }
+  loss(X, y) {
+    let s = 0;
+    X.forEach((x, n) => { const p = Math.min(1 - 1e-7, Math.max(1e-7, this.predict(x))); s -= y[n] ? Math.log(p) : Math.log(1 - p); });
+    return s / X.length;
+  }
+  nParams() { return this.W.reduce((s, W, l) => s + W.length * W[0].length + this.b[l].length, 0); }
+}
+
+// ---------- state ----------
+let train, test, net, epoch = 0, hist = [], timer = null, seed = 1, shuffle = rng(99);
+function reset() {
+  const noise = +$('noise').value, kind = $('data').value;
+  train = makeData(kind, noise, 11); test = makeData(kind, noise, 12);
+  const sizes = [2].concat(new Array(+$('layers').value).fill(+$('width').value), [1]);
+  net = new MLP(sizes, $('act').value, seed); epoch = 0; hist = [[net.loss(train.X, train.y), net.loss(test.X, test.y)]];
+  draw();
+}
+function trainEpoch() {
+  const idx = [...train.X.keys()];
+  for (let i = idx.length - 1; i > 0; i--) { const j = Math.floor(shuffle() * (i + 1)); [idx[i], idx[j]] = [idx[j], idx[i]]; }
+  const lr = 10 ** +$('lr').value, l2 = +$('l2').value;
+  for (let k = 0; k < idx.length; k += 10) net.train(train.X, train.y, idx.slice(k, k + 10), lr, l2, 'adam');
+  epoch++; hist.push([net.loss(train.X, train.y), net.loss(test.X, test.y)]);
+}
+
+// ---------- drawing ----------
+function draw() {
+  syncOutputs({ lr: v => (10 ** v).toPrecision(1), noise: v => v.toFixed(2) });
+  ctx.clearRect(0, 0, C.width, C.height);
+  const sizes = net.sizes, cols = sizes.length, s = 50;
+  const xs = sizes.map((_, l) => 40 + l * (650 / (cols - 1)));
+  const ys = sizes.map(n => Array.from({ length: n }, (_, j) => 285 + (j - (n - 1) / 2) * 58 - s / 2));
+  text(ctx, 'Network', 40, 24, 25, PAL.ink, 'left', '600');
+  // weights
+  const wmax = Math.max(...net.W.flat(2).map(Math.abs), 1e-9);
+  for (let l = 1; l < cols; l++) for (let j = 0; j < sizes[l]; j++) for (let i = 0; i < sizes[l - 1]; i++) {
+    const w = net.W[l - 1][j][i];
+    ctx.strokeStyle = w > 0 ? 'rgba(217,151,0,.75)' : 'rgba(37,59,83,.7)';
+    ctx.lineWidth = 0.6 + 5 * Math.abs(w) / wmax;
+    ctx.beginPath(); ctx.moveTo(xs[l - 1] + s, ys[l - 1][i] + s / 2); ctx.lineTo(xs[l], ys[l][j] + s / 2); ctx.stroke();
+  }
+  // unit thumbnails: evaluate each unit over the plane
+  const grid = [], n = 22;
+  for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) grid.push(net.forward([-R + (i + .5) / n * 2 * R, R - (j + .5) / n * 2 * R]).A);
+  const scale = $('act').value === 'relu' || $('act').value === 'linear';
+  for (let l = 0; l < cols; l++) for (let j = 0; j < sizes[l]; j++) {
+    let mx = 1;
+    if (l > 0 && l < cols - 1 && scale) mx = Math.max(...grid.map(A => Math.abs(A[l][j])), 1e-9);
+    const cell = s / n, X0 = xs[l], Y0 = ys[l][j];
+    grid.forEach((A, k) => {
+      const v = A[l][j], i = k % n, jj = Math.floor(k / n);
+      ctx.fillStyle = l === cols - 1 ? probColour(v) : (l === 0 ? signedColour(v, R) : ($('act').value === 'sigmoid' ? probColour(v) : signedColour(v, mx)));
+      ctx.fillRect(X0 + i * cell, Y0 + jj * cell, cell + .5, cell + .5);
+    });
+    ctx.strokeStyle = PAL.grid; ctx.lineWidth = 1; ctx.strokeRect(X0, Y0, s, s);
+  }
+  text(ctx, 'x₁, x₂', xs[0] + s / 2, 548, 18, PAL.muted, 'center');
+  for (let l = 1; l < cols - 1; l++) text(ctx, `layer ${l}`, xs[l] + s / 2, 548, 18, PAL.muted, 'center');
+  text(ctx, 'output', xs[cols - 1] + s / 2, 548, 18, PAL.muted, 'center');
+
+  // decision map
+  const P = new Panel(ctx, 860, 40, 440, 440, [-R, R], [-R, R]);
+  P.field((a, b) => net.predict([a, b]), 64);
+  P.frame('Output p(class 1 | x)', 'x₁', 'x₂', [-1, 0, 1], [-1, 0, 1], v => v.toFixed(0));
+  const show = $('test').checked ? test : train;
+  show.X.forEach((x, i) => P.dot(x[0], x[1], show.y[i] ? PAL.gold : PAL.blue, 5, $('test').checked ? '#000' : 'white', $('test').checked ? 1.5 : 1));
+
+  // loss curves
+  const E = Math.max(50, hist.length - 1), top = Math.max(0.8, ...hist.map(h => h[0]));
+  const Q = new Panel(ctx, 1380, 40, 200, 440, [0, E], [0, top]);
+  Q.frame('Loss', 'epoch', '', [0, E], [0, top / 2, top], v => Number.isInteger(v) && v > 1 ? String(v) : v.toFixed(1));
+  Q.line(hist.map((h, i) => [i, h[0]]), PAL.ink, 2.5);
+  Q.line(hist.map((h, i) => [i, h[1]]), PAL.red, 2.5, [7, 5]);
+  text(ctx, '— train', Q.x + 10, Q.y + 26, 17, PAL.ink); text(ctx, '- - test', Q.x + 10, Q.y + 48, 17, PAL.red);
+
+  const acc = d => d.X.filter((x, i) => (net.predict(x) > .5 ? 1 : 0) === d.y[i]).length / d.y.length;
+  const last = hist[hist.length - 1];
+  stats([['Epoch', epoch], ['Parameters', net.nParams()], ['Train loss', last[0].toFixed(3)], ['Test loss', last[1].toFixed(3)],
+         ['Train accuracy', (100 * acc(train)).toFixed(0) + '%'], ['Test accuracy', (100 * acc(test)).toFixed(0) + '%']]);
+}
+
+function stop() { clearInterval(timer); timer = null; $('run').textContent = 'Train'; }
+$('run').onclick = () => {
+  if (timer) return stop();
+  $('run').textContent = 'Pause';
+  timer = setInterval(() => { trainEpoch(); draw(); if (epoch >= 1000) stop(); }, 30);
+};
+$('reset').onclick = () => { stop(); seed++; reset(); };
+['data', 'layers', 'width', 'act', 'noise'].forEach(id => $(id).addEventListener('input', () => { stop(); reset(); }));
+['lr', 'l2', 'test'].forEach(id => $(id).addEventListener('input', draw));
+reset();
+if (new URLSearchParams(location.search).has('demo')) { $('data').value = 'spiral'; $('layers').value = '3'; $('width').value = '8'; reset(); for (let i = 0; i < 300; i++) trainEpoch(); draw(); }
+</script>
+</body>
+</html>

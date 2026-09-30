@@ -1,0 +1,34 @@
+project:
+  type: website
+  output-dir: _site
+  # Only the landing page and the eight decks are Quarto documents; the
+  # exercise Markdown is rendered to PDF by scripts/build_attendance.py.
+  render:
+    - index.qmd
+    - slides/lectures/Lecture_*/Lecture_*.qmd
+  # Files loaded by the decks at runtime (widgets via data-src) or linked from
+  # the landing page. Quarto cannot discover them, so they are listed here.
+  resources:
+    - slides/lectures/*/widgets/**
+    - slides/lectures/*/figures/**
+    - slides/lectures/*/notebooks/**
+    - slides/lectures/*/pluto/*.jl
+    - slides/lectures/*/scripts/*.jl
+    - slides/lectures/*/*.py
+    - slides/lectures/*/requirements.txt
+    - homework_exercises/python/*.py
+    - homework_solutions/python/*.py
+    - build/attendance_exercises/*.pdf
+    - build/attendance_solutions/*.pdf
+
+website:
+  title: "Statistics & Machine Learning"
+  site-url: https://ctoennis.github.io/Data-Analysis-Block-Course-2026/
+  repo-url: https://github.com/ctoennis/Data-Analysis-Block-Course-2026
+  page-footer:
+    left: "Data Analysis Block Course 2026 · TU Dortmund & Ruhr-Universität Bochum"
+    right:
+      - text: Indico
+        href: https://indico.global/event/18022/
+      - text: GitHub
+        href: https://github.com/ctoennis/Data-Analysis-Block-Course-2026

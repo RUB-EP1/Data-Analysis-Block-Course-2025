@@ -1,0 +1,29 @@
+# Eight-deck course plan (Lecture 4 is split into 4A and 4B). A deck becomes buildable when its top-level .qmd exists.
+lectures:
+  - id: Lecture_1A
+    source: lectures/Lecture_1A/Lecture_1A.qmd
+    status: existing
+  - id: Lecture_1B
+    source: lectures/Lecture_1B/Lecture_1B.qmd
+    status: native
+  - id: Lecture_2A
+    source: lectures/Lecture_2A/Lecture_2A.qmd
+    status: native
+  - id: Lecture_2B
+    source: lectures/Lecture_2B/Lecture_2B.qmd
+    status: native
+  - id: Lecture_3A
+    source: lectures/Lecture_3A/Lecture_3A.qmd
+    status: native
+  - id: Lecture_3B
+    source: lectures/Lecture_3B/Lecture_3B.qmd
+    status: native
+  - id: Lecture_4A
+    source: lectures/Lecture_4A/Lecture_4A.qmd
+    status: native
+  - id: Lecture_4B
+    source: lectures/Lecture_4B/Lecture_4B.qmd
+    status: native
+
+# lectures/Lecture_3/ is the imported combined deck, superseded by the native 3A and 3B.
+# lectures/Lecture_4/ is an empty placeholder from the seven-deck plan.

@@ -1,0 +1,7 @@
+marimo>=0.25.0
+torch
+torchvision
+numpy
+matplotlib
+pillow
+scikit-image

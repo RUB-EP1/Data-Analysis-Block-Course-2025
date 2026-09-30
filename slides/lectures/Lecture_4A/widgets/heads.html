@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Inside GPT-2: 144 attention heads</title>
+<link rel="stylesheet" href="lab.css">
+<style>.controls{gap:16px;flex-wrap:nowrap}input[type=range]{width:120px}select{max-width:300px}</style>
+</head>
+<body>
+<header><h1>Inside GPT-2: 144 attention heads</h1><span class="legend">12 layers × 12 heads · click a thumbnail</span></header>
+<p class="subtitle">Real attention patterns of GPT-2 small. Row = the token doing the looking (query), column = the token looked at (key). ⟨bos⟩ is a start token.</p>
+<div class="controls">
+  <label for="sentence">Text <select id="sentence"></select></label>
+  <label for="layer">Layer <input id="layer" type="range" min="0" max="11" step="1" value="5"><output id="layer-value"></output></label>
+  <label for="head">Head <input id="head" type="range" min="0" max="11" step="1" value="5"><output id="head-value"></output></label>
+  <label for="jump">Known heads <select id="jump"><option value="">—</option></select></label>
+</div>
+<canvas id="plot" width="1600" height="560" role="img" aria-label="One attention pattern in detail and all 144 patterns as thumbnails"></canvas>
+<div id="stats" class="stats" aria-live="polite"></div>
+<script src="plot.js"></script>
+<script src="data_attention.js"></script>
+<script>
+'use strict';
+const C = $('plot'), ctx = C.getContext('2d'), D = window.DATA_ATTENTION;
+const LABEL = { flag: 'The American flag is red, white, and', names: 'When Mary and John went to the store, John gave a drink to',
+                repeat: 'random words, repeated twice', physics: 'The electron was accelerated … and the electron' };
+D.sentences.forEach((s, i) => $('sentence').add(new Option(LABEL[s.key] || s.text, i)));
+Object.entries(D.notes).forEach(([k, v]) => $('jump').add(new Option(`L${k.split('.')[0]} H${k.split('.')[1]}: ${v}`, k)));
+const G = { x: 830, y: 34, cell: 42, gap: 3 };
+function pattern(s, l, h) {
+  const T = s.tokens.length, M = [];
+  for (let i = 0; i < T; i++) { M.push(new Array(T).fill(null)); s.patterns[l][h][i].forEach((v, j) => M[i][j] = v / 200); }
+  return M;
+}
+function draw() {
+  syncOutputs();
+  const s = D.sentences[+$('sentence').value], l = +$('layer').value, h = +$('head').value, T = s.tokens.length;
+  const M = pattern(s, l, h);
+  ctx.clearRect(0, 0, C.width, C.height);
+  // Detail view
+  const labelW = 150, size = Math.min(470, 26 * T), cs = size / T, x0 = 40 + labelW, y0 = 30;
+  const note = D.notes[`${l}.${h}`];
+  text(ctx, `Layer ${l}, head ${h}${note ? ' — ' + note : ''}`, 40, 22, 23, PAL.ink, 'left', '600');
+  for (let i = 0; i < T; i++) {
+    text(ctx, s.tokens[i].replace(/ /g, '·'), x0 - 8, y0 + 10 + i * cs + cs / 2 + 5, Math.min(16, cs * 0.75), PAL.muted, 'right');
+    ctx.save(); ctx.translate(x0 + i * cs + cs / 2 + 4, y0 + 14 + T * cs); ctx.rotate(Math.PI / 2.6);
+    text(ctx, s.tokens[i].replace(/ /g, '·'), 0, 0, Math.min(16, cs * 0.75), PAL.muted); ctx.restore();
+    for (let j = 0; j < T; j++) {
+      ctx.fillStyle = M[i][j] === null ? '#f4f6f8' : viridis(Math.min(1, M[i][j] / 0.8));
+      ctx.fillRect(x0 + j * cs, y0 + 10 + i * cs, cs - 1, cs - 1);
+    }
+  }
+  // All heads
+  text(ctx, 'All 144 heads (rows: layers 0–11, columns: heads 0–11)', G.x, 22, 20, PAL.ink, 'left', '600');
+  const ts = G.cell - G.gap;
+  for (let L = 0; L < 12; L++) for (let H = 0; H < 12; H++) {
+    const X = G.x + H * G.cell, Y = G.y + L * G.cell, P = s.patterns[L][H], c = ts / T;
+    ctx.fillStyle = '#f4f6f8'; ctx.fillRect(X, Y, ts, ts);
+    for (let i = 0; i < T; i++) P[i].forEach((v, j) => { ctx.fillStyle = viridis(Math.min(1, v / 160)); ctx.fillRect(X + j * c, Y + i * c, c + .3, c + .3); });
+    if (D.notes[`${L}.${H}`]) { ctx.strokeStyle = PAL.gold; ctx.lineWidth = 2; ctx.strokeRect(X - 1, Y - 1, ts + 2, ts + 2); }
+  }
+  ctx.strokeStyle = PAL.red; ctx.lineWidth = 3; ctx.strokeRect(G.x + h * G.cell - 2, G.y + l * G.cell - 2, ts + 4, ts + 4);
+  text(ctx, 'gold frame = head with a known role', G.x, G.y + 12 * G.cell + 16, 15, PAL.muted);
+
+  // Where does the last token look?
+  const last = M[T - 1], top = last.map((v, j) => [v, j]).sort((a, b) => b[0] - a[0]).slice(0, 3);
+  stats([
+    ['GPT-2 next token', s.next.slice(0, 3).map((t, k) => `${JSON.stringify(t)} ${(100 * s.nextp[k]).toFixed(0)}%`).join('  ')],
+    [`Last token “${s.tokens[T - 1].trim()}” attends to`, top.map(([v, j]) => `${s.tokens[j].trim() || '·'} ${v.toFixed(2)}`).join('   ')],
+  ]);
+}
+C.addEventListener('click', ev => {
+  const [x, y] = canvasPoint(C, ev), H = Math.floor((x - G.x) / G.cell), L = Math.floor((y - G.y) / G.cell);
+  if (H >= 0 && H < 12 && L >= 0 && L < 12) { $('layer').value = L; $('head').value = H; $('jump').value = ''; draw(); }
+});
+$('jump').oninput = () => { if (!$('jump').value) return; const [L, H] = $('jump').value.split('.'); $('layer').value = L; $('head').value = H; draw(); };
+['sentence', 'layer', 'head'].forEach(id => $(id).addEventListener('input', draw));
+$('sentence').value = 2;
+draw();
+</script>
+</body>
+</html>

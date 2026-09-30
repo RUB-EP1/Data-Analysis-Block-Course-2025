@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>“Wait”: forcing the model to think longer</title>
+<link rel="stylesheet" href="lab.css">
+<style>
+body{overflow:hidden}
+.main{flex:1 1 0;min-height:0;display:grid;grid-template-columns:1.5fr 1fr;gap:22px}
+.trace{min-height:0;overflow:auto;border:1px solid #dbe3ea;border-radius:8px;padding:14px 18px;font:20px/1.5 Georgia,serif;background:#fbfcfd}
+.trace .q{font-family:"Helvetica Neue",Arial;font-weight:600;margin-bottom:10px}
+.trace .tag{font:14px Menlo,monospace;background:#172635;color:#fff;border-radius:3px;padding:1px 5px}
+.trace .wait{background:#fff1cf;font-weight:700;padding:0 3px;border-radius:3px}
+.trace .seg{display:block;margin:6px 0}
+.trace .answer{display:block;margin-top:12px;font-family:"Helvetica Neue",Arial;font-size:22px;font-weight:700}
+.ok{color:#3c8d52}.bad{color:#c74842}
+.side{display:flex;flex-direction:column;min-height:0;gap:10px}
+canvas{flex:1 1 0;min-height:0}
+.note{font-size:17px;color:#536878;line-height:1.35}
+</style>
+</head>
+<body>
+<header><h1>“Wait”: forcing the model to think longer</h1><span class="legend">a constructed example to show the mechanism</span></header>
+<p class="subtitle">When the model tries to end its thinking, the harness can refuse and append the word <b>“Wait”</b> instead. The model continues, and often checks or corrects itself (budget forcing, s1, 2025).</p>
+<div class="controls">
+  <label for="problem">Question <select id="problem"><option value="ball">ball thrown upward</option><option value="bat">bat and ball</option></select></label>
+  <button id="wait">Replace the stop with “Wait”</button>
+  <button id="stop">Let it stop and answer</button>
+  <button id="reset">Reset</button>
+</div>
+<div class="main">
+  <div id="trace" class="trace" aria-live="polite"></div>
+  <div class="side">
+    <canvas id="plot" width="620" height="400" role="img" aria-label="Correctness of the final answer versus thinking tokens"></canvas>
+    <p class="note">Real reasoning models learn when to write “wait” during reinforcement learning (DeepSeek-R1, 2025). More thinking helps up to a point; beyond it, extra tokens only cost time and money.</p>
+  </div>
+</div>
+<div id="stats" class="stats" aria-live="polite"></div>
+<script src="plot.js"></script>
+<script>
+'use strict';
+const C = $('plot'), ctx = C.getContext('2d');
+const P = {
+  ball: {
+    q: 'A ball is thrown straight up at 10 m/s. How long until it lands back in the hand? (g = 9.8 m/s²)',
+    segs: [
+      { t: 'The ball slows down at g. Time until it stops: t = v/g = 10/9.8 ≈ 1.02 s.', a: '1.02 s', ok: false, n: 38 },
+      { t: 'Wait — 1.02 s is only the way up. By symmetry the fall takes as long, so the total is 2 × 1.02 ≈ 2.04 s.', a: '2.04 s', ok: true, n: 40 },
+      { t: 'Wait, let me check with the equation of motion: y(t) = 10t − 4.9t² = 0 gives t = 10/4.9 ≈ 2.04 s. Consistent.', a: '2.04 s', ok: true, n: 44 },
+      { t: 'Wait, should I include air resistance? The question gives only g, so neglect it. The answer stays 2.04 s.', a: '2.04 s', ok: true, n: 36 },
+      { t: 'Wait, maybe g = 10 m/s² was meant… no, 9.8 m/s² is stated. 2.04 s.', a: '2.04 s', ok: true, n: 28 }
+    ]
+  },
+  bat: {
+    q: 'A bat and a ball cost 1.10 € together. The bat costs 1.00 € more than the ball. How much is the ball?',
+    segs: [
+      { t: '1.10 € minus 1.00 € leaves 0.10 €, so the ball costs 0.10 €.', a: '0.10 €', ok: false, n: 26 },
+      { t: 'Wait — then the bat costs 1.10 € and together they cost 1.20 €, not 1.10 €. Let the ball cost x: x + (x + 1.00) = 1.10, so 2x = 0.10 and x = 0.05 €.', a: '0.05 €', ok: true, n: 58 },
+      { t: 'Wait, check: ball 0.05 €, bat 1.05 €, difference 1.00 €, sum 1.10 €. Correct.', a: '0.05 €', ok: true, n: 34 },
+      { t: 'Wait, could the prices be in another currency? The unit does not matter here. 0.05 €.', a: '0.05 €', ok: true, n: 30 }
+    ]
+  }
+};
+let k = 1, answered = false;
+function draw() {
+  const p = P[$('problem').value], shown = p.segs.slice(0, k), last = shown[shown.length - 1];
+  const tokens = shown.reduce((s, x) => s + x.n, 0);
+  $('trace').innerHTML = `<div class="q">${p.q}</div><span class="tag">&lt;think&gt;</span>`
+    + shown.map(s => `<span class="seg">${s.t.replace(/^Wait/, '<span class="wait">Wait</span>')}</span>`).join('')
+    + (answered ? `<span class="tag">&lt;/think&gt;</span><span class="answer ${last.ok ? 'ok' : 'bad'}">Answer: ${last.a} ${last.ok ? '✓' : '✗'}</span>` : '<span class="seg" style="color:#9aa1a8">… the model wants to stop here</span>');
+  $('wait').disabled = k >= p.segs.length;
+  ctx.clearRect(0, 0, C.width, C.height);
+  let cum = 0; const pts = p.segs.map(s => { cum += s.n; return [cum, s.ok ? 1 : 0]; });
+  const G = new Panel(ctx, 80, 40, 500, 280, [0, cum * 1.05], [-0.1, 1.1]);
+  G.frame('Answer correct if the model stops here?', 'thinking tokens', '', [0, Math.round(cum / 2), cum], []);
+  text(ctx, 'yes', G.x - 8, G.Y(1) + 6, 17, PAL.muted, 'right'); text(ctx, 'no', G.x - 8, G.Y(0) + 6, 17, PAL.muted, 'right');
+  G.line([[0, 0]].concat(pts.flatMap(([x, y], i) => [[x, i ? pts[i - 1][1] : 0], [x, y]])), '#b7c3cd', 2, [5, 5]);
+  pts.forEach(([x, y], i) => G.dot(x, y, i < k ? (y ? PAL.green : PAL.red) : '#d8dee4', i === k - 1 ? 11 : 7));
+  stats([['Thinking tokens', tokens], ['“Wait” insertions', k - 1], ['Current answer', `${last.a} ${last.ok ? '✓' : '✗'}`]]);
+}
+$('wait').onclick = () => { k++; answered = false; draw(); };
+$('stop').onclick = () => { answered = true; draw(); };
+$('reset').onclick = () => { k = 1; answered = false; draw(); };
+$('problem').oninput = () => { k = 1; answered = false; draw(); };
+if (new URLSearchParams(location.search).has('demo')) { k = 2; answered = true; }
+draw();
+</script>
+</body>
+</html>

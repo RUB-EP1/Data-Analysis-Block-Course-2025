@@ -1,0 +1,59 @@
+---
+pagetitle: "Data Analysis Block Course 2026"
+page-layout: full
+format:
+  html:
+    theme: cosmo
+    css: site/site.css
+    toc: false
+listing:
+  - id: lectures
+    contents: site/lectures.yml
+    template: site/lecture-cards.ejs
+    sort: false
+  - id: exercises
+    contents: site/exercises.yml
+    template: site/exercise-cards.ejs
+    sort: false
+---
+
+::: {.hero}
+[Data Analysis Block Course · 21 Sep – 2 Oct 2026]{.hero-kicker}
+
+# Statistics & Machine Learning {.hero-title}
+
+A hands-on block course for master students at TU Dortmund and
+Ruhr-Universität Bochum. Week 1 covers statistical inference;
+week 2 covers machine learning, from automatic differentiation to transformers and agents.
+
+::: {.hero-links}
+[Timetable on Indico](https://indico.global/event/18022/){.btn-main}
+[Moodle](https://moodle.ruhr-uni-bochum.de/course/view.php?id=71934){.chip}
+[GitHub](https://github.com/ctoennis/Data-Analysis-Block-Course-2026){.chip}
+:::
+:::
+
+## Lectures {.section-title}
+
+::: {.section-note}
+Machine-learning block, lectures by Prof. Dr. Mikhail Mikhasenko. The slides run in the
+browser; press <kbd>F</kbd> for full screen and <kbd>Esc</kbd> for the slide overview.
+Interactive panels load when their slide is reached.
+The statistics block (21–24 Sep, M. Schmelling and L. Nisi) is on
+[Indico](https://indico.global/event/18022/).
+:::
+
+::: {#lectures}
+:::
+
+## Exercises {.section-title}
+
+::: {.section-note}
+Each attendance sheet is worked through in class right after its lecture; the homework
+is a [marimo](https://marimo.io) notebook. **molab** opens a notebook in the browser
+without installing anything; the **.py** link downloads it for `marimo edit`.
+Teaching assistants: Hendric Jonas, Christoph Tönnis, Marian Stahl.
+:::
+
+::: {#exercises}
+:::

@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>One neuron draws one line</title>
+<link rel="stylesheet" href="lab.css">
+</head>
+<body>
+<header><h1>One neuron draws one line</h1><span class="legend"><span class="signal">● target 1</span> &nbsp; <span class="background">● target 0</span> &nbsp; ○ misclassified</span></header>
+<p class="subtitle">The neuron computes <i>z</i> = <i>w</i><sub>1</sub><i>x</i><sub>1</sub> + <i>w</i><sub>2</sub><i>x</i><sub>2</sub> + <i>b</i> and outputs <i>h</i>(<i>z</i>). The boundary <i>z</i> = 0 is a straight line with normal vector <b>w</b>.</p>
+<div class="controls">
+  <label for="task">Task <select id="task"><option>AND</option><option>OR</option><option>NAND</option><option>XOR</option></select></label>
+  <label for="act">h(z) <select id="act"><option value="step">step</option><option value="sigmoid">sigmoid</option></select></label>
+  <label for="w1">w₁ <input id="w1" type="range" min="-10" max="10" step="0.1" value="3"><output id="w1-value"></output></label>
+  <label for="w2">w₂ <input id="w2" type="range" min="-10" max="10" step="0.1" value="3"><output id="w2-value"></output></label>
+  <label for="b">b <input id="b" type="range" min="-15" max="15" step="0.1" value="-1"><output id="b-value"></output></label>
+  <button id="train">Train</button><button id="reset">Reset</button>
+</div>
+<canvas id="plot" width="1600" height="540" role="img" aria-label="Input plane with the neuron's decision line, and the activation function with the four inputs placed on it"></canvas>
+<div id="stats" class="stats" aria-live="polite"></div>
+<p class="prompt" id="prompt">Find weights for AND and OR by hand. Then try XOR, and let the training rule try too.</p>
+<script src="plot.js"></script>
+<script>
+const C = $('plot'), ctx = C.getContext('2d');
+const X = [[0, 0], [0, 1], [1, 0], [1, 1]];
+const TASKS = { AND: [0, 0, 0, 1], OR: [0, 1, 1, 1], NAND: [1, 1, 1, 0], XOR: [0, 1, 1, 0] };
+const sig = z => 1 / (1 + Math.exp(-z));
+const act = z => $('act').value === 'step' ? (z >= 0 ? 1 : 0) : sig(z);
+let timer = null, epoch = 0;
+
+function params() { return [+$('w1').value, +$('w2').value, +$('b').value]; }
+function setParams(w1, w2, b) {
+  const clip = (v, m) => Math.max(-m, Math.min(m, v));
+  $('w1').value = clip(w1, 10).toFixed(2); $('w2').value = clip(w2, 10).toFixed(2); $('b').value = clip(b, 15).toFixed(2);
+}
+
+function draw() {
+  syncOutputs({ w1: v => v.toFixed(1), w2: v => v.toFixed(1), b: v => v.toFixed(1) });
+  const [w1, w2, b] = params(), y = TASKS[$('task').value];
+  const z = X.map(([a, c]) => w1 * a + w2 * c + b), out = z.map(act);
+  ctx.clearRect(0, 0, C.width, C.height);
+
+  // Left: input plane with the output field and the decision line.
+  const P = new Panel(ctx, 90, 40, 440, 440, [-0.5, 1.5], [-0.5, 1.5]);
+  P.field((a, c) => act(w1 * a + w2 * c + b), 70);
+  P.frame('Input plane', 'x₁', 'x₂', [0, 0.5, 1], [0, 0.5, 1]);
+  if (Math.hypot(w1, w2) > 1e-9) {
+    const pts = Math.abs(w2) > Math.abs(w1)
+      ? [[-0.5, -(w1 * -0.5 + b) / w2], [1.5, -(w1 * 1.5 + b) / w2]]
+      : [[-(w2 * -0.5 + b) / w1, -0.5], [-(w2 * 1.5 + b) / w1, 1.5]];
+    P.clip(() => P.line(pts, PAL.accent, 4));
+    // Normal vector w, drawn from the point of the line closest to the centre (0.5, 0.5).
+    const n2 = w1 * w1 + w2 * w2, s = (w1 * .5 + w2 * .5 + b) / n2;
+    const fx = .5 - w1 * s, fy = .5 - w2 * s, L = 0.35 / Math.sqrt(n2);
+    if (fx > -0.4 && fx < 1.4 && fy > -0.4 && fy < 1.4) {
+      arrow(ctx, P.X(fx), P.Y(fy), P.X(fx + w1 * L), P.Y(fy + w2 * L), PAL.accent, 3);
+      text(ctx, 'w', P.X(fx + w1 * L) + 8, P.Y(fy + w2 * L) - 6, 24, PAL.accent, 'left', 'italic 600');
+    }
+  }
+  X.forEach(([a, c], i) => {
+    const wrong = Math.round(out[i]) !== y[i];
+    P.dot(a, c, y[i] ? PAL.gold : PAL.blue, 15, wrong ? PAL.red : 'white', wrong ? 5 : 2);
+    text(ctx, `(${a},${c})`, P.X(a) + 20, P.Y(c) - 16, 18, PAL.muted);
+  });
+
+  // Right: the same four points on the activation curve.
+  const Q = new Panel(ctx, 700, 40, 840, 440, [-10, 10], [-0.12, 1.12]);
+  Q.frame('Output of the neuron', 'z = w·x + b', 'h(z)', [-10, -5, 0, 5, 10], [0, 0.5, 1]);
+  Q.hline(0.5); Q.vline(0);
+  Q.fn(act, PAL.ink, 3, [], 800);
+  const seen = {};
+  X.forEach(([a, c], i) => {
+    const zz = Math.max(-9.8, Math.min(9.8, z[i])), key = zz.toFixed(1);
+    const k = seen[key] = (seen[key] || 0) + 1;
+    Q.dot(zz, act(z[i]), y[i] ? PAL.gold : PAL.blue, 13, Math.round(out[i]) !== y[i] ? PAL.red : 'white', 3);
+    const up = act(z[i]) > 0.5;
+    text(ctx, `(${a},${c})`, Q.X(zz), Q.Y(act(z[i])) + (up ? 38 + 22 * (k - 1) : -22 - 22 * (k - 1)), 17, PAL.muted, 'center');
+  });
+
+  const correct = out.filter((o, i) => Math.round(o) === y[i]).length;
+  const bce = -out.reduce((s, o, i) => s + (y[i] ? Math.log(Math.max(o, 1e-9)) : Math.log(Math.max(1 - o, 1e-9))), 0) / 4;
+  stats([
+    ['Correct inputs', `${correct} / 4`],
+    ['z for (0,0) (0,1) (1,0) (1,1)', z.map(v => v.toFixed(1)).join('  ')],
+    [$('act').value === 'sigmoid' ? 'Cross-entropy loss' : 'Training epochs', $('act').value === 'sigmoid' ? bce.toFixed(3) : epoch]
+  ]);
+  return correct;
+}
+
+// Perceptron rule for the step neuron, gradient descent on cross-entropy for the sigmoid neuron.
+function epochStep() {
+  let [w1, w2, b] = params();
+  const y = TASKS[$('task').value];
+  if ($('act').value === 'step') {
+    X.forEach(([a, c], i) => {
+      const e = y[i] - (w1 * a + w2 * c + b >= 0 ? 1 : 0);
+      w1 += e * a; w2 += e * c; b += e;
+    });
+  } else {
+    let g1 = 0, g2 = 0, gb = 0;
+    X.forEach(([a, c], i) => { const e = sig(w1 * a + w2 * c + b) - y[i]; g1 += e * a; g2 += e * c; gb += e; });
+    const eta = 2; w1 -= eta * g1; w2 -= eta * g2; b -= eta * gb;
+  }
+  setParams(w1, w2, b); epoch++;
+}
+
+function stop() { clearInterval(timer); timer = null; $('train').textContent = 'Train'; }
+$('train').onclick = () => {
+  if (timer) return stop();
+  $('train').textContent = 'Pause';
+  timer = setInterval(() => {
+    epochStep();
+    const ok = draw() === 4;
+    const xor = $('task').value === 'XOR';
+    if (ok && $('act').value === 'step') { stop(); $('prompt').textContent = `Converged after ${epoch} epochs: the perceptron rule stops once every input is correct.`; }
+    else if (epoch >= 400) { stop(); $('prompt').textContent = xor ? 'After 400 epochs XOR is still not solved: no straight line separates (0,1),(1,0) from (0,0),(1,1).' : 'Stopped after 400 epochs. The sigmoid neuron keeps sharpening the boundary; its loss approaches zero only as |w| grows.'; }
+  }, $('act').value === 'step' ? 180 : 40);
+};
+$('reset').onclick = () => { stop(); epoch = 0; setParams(0.5, -0.5, 0); $('prompt').textContent = 'Find weights for AND and OR by hand. Then try XOR, and let the training rule try too.'; draw(); };
+document.querySelectorAll('input,select').forEach(e => e.addEventListener('input', () => { if (!timer) epoch = 0; draw(); }));
+draw();
+if (new URLSearchParams(location.search).has('demo')) { setParams(1, 1, -1.5); draw(); }
+</script>
+</body>
+</html>

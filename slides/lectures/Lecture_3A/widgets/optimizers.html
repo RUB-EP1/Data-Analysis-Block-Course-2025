@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Optimizers on a loss surface</title>
+<link rel="stylesheet" href="lab.css">
+<style>.controls{gap:18px}input[type=range]{width:150px}label{gap:8px}.sw{display:inline-block;width:26px;height:5px;vertical-align:middle;margin-right:6px;border-radius:2px}</style>
+</head>
+<body>
+<header><h1>Optimizers on a loss surface</h1>
+<span class="legend">
+  <label style="display:inline-flex;font-size:18px"><input type="checkbox" id="on-gd" checked><span class="sw" style="background:#172635"></span>GD</label>
+  <label style="display:inline-flex;font-size:18px"><input type="checkbox" id="on-mom" checked><span class="sw" style="background:#c74842"></span>Momentum</label>
+  <label style="display:inline-flex;font-size:18px"><input type="checkbox" id="on-rms" checked><span class="sw" style="background:#3c8d52"></span>RMSProp</label>
+  <label style="display:inline-flex;font-size:18px"><input type="checkbox" id="on-adam" checked><span class="sw" style="background:#087bb9"></span>Adam</label>
+</span></header>
+<p class="subtitle">Click on the map to choose a starting point. All optimizers start together and see the same gradients.</p>
+<div class="controls">
+  <label for="surface">Surface <select id="surface"><option value="valley">narrow valley</option><option value="rosen">banana (Rosenbrock)</option><option value="basins">two basins</option></select></label>
+  <label for="eta">η (GD, momentum) <input id="eta" type="range" min="-3" max="0" step="0.01" value="-0.7"><output id="eta-value"></output></label>
+  <label for="alpha">α (RMSProp, Adam) <input id="alpha" type="range" min="-3" max="0" step="0.01" value="-1"><output id="alpha-value"></output></label>
+  <label for="noise">gradient noise <input id="noise" type="range" min="0" max="3" step="0.05" value="0"><output id="noise-value"></output></label>
+  <button id="run">Run</button><button id="reset">Reset</button>
+</div>
+<canvas id="plot" width="1600" height="560" role="img" aria-label="Contour map with optimizer trajectories and loss versus step"></canvas>
+<div id="stats" class="stats" aria-live="polite"></div>
+<p class="prompt" id="prompt">Narrow valley: plain GD zig-zags across and crawls along. Momentum builds speed along the valley; RMSProp and Adam rescale each coordinate.</p>
+<script src="plot.js"></script>
+<script>
+const C = $('plot'), ctx = C.getContext('2d');
+const S = {
+  valley: { f: (x, y) => 0.5 * (0.02 * x * x + 5 * y * y), g: (x, y) => [0.02 * x, 5 * y], xr: [-4, 4], yr: [-4, 4], start: [-3.6, 1.6], eta: 0.35, alpha: 0.1,
+    prompt: 'Narrow valley: plain GD zig-zags across and crawls along. Momentum builds speed along the valley; RMSProp and Adam rescale each coordinate.' },
+  rosen: { f: (x, y) => (1 - x) ** 2 + 5 * (y - x * x) ** 2, g: (x, y) => [-2 * (1 - x) - 20 * x * (y - x * x), 10 * (y - x * x)], xr: [-2, 2], yr: [-1, 3], start: [-1.6, 2.6], eta: 0.01, alpha: 0.03,
+    prompt: 'Banana: the minimum at (1, 1) sits in a curved, flat-bottomed valley. Raise η for GD until it becomes unstable.' },
+  basins: {
+    f: (x, y) => 1 - Math.exp(-((x - 1.5) ** 2 + (y - 1) ** 2) / 1.2) - 0.6 * Math.exp(-((x + 1.6) ** 2 + (y + 1.3) ** 2) / 0.5) + 0.02 * (x * x + y * y),
+    g: (x, y) => {
+      const a = Math.exp(-((x - 1.5) ** 2 + (y - 1) ** 2) / 1.2), b = 0.6 * Math.exp(-((x + 1.6) ** 2 + (y + 1.3) ** 2) / 0.5);
+      return [a * 2 * (x - 1.5) / 1.2 + b * 2 * (x + 1.6) / 0.5 + 0.04 * x, a * 2 * (y - 1) / 1.2 + b * 2 * (y + 1.3) / 0.5 + 0.04 * y];
+    }, xr: [-4, 4], yr: [-4, 4], start: [-3.2, -3.4], eta: 0.5, alpha: 0.1,
+    prompt: 'Two basins: with η = 0.5 momentum rolls through the shallow basin into the deep one. Try η = 0.6: escaping is luck, not a guarantee.'
+  }
+};
+const OPT = [
+  { id: 'gd', name: 'GD', colour: PAL.ink },
+  { id: 'mom', name: 'Momentum', colour: PAL.red },
+  { id: 'rms', name: 'RMSProp', colour: PAL.green },
+  { id: 'adam', name: 'Adam', colour: PAL.accent }
+];
+let start = null, runs = [], t = 0, timer = null, noiseRng = rng(7), fieldCache = {}, fmin = {};
+
+function surf() { return S[$('surface').value]; }
+function minimum(s) {
+  let best = Infinity, bx = 0, by = 0;
+  for (let i = 0; i <= 400; i++) for (let j = 0; j <= 400; j++) {
+    const x = s.xr[0] + i / 400 * (s.xr[1] - s.xr[0]), y = s.yr[0] + j / 400 * (s.yr[1] - s.yr[0]), v = s.f(x, y);
+    if (v < best) { best = v; bx = x; by = y; }
+  }
+  // Polish the grid minimum with small gradient steps.
+  for (let k = 0; k < 20000; k++) { const g = s.g(bx, by); bx -= 1e-3 * g[0]; by -= 1e-3 * g[1]; }
+  return Math.min(best, s.f(bx, by));
+}
+function reset() {
+  const s = surf();
+  if (!start) start = s.start.slice();
+  t = 0; noiseRng = rng(7);
+  runs = OPT.map(o => ({ ...o, p: start.slice(), v: [0, 0], s: [0, 0], m: [0, 0], path: [start.slice()], loss: [s.f(...start)] }));
+  draw();
+}
+function step() {
+  const s = surf(), eta = 10 ** +$('eta').value, alpha = 10 ** +$('alpha').value, sd = +$('noise').value;
+  t++;
+  const noise = [gauss(noiseRng) * sd, gauss(noiseRng) * sd]; // identical noise for everyone
+  runs.forEach(r => {
+    const [x, y] = r.p;
+    if (!isFinite(x) || Math.abs(x) > 1e3 || Math.abs(y) > 1e3) return;
+    const g = s.g(x, y).map((v, i) => v + noise[i]);
+    for (let i = 0; i < 2; i++) {
+      if (r.id === 'gd') r.p[i] -= eta * g[i];
+      if (r.id === 'mom') { r.v[i] = 0.9 * r.v[i] + g[i]; r.p[i] -= eta * r.v[i]; }
+      if (r.id === 'rms') { r.s[i] = 0.99 * r.s[i] + 0.01 * g[i] * g[i]; r.p[i] -= alpha * g[i] / (Math.sqrt(r.s[i]) + 1e-8); }
+      if (r.id === 'adam') {
+        r.m[i] = 0.9 * r.m[i] + 0.1 * g[i]; r.s[i] = 0.999 * r.s[i] + 0.001 * g[i] * g[i];
+        const mh = r.m[i] / (1 - 0.9 ** t), vh = r.s[i] / (1 - 0.999 ** t);
+        r.p[i] -= alpha * mh / (Math.sqrt(vh) + 1e-8);
+      }
+    }
+    r.path.push(r.p.slice()); r.loss.push(s.f(...r.p));
+  });
+  draw();
+}
+
+function field(P, s) {
+  const key = $('surface').value;
+  if (!fieldCache[key]) {
+    const off = document.createElement('canvas'); off.width = P.w; off.height = P.h;
+    const o = off.getContext('2d'), n = 160, vals = [];
+    for (let j = 0; j < n; j++) for (let i = 0; i < n; i++)
+      vals.push(s.f(s.xr[0] + (i + .5) / n * (s.xr[1] - s.xr[0]), s.yr[1] - (j + .5) / n * (s.yr[1] - s.yr[0])));
+    // Contour bands at equal-area quantiles: every band is visible whatever the loss scale.
+    const sorted = vals.slice().sort((a, b) => a - b), B = 12;
+    const edges = Array.from({ length: B - 1 }, (_, k) => sorted[Math.floor((k + 1) / B * sorted.length)]);
+    vals.forEach((v, k) => {
+      const band = edges.filter(e => v > e).length / (B - 1), i = k % n, j = Math.floor(k / n);
+      o.fillStyle = mix('#fff6dc', '#5f84a8', band);
+      o.fillRect(i * P.w / n, j * P.h / n, P.w / n + .6, P.h / n + .6);
+    });
+    fieldCache[key] = off;
+  }
+  ctx.drawImage(fieldCache[key], P.x, P.y);
+}
+
+function draw() {
+  syncOutputs({ eta: v => (10 ** v).toFixed(3), alpha: v => (10 ** v).toFixed(3), noise: v => v.toFixed(2) });
+  const s = surf(), key = $('surface').value;
+  if (fmin[key] === undefined) fmin[key] = minimum(s);
+  ctx.clearRect(0, 0, C.width, C.height);
+  const P = new Panel(ctx, 90, 40, 480, 480, s.xr, s.yr);
+  field(P, s);
+  P.frame('Loss surface (darker = higher)', 'θ₁', 'θ₂', [s.xr[0], (s.xr[0] + s.xr[1]) / 2, s.xr[1]], [s.yr[0], (s.yr[0] + s.yr[1]) / 2, s.yr[1]], v => v.toFixed(0));
+  P.clip(() => runs.forEach(r => { if ($('on-' + r.id).checked) { P.line(r.path.filter(p => Math.abs(p[0]) < 1e3), r.colour, 2.6); P.dot(...r.p, r.colour, 6); } }));
+  P.dot(...start, '#ffffff', 9, PAL.ink, 2.5);
+
+  const Q = new Panel(ctx, 720, 40, 820, 480, [0, 300], [-6, 2]);
+  Q.frame('Loss above the minimum per step', 'step', 'log₁₀(L − L_min)', [0, 100, 200, 300], [-6, -4, -2, 0, 2], v => v.toFixed(0));
+  Q.clip(() => runs.forEach(r => {
+    if (!$('on-' + r.id).checked) return;
+    Q.line(r.loss.map((v, i) => [i, Math.log10(Math.max(v - fmin[key], 1e-7))]).filter(p => isFinite(p[1])), r.colour, 3);
+  }));
+
+  stats([['Step', t]].concat(runs.map(r => [r.name, isFinite(r.loss[r.loss.length - 1]) && r.loss[r.loss.length - 1] < 1e6 ? (r.loss[r.loss.length - 1] - fmin[key]).toExponential(1) : 'diverged'])));
+}
+
+function stop() { clearInterval(timer); timer = null; $('run').textContent = 'Run'; }
+$('run').onclick = () => {
+  if (timer) return stop();
+  $('run').textContent = 'Pause';
+  timer = setInterval(() => { if (t >= 300) return stop(); step(); }, 25);
+};
+$('reset').onclick = () => { stop(); reset(); };
+C.addEventListener('click', ev => {
+  const s = surf(), P = new Panel(ctx, 90, 40, 480, 480, s.xr, s.yr), [px, py] = canvasPoint(C, ev);
+  if (!P.contains(px, py)) return;
+  stop(); start = P.inv(px, py); reset();
+});
+function defaults() { const s = surf(); $('eta').value = Math.log10(s.eta); $('alpha').value = Math.log10(s.alpha); $('prompt').textContent = s.prompt; }
+$('surface').addEventListener('input', () => { stop(); start = null; defaults(); reset(); });
+['eta', 'alpha', 'noise'].forEach(id => $(id).addEventListener('input', () => { stop(); reset(); }));
+OPT.forEach(o => $('on-' + o.id).addEventListener('input', draw));
+defaults();
+reset();
+if (new URLSearchParams(location.search).has('demo')) for (let i = 0; i < 300; i++) step();
+</script>
+</body>
+</html>

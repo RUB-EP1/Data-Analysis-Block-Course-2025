@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 880" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" fill="#172635">
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+<line x1="330.0" y1="820.0" x2="330.0" y2="58.0" stroke="#087bb9" stroke-width="7" marker-end="url(#arr)"/>
+<text x="330.0" y="40.0" font-size="20" text-anchor="middle" fill="#617484" font-weight="normal">to the next block</text>
+<text x="330.0" y="854.0" font-size="20" text-anchor="middle" fill="#617484" font-weight="normal">x (one row per token, 768 numbers each)</text>
+<text x="290.0" y="470.0" font-size="20" text-anchor="end" fill="#087bb9" font-weight="bold">residual</text>
+<text x="290.0" y="496.0" font-size="20" text-anchor="end" fill="#087bb9" font-weight="bold">stream</text>
+<path d="M330,790 H560" fill="none" stroke="#087bb9" stroke-width="2.5"/>
+<line x1="560.0" y1="790.0" x2="560.0" y2="748.0" stroke="#087bb9" stroke-width="2.5" marker-end="url(#arr)"/>
+<rect x="450.0" y="680.0" width="220.0" height="64.0" rx="8" fill="#fff" stroke="#617484" stroke-width="2"/>
+<text x="560.0" y="720.0" font-size="22" text-anchor="middle" fill="#172635" font-weight="normal">LayerNorm</text>
+<line x1="560.0" y1="678.0" x2="560.0" y2="648.0" stroke="#087bb9" stroke-width="2.5" marker-end="url(#arr)"/>
+<rect x="430.0" y="548.0" width="260.0" height="96.0" rx="10" fill="#e9f5fd" stroke="#087bb9" stroke-width="3"/>
+<text x="560.0" y="590.0" font-size="25" text-anchor="middle" fill="#172635" font-weight="bold">Multi-head attention</text>
+<text x="560.0" y="622.0" font-size="18" text-anchor="middle" fill="#617484" font-weight="normal">tokens exchange information</text>
+<path d="M560,546 V470 H354" fill="none" stroke="#087bb9" stroke-width="2.5" marker-end="url(#arr)"/>
+<circle cx="330" cy="470" r="20" fill="#fff" stroke="#087bb9" stroke-width="3"/>
+<text x="330.0" y="479.0" font-size="30" text-anchor="middle" fill="#087bb9" font-weight="bold">+</text>
+<path d="M330,430 H560" fill="none" stroke="#d99700" stroke-width="2.5"/>
+<line x1="560.0" y1="430.0" x2="560.0" y2="388.0" stroke="#d99700" stroke-width="2.5" marker-end="url(#arr)"/>
+<rect x="450.0" y="320.0" width="220.0" height="64.0" rx="8" fill="#fff" stroke="#617484" stroke-width="2"/>
+<text x="560.0" y="360.0" font-size="22" text-anchor="middle" fill="#172635" font-weight="normal">LayerNorm</text>
+<line x1="560.0" y1="318.0" x2="560.0" y2="288.0" stroke="#d99700" stroke-width="2.5" marker-end="url(#arr)"/>
+<rect x="430.0" y="188.0" width="260.0" height="96.0" rx="10" fill="#fff1cf" stroke="#d99700" stroke-width="3"/>
+<text x="560.0" y="230.0" font-size="25" text-anchor="middle" fill="#172635" font-weight="bold">MLP</text>
+<text x="560.0" y="262.0" font-size="18" text-anchor="middle" fill="#617484" font-weight="normal">768 → 3072 → 768, per token</text>
+<path d="M560,186 V120 H354" fill="none" stroke="#d99700" stroke-width="2.5" marker-end="url(#arr)"/>
+<circle cx="330" cy="120" r="20" fill="#fff" stroke="#d99700" stroke-width="3"/>
+<text x="330.0" y="129.0" font-size="30" text-anchor="middle" fill="#d99700" font-weight="bold">+</text>
+</svg>

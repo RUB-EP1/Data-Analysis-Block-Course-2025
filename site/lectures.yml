@@ -1,0 +1,126 @@
+# Lecture cards on the landing page (rendered by site/lecture-cards.ejs).
+# `slides` is the rendered deck; `materials` are notebooks attached to it.
+# kind: marimo -> "Open in molab" + download; pluto -> download (+ static view).
+- id: 1A
+  title: Automatic Differentiation
+  when: Fri 25 Sep · 09:00
+  instructor: Mikhail Mikhasenko
+  slides: slides/lectures/Lecture_1A/Lecture_1A.html
+  exercise: 1
+  materials:
+    - label: JAX, scalar loss
+      kind: marimo
+      src: slides/lectures/Lecture_1A/notebooks/01_jax_scalar.py
+      view: slides/lectures/Lecture_1A/notebooks/exports/01_jax_scalar.html
+    - label: JAX, vectors and Jacobians
+      kind: marimo
+      src: slides/lectures/Lecture_1A/notebooks/02_jax_vector.py
+      view: slides/lectures/Lecture_1A/notebooks/exports/02_jax_vector.html
+    - label: PyTorch training step
+      kind: marimo
+      src: slides/lectures/Lecture_1A/notebooks/03_pytorch_training.py
+      view: slides/lectures/Lecture_1A/notebooks/exports/03_pytorch_training.html
+
+- id: 1B
+  title: Key Notions in ML — Loss, ROC
+  when: Fri 25 Sep · 13:30
+  instructor: Mikhail Mikhasenko
+  slides: slides/lectures/Lecture_1B/Lecture_1B.html
+  exercise: 2
+  materials:
+    - label: Entropy
+      kind: pluto
+      src: slides/lectures/Lecture_1B/notebooks/lecture-1B-entropy.jl
+    - label: Mean squared error
+      kind: pluto
+      src: slides/lectures/Lecture_1B/notebooks/lecture-1B-mse.jl
+
+- id: 2A
+  title: Decision Trees
+  when: Mon 28 Sep · 09:00
+  instructor: Mikhail Mikhasenko
+  slides: slides/lectures/Lecture_2A/Lecture_2A.html
+  exercise: 3
+  materials:
+    - label: CartPole — trees and bagging
+      kind: marimo
+      src: slides/lectures/Lecture_2A/CartPole_decision_trees_and_bagging.py
+    - label: Cuts and impurity
+      kind: pluto
+      src: slides/lectures/Lecture_2A/notebooks/cuts-and-impurity.jl
+      view: slides/lectures/Lecture_2A/notebooks/exports/cuts-and-impurity.html
+    - label: Classification trees
+      kind: pluto
+      src: slides/lectures/Lecture_2A/notebooks/classification-trees.jl
+      view: slides/lectures/Lecture_2A/notebooks/exports/classification-trees.html
+    - label: Regression trees
+      kind: pluto
+      src: slides/lectures/Lecture_2A/notebooks/regression-trees.jl
+      view: slides/lectures/Lecture_2A/notebooks/exports/regression-trees.html
+
+- id: 2B
+  title: Gradient Boosting
+  when: Mon 28 Sep · 13:30
+  instructor: Mikhail Mikhasenko
+  slides: slides/lectures/Lecture_2B/Lecture_2B.html
+  exercise: 4
+  materials:
+    - label: Gradient-boosting playground
+      kind: pluto
+      src: slides/lectures/Lecture_2B/notebooks/gradient-boosting-playground.jl
+      view: slides/lectures/Lecture_2B/notebooks/exports/gradient-boosting-playground.html
+
+- id: 3A
+  title: Neural Networks
+  when: Tue 29 Sep · 09:00
+  instructor: Mikhail Mikhasenko
+  slides: slides/lectures/Lecture_3A/Lecture_3A.html
+  exercise: 5
+  materials:
+    - label: Universal approximation
+      kind: pluto
+      src: slides/lectures/Lecture_3A/scripts/lecture-3B-UAT.jl
+    - label: MNIST
+      kind: pluto
+      src: slides/lectures/Lecture_3A/scripts/lecture-3B-NMIST.jl
+
+- id: 3B
+  title: Convolutional Neural Networks
+  when: Tue 29 Sep · 13:30
+  instructor: Mikhail Mikhasenko
+  slides: slides/lectures/Lecture_3B/Lecture_3B.html
+  exercise: 6
+  materials:
+    - label: AlexNet under the hood
+      kind: marimo
+      src: slides/lectures/Lecture_3B/AlexNet_under_the_hood.py
+      view: slides/lectures/Lecture_3B/notebooks/exports/AlexNet_under_the_hood.html
+    - label: Draw a digit
+      kind: pluto
+      src: slides/lectures/Lecture_3B/pluto/mnist-draw.jl
+    - label: MNIST with trees
+      kind: pluto
+      src: slides/lectures/Lecture_3B/pluto/mnist-trees.jl
+
+- id: 4A
+  title: Transformers
+  when: Wed 30 Sep · 09:00
+  instructor: Mikhail Mikhasenko
+  slides: slides/lectures/Lecture_4A/Lecture_4A.html
+  exercise: 7
+  materials:
+    - label: GPT-2 under the hood
+      kind: marimo
+      src: slides/lectures/Lecture_4A/GPT2_under_the_hood.py
+      view: slides/lectures/Lecture_4A/notebooks/exports/GPT2_under_the_hood.html
+
+- id: 4B
+  title: LLM Chats and Agents
+  when: Wed 30 Sep · 14:00
+  instructor: Mikhail Mikhasenko
+  slides: slides/lectures/Lecture_4B/Lecture_4B.html
+  materials:
+    - label: Build an agent
+      kind: marimo
+      src: slides/lectures/Lecture_4B/Build_an_agent.py
+      view: slides/lectures/Lecture_4B/notebooks/exports/Build_an_agent.html

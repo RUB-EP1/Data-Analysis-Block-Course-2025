@@ -1,0 +1,80 @@
+## Backpropagation is older than deep learning {#backprop-history .addition .history-epilogue}
+
+::: {.two-col .history-columns}
+::: {.history-copy}
+**1970 — Seppo Linnainmaa**  
+Systematic reverse accumulation for differentiating a program.
+
+**1974 — Paul Werbos**  
+Connected backward differentiation with learning systems.
+
+**1986 — Rumelhart, Hinton & Williams**  
+Demonstrated and popularized backpropagation for multilayer neural networks.
+
+::: {.takeaway}
+Backpropagation is reverse-mode automatic differentiation applied to a learning problem.
+:::
+:::
+::: {.history-visual}
+![](figures/history/history-relay.png){alt="A relay race passes a baton labelled chain rule from 1970 to 1974 to 1986."}
+:::
+:::
+
+::: {.notes}
+The milestones are deliberately selective. Linnainmaa described reverse accumulation without framing it as neural-network training. Werbos connected backward differentiation to learning systems. Rumelhart, Hinton and Williams demonstrated that the procedure could learn useful internal representations and made it widely known in neural networks. Do not say that Hinton invented backpropagation.
+
+Sources: Baydin et al., “Automatic Differentiation in Machine Learning: a Survey,” JMLR 18 (2018), section 3.3, https://www.jmlr.org/papers/volume18/17-468/17-468.pdf; Werbos, *Beyond Regression* (1974), https://gwern.net/doc/ai/nn/1974-werbos.pdf; Rumelhart, Hinton & Williams, Nature 323 (1986), https://doi.org/10.1038/323533a0. Illustration supplied by the lecturer and cropped to the image column.
+:::
+
+## The same algorithm at larger scale {#backprop-scale .addition .history-epilogue}
+
+::: {.two-col .history-columns}
+::: {.history-copy}
+**1989 — handwritten ZIP codes**  
+LeCun and colleagues trained a convolutional network with backpropagation.
+
+**1990s — document recognition**  
+Neural systems moved into deployed cheque and document processing.
+
+**2012 — AlexNet**  
+GPU training, about 60 million parameters, and 1.2 million ImageNet training images.
+
+::: {.takeaway}
+Data, compute, architecture and scale changed dramatically. The chain rule did not.
+:::
+:::
+::: {.history-visual}
+![](figures/history/scale-relay.png){alt="A small 1989 handwritten-digit system and a much larger 2012 GPU system use the same backpropagation principle."}
+:::
+:::
+
+::: {.notes}
+The 1989 reference is LeCun et al., “Backpropagation Applied to Handwritten Zip Code Recognition,” Neural Computation 1(4), 541–551. The later overview describes industrial document-recognition systems: LeCun, Bottou, Bengio & Haffner, “Gradient-Based Learning Applied to Document Recognition,” Proc. IEEE 86(11), 1998, https://doi.org/10.1109/5.726791. AlexNet reports 60 million parameters and training on 1.2 million high-resolution ImageNet images: Krizhevsky, Sutskever & Hinton, NeurIPS 2012, https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf. Illustration supplied by the lecturer and cropped to the image column.
+:::
+
+## The surprising fact: gradients are cheap {#cheap-gradients .addition .history-epilogue}
+
+::: {.two-col .history-columns}
+::: {.history-copy}
+For a scalar objective
+
+$$f:\mathbb R^n\to\mathbb R,$$
+
+one reverse sweep produces the complete gradient:
+
+$$\operatorname{cost}(\nabla f)=O\!\left(\operatorname{cost}(f)\right).$$
+
+In practice, the backward pass costs a small constant multiple of the forward computation. It also needs stored or recomputed intermediate values.
+
+::: {.takeaway}
+$10^6$ or $10^9$ parameters do not require $10^6$ or $10^9$ separate derivative calculations.
+:::
+:::
+::: {.history-visual}
+![](figures/history/cheap-gradient.png){alt="A scalar loss sends all parameter gradients back in one reverse sweep."}
+:::
+:::
+
+::: {.notes}
+Pause on the asymptotic statement. The important scaling is with the number of inputs to a scalar output. Reverse mode has a memory cost, and the constant factor depends on the computation and implementation. Baur and Strassen proved an arithmetic-circuit version of the cheap-gradient principle: Walter Baur & Volker Strassen, “The Complexity of Partial Derivatives,” Theoretical Computer Science 22 (1983), 317–330, https://doi.org/10.1016/0304-3975(83)90110-X. Illustration supplied by the lecturer and cropped to the image column.
+:::

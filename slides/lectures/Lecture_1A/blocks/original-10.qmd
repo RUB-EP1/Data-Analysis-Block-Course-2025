@@ -1,0 +1,17 @@
+## Example to work out {#original-a-10 .original-slide}
+
+```{=html}
+<div class="source-page" aria-label="Original Lecture 1A, slide 10">
+<img class="source-art" src="figures/original/original-10.svg" alt="Example to work out" loading="eager" />
+
+</div>
+```
+
+::: {.notes}
+Original Lecture-1A, slide 10. Visual source: Keynote PDF export.
+
+Example to work out
+c→(c,0)
+x→(x,1)
+
+:::

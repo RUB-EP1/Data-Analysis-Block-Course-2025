@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Universal approximation, one unit at a time</title>
+<link rel="stylesheet" href="lab.css">
+</head>
+<body>
+<header><h1>Universal approximation, one unit at a time</h1><span class="legend">— target &nbsp; <span style="color:#087bb9">— network g(x)</span></span></header>
+<p class="subtitle">One hidden layer: <i>g</i>(<i>x</i>) = <i>c</i><sub>0</sub> + Σ<sub><i>j</i></sub> <i>v<sub>j</sub></i> <i>h</i>(<i>w<sub>j</sub></i> <i>x</i> + <i>b<sub>j</sub></i>). Here the weights are <b>constructed</b>, not trained: each unit adds one step (sigmoid) or one kink (ReLU).</p>
+<div class="controls">
+  <label for="target">Target <select id="target"><option value="wave">smooth wave</option><option value="bump">narrow bump</option><option value="saw">zig-zag</option><option value="step">jump</option></select></label>
+  <label for="act">h <select id="act"><option value="sigmoid">sigmoid</option><option value="relu">ReLU</option></select></label>
+  <label for="n">Hidden units <input id="n" type="range" min="1" max="60" step="1" value="6"><output id="n-value"></output></label>
+  <label for="k">Steepness <input id="k" type="range" min="0" max="3" step="0.01" value="1.3"><output id="k-value"></output></label>
+  <label><input id="parts" type="checkbox" checked> show units</label>
+</div>
+<canvas id="plot" width="1600" height="560" role="img" aria-label="Target function, network approximation, and the contributions of individual hidden units"></canvas>
+<div id="stats" class="stats" aria-live="polite"></div>
+<p class="prompt">Increase the number of units and watch the error fall. The theorem says such weights <b>exist</b>; it says nothing about how many units you need or whether training finds them.</p>
+<script src="plot.js"></script>
+<script>
+const C = $('plot'), ctx = C.getContext('2d');
+const T = {
+  wave: x => 0.5 + 0.35 * Math.sin(2 * Math.PI * x) + 0.12 * Math.sin(6 * Math.PI * x),
+  bump: x => 0.15 + 0.7 * Math.exp(-((x - 0.55) ** 2) / 0.004),
+  saw: x => 0.2 + 0.6 * Math.abs(((3 * x) % 2) - 1),
+  step: x => x < 0.4 ? 0.25 : 0.8
+};
+const sig = z => 1 / (1 + Math.exp(-z));
+const colours = [PAL.gold, PAL.blue, PAL.accent, PAL.red, PAL.green, PAL.violet];
+
+// Build the units: returns [{v, w, b}] and the constant c0.
+function build() {
+  const f = T[$('target').value], N = +$('n').value, relu = $('act').value === 'relu';
+  const xs = Array.from({ length: N + 1 }, (_, j) => j / N);
+  const units = [];
+  if (relu) {
+    // Piecewise-linear interpolation: one kink per node, slope change = v.
+    let prev = 0;
+    for (let j = 0; j < N; j++) {
+      const s = (f(xs[j + 1]) - f(xs[j])) / (xs[j + 1] - xs[j]);
+      units.push({ v: s - prev, w: 1, b: -xs[j] }); prev = s;
+    }
+  } else {
+    // Staircase: one smooth step at the midpoint of each interval.
+    const k = 10 ** +$('k').value * Math.max(1, N / 4);
+    for (let j = 1; j <= N; j++) {
+      const m = (xs[j - 1] + xs[j]) / 2;
+      units.push({ v: f(xs[j]) - f(xs[j - 1]), w: k, b: -k * m });
+    }
+  }
+  return { units, c0: f(0), relu };
+}
+function unitOut(u, x, relu) { const z = u.w * x + u.b; return u.v * (relu ? Math.max(0, z) : sig(z)); }
+
+function draw() {
+  syncOutputs({ k: v => (10 ** v).toFixed(v < 1 ? 1 : 0) });
+  const relu = $('act').value === 'relu';
+  $('k').disabled = relu;
+  const f = T[$('target').value], { units, c0 } = build();
+  const g = x => units.reduce((s, u) => s + unitOut(u, x, relu), c0);
+  ctx.clearRect(0, 0, C.width, C.height);
+
+  const P = new Panel(ctx, 90, 40, 900, 440, [0, 1], [0, 1.05]);
+  P.frame('Target and network output', 'x', 'y', [0, 0.25, 0.5, 0.75, 1], [0, 0.5, 1]);
+  P.fn(f, '#8c9aa6', 7, [], 600);
+  P.fn(g, PAL.accent, 3.5, [], 900);
+
+  const Q = new Panel(ctx, 1100, 40, 440, 440, [0, 1], [-1, 1]);
+  Q.frame(relu ? 'Individual units  vⱼ·ReLU(x − xⱼ)' : 'Individual units  vⱼ·σ(wⱼx + bⱼ)', 'x', '', [0, 0.5, 1], [-1, 0, 1]);
+  Q.hline(0);
+  if ($('parts').checked) {
+    const scale = relu ? Math.max(...units.map(u => Math.abs(u.v)), 1e-9) : Math.max(...units.map(u => Math.abs(u.v)), 1e-9);
+    units.slice(0, 40).forEach((u, j) => Q.fn(x => unitOut(u, x, relu) / scale, colours[j % colours.length], 2, [], 300));
+    text(ctx, 'each curve rescaled by the largest |vⱼ|', Q.x + 8, Q.y + 24, 17, PAL.muted);
+  }
+
+  let maxErr = 0, sq = 0; const n = 1000;
+  for (let i = 0; i <= n; i++) { const x = i / n, e = Math.abs(g(x) - f(x)); maxErr = Math.max(maxErr, e); sq += e * e; }
+  stats([
+    ['Hidden units N', units.length],
+    ['Parameters 3N + 1', 3 * units.length + 1],
+    ['Max |g − f|', maxErr.toFixed(3)],
+    ['RMS error', Math.sqrt(sq / (n + 1)).toFixed(4)]
+  ]);
+}
+document.querySelectorAll('input,select').forEach(e => e.addEventListener('input', draw));
+draw();
+</script>
+</body>
+</html>

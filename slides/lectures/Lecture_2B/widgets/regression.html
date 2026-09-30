@@ -1,0 +1,66 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Boosting a regression, one tree at a time</title><link rel="stylesheet" href="lab.css"></head>
+<body>
+<header><h1>Boosting a regression, one tree at a time</h1><span class="legend"><span style="color:#087bb9">— F<sub>m</sub></span> &nbsp; <span style="color:#c74842">— tree γ<sub>m</sub></span> &nbsp; <span style="color:#617484">- - truth</span></span></header>
+<p class="subtitle">MSE loss. Tree m is fitted to the residuals of F<sub>m−1</sub>; the model moves by η γ<sub>m</sub>(x). 50 training events, 400 validation events.</p>
+<div class="controls">
+  <label for="round">Tree m <input id="round" type="range" min="1" max="100" step="1" value="1"><output id="round-value" for="round">1</output></label>
+  <label for="eta">Learning rate η <input id="eta" type="range" min="0.05" max="1" step="0.05" value="0.3" data-digits="2"><output id="eta-value" for="eta">0.30</output></label>
+  <label for="depth">Tree depth <input id="depth" type="range" min="1" max="4" step="1" value="2" style="width:120px"><output id="depth-value" for="depth">2</output></label>
+  <button id="next">Next tree →</button><button id="reset">Reset</button>
+</div>
+<canvas id="plot" width="1600" height="540" role="img" aria-label="Model after m trees, residuals with tree m, and train and validation MSE versus number of trees"></canvas>
+<div id="stats" class="stats" aria-live="polite"></div>
+<p class="prompt">Step through the first trees at η = 1 and η = 0.3. Then drag m to 100 with depth 4: the training MSE keeps falling, the validation MSE does not.</p>
+<script src="gb.js"></script>
+<script>
+'use strict';
+const $ = (id) => document.getElementById(id), P = makeCanvas('plot');
+const train = GB.regData(11, 50), val = GB.regData(12, 400), M = 100;
+let model = null, key = '';
+function fit() {
+  const k = $('eta').value + '/' + $('depth').value;
+  if (k !== key) { model = GB.boost(train, val, 'mse', { rounds: M, eta: +$('eta').value, maxDepth: +$('depth').value }); key = k; }
+}
+const grid = Array.from({ length: 401 }, (_, i) => i / 400);
+function draw() {
+  syncOutputs(); fit(); P.clear();
+  const m = +$('round').value, t = model.trees[m - 1], eta = model.eta;
+  const before = model.before[m - 1];
+  // (a) data and the model before / after tree m
+  const a = P.frame(90, 50, 420, 360, `Model after ${m} tree${m > 1 ? 's' : ''}`, 'x', 'y', [0, 1], [-2, 2]);
+  train.X.forEach((x, i) => P.dot(a, x[0], train.y[i], '#9fb1bf', 5.5));
+  P.line(a, grid.map((x) => [x, GB.truth1(x)]), COL.muted, 2, [7, 6]);
+  P.line(a, grid.map((x) => [x, model.F([x], m - 1)]), '#9ccbe6', 3, [10, 6]);
+  P.line(a, grid.map((x) => [x, model.F([x], m)]), COL.accent, 3.5);
+  P.text(`dashed: F${sub(m - 1)}   solid: F${sub(m)}`, a.x + 10, a.y + 26, 18, COL.muted);
+  // (b) residuals before tree m and the fitted tree
+  const res = train.y.map((y, i) => y - before[i]);
+  const R = Math.ceil(Math.max(0.3, ...res.map(Math.abs)) * 1.1 / 0.4) * 0.4;
+  const b = P.frame(640, 50, 420, 360, `Tree ${m} fitted to residuals`, 'x', `r = y − F${sub(m - 1)}`, [0, 1], [-R, R], 2);
+  P.line(b, [[0, 0], [1, 0]], COL.grid, 1);
+  splits(t).forEach((c) => P.line(b, [[c, -R], [c, R]], '#e2c7c5', 1.5, [4, 4]));
+  train.X.forEach((x, i) => P.dot(b, x[0], res[i], COL.blue, 5.5));
+  P.line(b, grid.map((x) => [x, GB.predict(t, [x])]), COL.red, 4);
+  P.line(b, grid.map((x) => [x, eta * GB.predict(t, [x])]), COL.red, 2.5, [8, 5]);
+  P.text(`solid: γ${sub(m)}(x)   dashed: η·γ${sub(m)}(x)`, b.x + 10, b.y + 26, 18, COL.muted);
+  // (c) loss curves
+  const top = 0.4;
+  const c = P.frame(1180, 50, 380, 360, 'MSE versus number of trees', 'trees', 'MSE', [0, M], [0, top], 2);
+  P.line(c, model.trainLoss.map((v, k) => [k, v]), COL.accent, 3);
+  P.line(c, model.valLoss.map((v, k) => [k, v]), COL.red, 3);
+  P.line(c, [[0, 0.0625], [M, 0.0625]], COL.muted, 1.5, [6, 5]);
+  P.line(c, [[m, 0], [m, top]], COL.blue, 1.5);
+  P.text('train', c.x + c.w - 70, c.Y(model.trainLoss[M]) - 10, 18, COL.accent);
+  P.text('validation', c.x + c.w - 100, Math.min(c.Y(model.valLoss[M]) - 10, c.y + c.h - 40), 18, COL.red);
+  P.text('noise σ² = 0.0625', c.x + c.w - 8, c.Y(0.0625) - 8, 16, COL.muted, 'right');
+  const best = model.valLoss.indexOf(Math.min(...model.valLoss));
+  const lv = GB.leaves(t).map((l) => l.value.toFixed(2)).join(', ');
+  stat([['Leaf values of tree ' + m, lv], ['Train MSE', model.trainLoss[m].toFixed(4)], ['Validation MSE', model.valLoss[m].toFixed(4)], ['Best validation', `${model.valLoss[best].toFixed(4)} at m = ${best}`]]);
+}
+function splits(t) { return t.left ? [t.cut, ...splits(t.left), ...splits(t.right)] : []; }
+function sub(n) { return String(n).split('').map((d) => '₀₁₂₃₄₅₆₇₈₉'[+d]).join(''); }
+document.querySelectorAll('input').forEach((e) => e.addEventListener('input', draw));
+$('next').addEventListener('click', () => { $('round').value = Math.min(M, +$('round').value + 1); draw(); });
+$('reset').addEventListener('click', () => { document.querySelectorAll('input').forEach((e) => (e.value = e.defaultValue)); draw(); });
+draw();
+</script></body></html>

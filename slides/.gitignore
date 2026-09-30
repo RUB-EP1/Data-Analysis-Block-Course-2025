@@ -1,0 +1,15 @@
+# Shared generated state
+qa/
+.quarto/
+.venv-pdf/
+.venv-lectures/
+.DS_Store
+.build/
+
+# Lecture-local generated state
+lectures/*/*.html
+lectures/*/*_files/
+lectures/*/.quarto/
+lectures/*/notebooks/__pycache__/
+lectures/*/notebooks/__marimo__/
+lectures/*/*.pdf

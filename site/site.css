@@ -1,0 +1,171 @@
+/* Landing page. Palette follows the slide decks (slides/styles.css). */
+:root {
+  --ink: #111418;
+  --muted: #71787f;
+  --line: #dfe3e7;
+  --accent: #007dc5;
+  --accent-soft: #e8f3fa;
+  --card: #ffffff;
+  --page: #f6f8fa;
+  --marimo: #1c7c54;
+  --pluto: #7b4bb3;
+  --site-font: "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+}
+
+body {
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--site-font);
+}
+
+main.content { max-width: 1180px; margin: 0 auto; }
+
+/* Hero */
+.hero {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  margin: 1.5rem 0 2.5rem;
+  padding: 2.5rem 2.5rem 2rem;
+}
+.hero-kicker {
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.hero h1.hero-title {
+  border: 0;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0.4rem 0 0.8rem;
+}
+.hero p { color: var(--muted); font-size: 1.1rem; max-width: 46rem; }
+.hero-links { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.2rem; }
+
+/* Section headings */
+h2.section-title {
+  border: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 2.5rem 0 0.4rem;
+}
+.section-note { color: var(--muted); margin-bottom: 1.2rem; max-width: 52rem; }
+.section-note p { margin: 0; }
+kbd {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--ink);
+  font-size: 0.8em;
+  padding: 0 0.35em;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  gap: 1.1rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr));
+}
+.course-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+.course-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 6px 22px rgba(0, 125, 197, 0.12);
+  transform: translateY(-2px);
+}
+.course-card:target { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+.card-head {
+  color: inherit;
+  display: block;
+  padding: 1.2rem 1.3rem 0.6rem;
+  text-decoration: none;
+}
+.card-head:hover { color: inherit; }
+.card-tag {
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.card-title {
+  border: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0.3rem 0 0.5rem;
+}
+.card-meta {
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.9rem;
+  gap: 0.3rem 1rem;
+  margin: 0;
+}
+
+.card-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.4rem 1.3rem 1rem;
+}
+
+.btn-main, .chip {
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.35rem 0.95rem;
+  text-decoration: none;
+}
+.btn-main { background: var(--accent); border: 1px solid var(--accent); color: #fff; }
+.btn-main:hover { background: #00669f; color: #fff; }
+.chip { background: var(--card); border: 1px solid var(--line); color: var(--ink); }
+.chip:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Attached notebooks */
+.materials {
+  border-top: 1px solid var(--line);
+  list-style: none;
+  margin: auto 0 0;
+  padding: 0.6rem 1.3rem 0.8rem;
+}
+.materials li {
+  align-items: center;
+  display: flex;
+  font-size: 0.88rem;
+  gap: 0.55rem;
+  padding: 0.22rem 0;
+}
+.materials .label { flex: 1 1 auto; min-width: 0; }
+.materials .links { display: flex; gap: 0.6rem; white-space: nowrap; }
+.materials .links a { color: var(--accent); text-decoration: none; }
+.materials .links a:hover { text-decoration: underline; }
+.kind {
+  border-radius: 6px;
+  flex: 0 0 auto;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.1rem 0.45rem;
+  text-transform: uppercase;
+}
+.kind-marimo { background: #e6f4ec; color: var(--marimo); }
+.kind-pluto { background: #f1eafa; color: var(--pluto); }
+
+@media (max-width: 600px) {
+  .hero { padding: 1.6rem 1.3rem 1.4rem; }
+  .materials li { flex-wrap: wrap; }
+}

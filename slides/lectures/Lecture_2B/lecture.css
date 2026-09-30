@@ -1,0 +1,80 @@
+/* Lecture 2B additions on top of the shared Lecture 1B/2A (l1b) look. */
+.reveal .l1b .source-media img{max-height:680px;width:100%;object-fit:contain}
+.reveal .l1b table{font-size:33px;width:100%;margin:18px 0;border-collapse:collapse}
+.reveal .l1b table th,.reveal .l1b table td{padding:14px 22px;border-bottom:1px solid #d8e0e7;vertical-align:middle}
+.reveal .l1b table th{text-align:left;color:#087bb9;border-top:5px solid #087bb9}
+.reveal .l1b pre{font-size:27px;box-shadow:none;width:100%;padding:22px;background:#f5f8fa;box-sizing:border-box;margin-left:0;margin-right:0}
+.reveal .l1b pre code{max-height:none;line-height:1.35}
+.reveal .l1b a{color:#087bb9}
+.reveal .l1b table{table-layout:fixed;max-width:100%}
+.reveal .l1b td,.reveal .l1b th{white-space:normal!important;overflow-wrap:break-word}
+.reveal .l1b div.sourceCode{min-width:0}
+.reveal .l1b-two>*{min-width:0}
+.reveal .l1b .slide-refs{font-size:22px;color:#617484}
+.reveal .l1b .small-note{font-size:34px;color:#43586c;border-left:6px solid #087bb9;padding-left:34px}
+.reveal .l1b ol ol{list-style-type:lower-alpha}
+.reveal .l1b li{margin:.18em 0}
+
+/* Tree diagram (as in Lecture 2A) */
+.reveal .tree-diagram{text-align:center;font-size:32px}
+.tree-root,.tree-node{padding:20px;background:#e9f5fd;border:3px solid #087bb9;border-radius:10px;margin:0 auto;color:#172635}
+.tree-root{width:230px}.tree-branches{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:38px;border-top:3px solid #58778c;padding-top:20px}
+.tree-branches span{color:#58778c}.tree-node{margin-top:14px;width:230px}
+.tree-leaves{display:flex;gap:14px;justify-content:center;margin-top:35px}
+.tree-leaves b{padding:12px 14px;background:#ffe4a3;font-size:26px;font-weight:400;line-height:1.35}
+.tree-cap{font-size:26px;color:#617484;margin-bottom:18px}
+
+/* Sum of trees */
+.reveal .boost-sum{display:flex;align-items:center;justify-content:center;gap:34px;margin:30px 0 10px}
+.boost-sum .bs-term{display:flex;flex-direction:column;align-items:center;gap:14px;font-size:30px;color:#43586c}
+.boost-sum svg{width:300px;height:206px}
+.boost-sum .edges path{stroke:#58778c;stroke-width:2.5;fill:none}
+.boost-sum rect.n{fill:#e9f5fd;stroke:#087bb9;stroke-width:3;rx:4}
+.boost-sum rect.l{fill:#ffb000;stroke:#d97a00;stroke-width:2;rx:4}
+.boost-sum .bs-const{width:70px;height:70px;background:#ffb000;border:3px solid #d97a00;border-radius:8px;margin:68px 0}
+.boost-sum .bs-op{font-size:56px;color:#172635}
+#target-in-steps .slide-body>p{text-align:center}
+
+/* Per-slide density */
+#notation table{font-size:34px}
+#notation td:first-child{width:24%}
+#split-mse .slide-body{font-size:33px;gap:4px}
+#split-mse .slide-body>p{margin:.2em 0}
+#split-mse .steps{font-size:30px;border-left:6px solid #087bb9;padding-left:30px;margin-top:10px}
+#split-mse .steps ol{margin:0}
+#newton-leaf .slide-body{font-size:32px;gap:6px}
+#newton-leaf .slide-body>p{margin:.25em 0}
+#general-gain .slide-body{font-size:33px;gap:4px}
+.reveal #general-gain table{font-size:29px;margin:10px 0}
+.reveal #general-gain table td:first-child{width:22%}
+.reveal #mse-vs-bce table{font-size:29px;margin:0}
+.reveal #mse-vs-bce table th,.reveal #mse-vs-bce table td{padding:9px 18px}
+.reveal #mse-vs-bce table td:first-child{width:21%;color:#43586c}
+.reveal #regularization table td:first-child{width:36%}
+.reveal #regularization table{font-size:31px}
+#pseudo-residuals .l1b-copy table{font-size:30px}
+#bce-derivatives .l1b-copy{font-size:35px}
+#libraries .l1b-copy table{font-size:27px}
+.reveal #libraries table th,.reveal #libraries table td{padding:8px 14px}
+#libraries .l1b-copy code{font-size:.92em}
+#libraries .l1b-two{gap:50px;grid-template-columns:1.05fr .95fr}
+#algorithm-mse .l1b-copy,#general-algorithm .l1b-copy{font-size:37px}
+#turtle .l1b-copy{font-size:35px}
+#classification .l1b-copy{font-size:35px}
+#huber .l1b-copy{font-size:35px}
+#other-losses .l1b-copy{font-size:35px}
+.reveal .l1b table{width:100%!important}
+#classification .l1b-two,#huber .l1b-two{grid-template-columns:.8fr 1.2fr;gap:50px}
+#classification .source-media img,#huber .source-media img{max-height:none}
+#libraries .l1b-copy>p code{font-size:.85em}
+.reveal .slides section.l1b table{width:100%!important}
+#notation col:nth-child(1){width:26%!important}#notation col:nth-child(2){width:74%!important}
+#general-gain col:nth-child(1){width:20%!important}#general-gain col:nth-child(2){width:80%!important}
+#regularization col:nth-child(1){width:36%!important}#regularization col:nth-child(2){width:64%!important}
+#pseudo-residuals col:nth-child(1){width:48%!important}#pseudo-residuals col:nth-child(2){width:52%!important}
+#mse-vs-bce col:nth-child(1){width:20%!important}#mse-vs-bce col:nth-child(2){width:40%!important}#mse-vs-bce col:nth-child(3){width:40%!important}
+#libraries col:nth-child(1){width:22%!important}#libraries col:nth-child(2){width:36%!important}#libraries col:nth-child(3){width:42%!important}
+#newton-leaf .slide-body{font-size:35px}
+#split-mse .slide-body{font-size:35px}
+#classification .l1b-two{grid-template-columns:1fr 1fr;gap:60px}
+#libraries td code{font-size:.8em}

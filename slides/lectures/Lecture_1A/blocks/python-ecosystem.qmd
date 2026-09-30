@@ -1,0 +1,276 @@
+## Python ecosystem {#python-ecosystem .addition .python-section}
+
+::: {.slide-refs}
+[JAX](https://docs.jax.dev/en/latest/automatic-differentiation.html) ·
+[PyTorch](https://docs.pytorch.org/docs/stable/func.html) ·
+[TensorFlow](https://www.tensorflow.org/api_docs/python/tf/autodiff)
+:::
+
+| Tool | Role | Differentiation interface |
+|:--|:--|:--|
+| NumPy / SciPy | Numerical arrays and scientific algorithms | Derivatives supplied separately or approximated |
+| SymPy | Symbolic expressions | `diff(expression, variable)` |
+| JAX | Array programs and function transformations | `jvp`, `vjp`, `grad` |
+| PyTorch | Tensors, neural networks, training | `torch.func`, `.backward()` |
+| TensorFlow | Tensors, models, training | `ForwardAccumulator`, `GradientTape` |
+| marimo | Reactive Python notebooks | Runs the chosen library's code |
+
+::: {.notes}
+NumPy and SciPy themselves are not general-purpose reverse-mode AD systems.
+Some SciPy routines provide finite-difference derivatives, accept derivatives,
+or support particular array backends. SymPy computes symbolic derivatives.
+marimo is the notebook interface, not an AD implementation.
+SymPy source: https://docs.sympy.org/latest/tutorials/intro-tutorial/calculus.html.
+marimo source: https://docs.marimo.io/.
+:::
+
+## Forward evaluation and forward-mode AD {#python-forward-principle .addition .python-section}
+
+For $\mathbf y=F(\mathbf x)$, ordinary evaluation computes $\mathbf y$.
+
+Forward-mode AD also propagates an **input direction** $\mathbf v$:
+
+$$\dot{\mathbf y}=J_F(\mathbf x)\,\mathbf v$$
+
+::: {.two-col}
+::: {}
+**Value**
+
+$$z=uv$$
+:::
+::: {}
+**Tangent**
+
+$$\dot z=\dot u\,v+u\,\dot v$$
+:::
+:::
+
+A Jacobian-vector product (**JVP**) answers: how does the output change along this input direction?
+
+::: {.notes}
+A model's ordinary forward pass is not automatically forward-mode differentiation.
+Forward-mode AD evaluates values and tangents together. The tangent seed is an
+infinitesimal direction, not a finite-difference step size. JAX API:
+https://docs.jax.dev/en/latest/_autosummary/jax.jvp.html.
+:::
+
+## Reverse mode: an output sensitivity {#python-reverse-principle .addition .python-section}
+
+Evaluate $\mathbf y=F(\mathbf x)$, then choose an output sensitivity $\mathbf u$.
+
+$$\bar{\mathbf x}=J_F(\mathbf x)^T\,\mathbf u$$
+
+```python
+y, pullback = jax.vjp(F, x)
+(sensitivity_x,) = pullback(u)
+```
+
+The **pullback** maps an output sensitivity back to the inputs.
+
+For a scalar loss, seed the output with $1$ to obtain its gradient.
+
+::: {.subtle}
+JVP: a direction through the inputs. VJP: a weighted combination of output sensitivities.
+:::
+
+::: {.notes}
+The library calls this a vector-Jacobian product (VJP). With sensitivities
+represented as column vectors, its returned input sensitivity is J transpose u.
+Source: https://docs.jax.dev/en/latest/_autosummary/jax.vjp.html.
+:::
+
+## JAX: the lecture's scalar loss {#python-jax-scalar .addition .python-section}
+
+```python
+import jax
+jax.config.update("jax_enable_x64", True)
+
+def loss(w):
+    a = 2.0 * w
+    return 0.5 * (a**2 + a - 5.0)**2
+
+value, tangent = jax.jvp(loss, (1.0,), (1.0,))
+value, pullback = jax.vjp(loss, 1.0)
+(gradient,) = pullback(1.0)
+
+print(value, tangent, gradient)   # 0.5, 10.0, 10.0
+print(jax.grad(loss)(1.0))        # 10.0
+```
+
+The input direction is $1$. The scalar-loss output seed is also $1$.
+
+::: {.notes}
+The two seeds have different meanings despite having the same numerical value.
+The trailing comma constructs a one-element tuple, matching the function's
+argument structure. grad is the convenient reverse-mode interface for a scalar
+output. Sources: JAX jvp, vjp, and grad API documentation.
+:::
+
+## marimo: compare the two modes {#python-marimo-scalar .addition .python-section}
+
+::: {.slide-refs}
+[Live notebook](http://127.0.0.1:42761/?file=01_jax_scalar.py) · [Snapshot](notebooks/exports/01_jax_scalar.html) · [Python source](notebooks/01_jax_scalar.py)
+:::
+
+![](figures/python-ecosystem/01_jax_scalar.png){.notebook-shot alt="Executed marimo notebook comparing loss 0.5 and derivative 10 using JAX jvp, vjp, and grad."}
+
+Change $w$ from $1$ to $0.9$: predict the loss and gradient before rerunning.
+
+::: {.notes}
+At w=0.9 the loss is 0.0008 and the gradient is 0.368.
+This is a screenshot of the executed notebook, not a live control. The source
+notebook is reactive when opened in marimo. The HTML link is a static snapshot.
+Launch: ../../.venv-lectures/bin/marimo edit notebooks/01_jax_scalar.py.
+:::
+
+## A vector function {#python-vector-principle .addition .python-section}
+
+$$F(x_1,x_2)=\begin{pmatrix}x_1x_2\\x_1^2+x_2\end{pmatrix},
+\qquad \mathbf x=\begin{pmatrix}2\\3\end{pmatrix},
+\qquad J=\begin{pmatrix}3&2\\4&1\end{pmatrix}$$
+
+::: {.two-col}
+::: {}
+**Forward: select a column**
+
+$$\mathbf v=\begin{pmatrix}1\\0\end{pmatrix},\qquad
+J\mathbf v=\begin{pmatrix}3\\4\end{pmatrix}$$
+:::
+::: {}
+**Reverse: select a row**
+
+$$\mathbf u=\begin{pmatrix}1\\0\end{pmatrix},\qquad
+J^T\mathbf u=\begin{pmatrix}3\\2\end{pmatrix}$$
+:::
+:::
+
+For general seeds, compute linear combinations of columns or rows.
+
+## JAX: products and full Jacobians {#python-jax-vector .addition .python-section}
+
+```python
+import jax.numpy as jnp
+
+def F(x):
+    return jnp.array([x[0] * x[1], x[0]**2 + x[1]])
+
+x = jnp.array([2.0, 3.0])
+seed = jnp.array([1.0, 0.0])
+y, Jv = jax.jvp(F, (x,), (seed,))  # [3., 4.]
+y, pullback = jax.vjp(F, x)
+(JTu,) = pullback(seed)            # [3., 2.]
+
+J_forward = jax.jacfwd(F)(x)       # [[3., 2.],
+J_reverse = jax.jacrev(F)(x)       #  [4., 1.]]
+```
+
+Both Jacobian functions return the same matrix. JVP and VJP need not build it.
+
+::: {.notes}
+This code continues from the previous JAX import. The notebook is standalone.
+Source: https://docs.jax.dev/en/latest/jacobian-vector-products.html.
+:::
+
+## marimo: input direction and output seed {#python-marimo-vector .addition .python-section}
+
+::: {.slide-refs}
+[Live notebook](http://127.0.0.1:42761/?file=02_jax_vector.py) · [Snapshot](notebooks/exports/02_jax_vector.html) · [Python source](notebooks/02_jax_vector.py)
+:::
+
+![](figures/python-ecosystem/02_jax_vector.png){.notebook-shot alt="Executed marimo vector example with Jacobian [[3,2],[4,1]], JVP [3,4], and VJP [3,2]."}
+
+Switch each seed to $(0,1)$. Which column or row should appear?
+
+::: {.notes}
+JVP with (0,1) gives (2,1). VJP with (0,1) gives (4,1).
+Open the live source to use the dropdowns; the slide and linked HTML are static.
+:::
+
+## PyTorch: forward and reverse transforms {#python-torch-transforms .addition .python-section}
+
+::: {.slide-refs}
+[PyTorch function transforms](https://docs.pytorch.org/tutorials/intermediate/jacobians_hessians.html)
+:::
+
+```python
+import torch
+from torch.func import jvp, vjp
+
+w = torch.tensor(1.0, dtype=torch.float64)
+one = torch.ones_like(w)
+
+value, tangent = jvp(loss, (w,), (one,))
+value, pullback = vjp(loss, w)
+(gradient,) = pullback(one)
+
+print(value.item())      # 0.5
+print(tangent.item())    # 10.0
+print(gradient.item())   # 10.0
+```
+
+Use the same scalar `loss` function. These transforms return derivatives directly.
+
+## PyTorch: a training step {#python-torch-training .addition .python-section}
+
+```python
+w = torch.tensor(1.0, dtype=torch.float64, requires_grad=True)
+optimizer = torch.optim.SGD([w], lr=0.01)
+
+optimizer.zero_grad(set_to_none=True)
+value = loss(w)                 # forward evaluation: 0.5
+value.backward()               # reverse mode
+print(w.grad.item())           # 10.0
+
+optimizer.step()               # optimizer changes w
+print(w.item())                # 0.9
+print(loss(w).item())          # approximately 0.0008
+```
+
+`.backward()` **accumulates** into `.grad`. Clear gradients before the next step.
+
+::: {.notes}
+The optimizer update is separate from autodiff. zero_grad is normally called
+once per training step, before the backward call. Intentional accumulation
+across microbatches is an exception. A new forward graph is built on the next
+evaluation. Source: https://docs.pytorch.org/docs/stable/generated/torch.Tensor.backward.html.
+:::
+
+## marimo: one optimizer step {#python-marimo-training .addition .python-section}
+
+::: {.slide-refs}
+[Live notebook](http://127.0.0.1:42761/?file=03_pytorch_training.py) · [Snapshot](notebooks/exports/03_pytorch_training.html) · [Python source](notebooks/03_pytorch_training.py)
+:::
+
+![](figures/python-ecosystem/03_pytorch_training.png){.notebook-shot alt="Executed marimo PyTorch notebook: gradient ten, updated weight 0.9, loss decreases from 0.5 to 0.0008."}
+
+Increase the learning rate to $0.5$. The gradient is still correct. What happens to the loss?
+
+::: {.notes}
+The new weight is -4 and the new loss is 1300.5. Each reactive execution starts
+from the selected initial weight and takes exactly one step; there is no hidden
+training history. Open the Python source in marimo for the live sliders.
+:::
+
+## Choosing and checking an AD mode {#python-practice .addition .python-section}
+
+For $F:\mathbb R^n\to\mathbb R^m$, think about what derivative you need.
+
+| Task | Usual starting point |
+|:--|:--|
+| One input direction | JVP / forward mode |
+| Scalar loss, many parameters | Gradient / reverse mode |
+| Full Jacobian, few inputs | `jacfwd` |
+| Full Jacobian, few outputs | `jacrev` |
+
+Keep operations inside the library's differentiable computation.
+Convert to NumPy or Python numbers **after** computing the derivative.
+
+Check small examples analytically or with finite differences, and benchmark the real workload.
+
+::: {.notes}
+Mode choice is a rule of thumb, not a guarantee about wall-clock performance.
+JAX examples use pure functions and floating-point inputs. PyTorch detach,
+conversion to NumPy, and rebuilding a tensor can disconnect a gradient path.
+A model forward pass alone computes values; forward-mode AD also propagates
+tangents. Source: https://docs.jax.dev/en/latest/jacobian-vector-products.html.
+:::

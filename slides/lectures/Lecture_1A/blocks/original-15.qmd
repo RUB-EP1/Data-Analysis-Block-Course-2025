@@ -1,0 +1,24 @@
+## Existing AD techniques {#original-a-15 .original-slide}
+
+```{=html}
+<div class="source-page" aria-label="Original Lecture 1A, slide 15">
+<img class="source-art" src="figures/original/original-15.svg" alt="Existing AD techniques" loading="eager" />
+
+</div>
+```
+
+::: {.notes}
+Original Lecture-1A, slide 15. Visual source: Keynote PDF export.
+
+Existing AD techniques
+•Diﬀerentiable DSLs (TensorFlow, PyTorch) provide a new 
+language where everything is diﬀerentiable. Must rewrite code 
+in DSL.
+•Operator Overloading (Adept, JAX) tools provide 
+diﬀerentiable versions of language constructs (e.g. np.sum => 
+jax.sum). Require rewriting non-standard utlities for support.
+•Source Rewriting tools statically analyze code to produce a 
+new gradient function in the source language. Requires all 
+code available ahead of time, diﬃcult with external libraries.
+
+:::

@@ -1,0 +1,8 @@
+[deps]
+AbstractPlutoDingetjes = "6e696c72-6542-2067-7265-42206c756150"
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+Flux = "587475ba-b771-5e3f-ad9e-33799f191a9c"
+HypertextLiteral = "ac1192a8-f4b3-4bfe-ba22-af5b92cd3ab2"
+JLBoost = "13d6d4a1-5e7f-472c-9ebc-8123a4fbb95f"
+Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
+PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"

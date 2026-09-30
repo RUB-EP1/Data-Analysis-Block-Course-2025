@@ -1,0 +1,6 @@
+# Pluto notebooks embedded in this deck; served by `make start-julia-server DECK=Lecture_3A`.
+# The id is fixed so the slide URLs (edit?id=...&isolated_cell_id=...) stay valid across restarts.
+
+[[notebook]]
+path = "scripts/lecture-3B-UAT.jl"
+id = "3a0a7000-0000-4000-8000-00000000a7a1"

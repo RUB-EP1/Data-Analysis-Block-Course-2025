@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1420 400" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" fill="#172635">
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+<text x="240.0" y="40.0" font-size="28" text-anchor="middle" fill="#172635" font-weight="bold">Encoder only</text>
+<text x="240.0" y="72.0" font-size="20" text-anchor="middle" fill="#617484" font-weight="normal">BERT (2018)</text>
+<rect x="162.0" y="110.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="188.0" y="110.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="214.0" y="110.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="240.0" y="110.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="266.0" y="110.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="292.0" y="110.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="162.0" y="136.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="188.0" y="136.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="214.0" y="136.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="240.0" y="136.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="266.0" y="136.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="292.0" y="136.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="162.0" y="162.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="188.0" y="162.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="214.0" y="162.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="240.0" y="162.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="266.0" y="162.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="292.0" y="162.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="162.0" y="188.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="188.0" y="188.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="214.0" y="188.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="240.0" y="188.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="266.0" y="188.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="292.0" y="188.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="162.0" y="214.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="188.0" y="214.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="214.0" y="214.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="240.0" y="214.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="266.0" y="214.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="292.0" y="214.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="162.0" y="240.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="188.0" y="240.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="214.0" y="240.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="240.0" y="240.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="266.0" y="240.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="292.0" y="240.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<text x="240.0" y="290.0" font-size="16" text-anchor="middle" fill="#617484" font-weight="normal">attention mask: row = query, column = key</text>
+<text x="240.0" y="336.0" font-size="20" text-anchor="middle" fill="#172635" font-weight="normal">sees the whole text in both directions</text>
+<text x="240.0" y="372.0" font-size="20" text-anchor="middle" fill="#087bb9" font-weight="bold">understanding: classify, embed, search</text>
+<text x="700.0" y="40.0" font-size="28" text-anchor="middle" fill="#172635" font-weight="bold">Decoder only</text>
+<text x="700.0" y="72.0" font-size="20" text-anchor="middle" fill="#617484" font-weight="normal">GPT, Llama, Claude (2018 →)</text>
+<rect x="622.0" y="110.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="648.0" y="110.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="674.0" y="110.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="700.0" y="110.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="726.0" y="110.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="752.0" y="110.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="622.0" y="136.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="648.0" y="136.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="674.0" y="136.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="700.0" y="136.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="726.0" y="136.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="752.0" y="136.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="622.0" y="162.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="648.0" y="162.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="674.0" y="162.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="700.0" y="162.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="726.0" y="162.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="752.0" y="162.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="622.0" y="188.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="648.0" y="188.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="674.0" y="188.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="700.0" y="188.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="726.0" y="188.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="752.0" y="188.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="622.0" y="214.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="648.0" y="214.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="674.0" y="214.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="700.0" y="214.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="726.0" y="214.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="752.0" y="214.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="622.0" y="240.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="648.0" y="240.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="674.0" y="240.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="700.0" y="240.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="726.0" y="240.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="752.0" y="240.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<text x="700.0" y="290.0" font-size="16" text-anchor="middle" fill="#617484" font-weight="normal">attention mask: row = query, column = key</text>
+<text x="700.0" y="336.0" font-size="20" text-anchor="middle" fill="#172635" font-weight="normal">each token sees only the past</text>
+<text x="700.0" y="372.0" font-size="20" text-anchor="middle" fill="#087bb9" font-weight="bold">generation: next token, chat, code</text>
+<text x="1160.0" y="40.0" font-size="28" text-anchor="middle" fill="#172635" font-weight="bold">Encoder–decoder</text>
+<text x="1160.0" y="72.0" font-size="20" text-anchor="middle" fill="#617484" font-weight="normal">original Transformer (2017), T5</text>
+<rect x="1000.0" y="110.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1026.0" y="110.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1052.0" y="110.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1078.0" y="110.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1104.0" y="110.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1130.0" y="110.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1000.0" y="136.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1026.0" y="136.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1052.0" y="136.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1078.0" y="136.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1104.0" y="136.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1130.0" y="136.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1000.0" y="162.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1026.0" y="162.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1052.0" y="162.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1078.0" y="162.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1104.0" y="162.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1130.0" y="162.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1000.0" y="188.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1026.0" y="188.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1052.0" y="188.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1078.0" y="188.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1104.0" y="188.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1130.0" y="188.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1000.0" y="214.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1026.0" y="214.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1052.0" y="214.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1078.0" y="214.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1104.0" y="214.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1130.0" y="214.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1000.0" y="240.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1026.0" y="240.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1052.0" y="240.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1078.0" y="240.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1104.0" y="240.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1130.0" y="240.0" width="24" height="24" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="1180.0" y="110.0" width="24" height="24" fill="#d99700" fill-opacity="0.60"/>
+<rect x="1206.0" y="110.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="1232.0" y="110.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="1258.0" y="110.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="1284.0" y="110.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="1310.0" y="110.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="1180.0" y="136.0" width="24" height="24" fill="#d99700" fill-opacity="0.60"/>
+<rect x="1206.0" y="136.0" width="24" height="24" fill="#d99700" fill-opacity="0.60"/>
+<rect x="1232.0" y="136.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="1258.0" y="136.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="1284.0" y="136.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="1310.0" y="136.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="1180.0" y="162.0" width="24" height="24" fill="#d99700" fill-opacity="0.60"/>
+<rect x="1206.0" y="162.0" width="24" height="24" fill="#d99700" fill-opacity="0.60"/>
+<rect x="1232.0" y="162.0" width="24" height="24" fill="#d99700" fill-opacity="0.60"/>
+<rect x="1258.0" y="162.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="1284.0" y="162.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="1310.0" y="162.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="1180.0" y="188.0" width="24" height="24" fill="#d99700" fill-opacity="0.60"/>
+<rect x="1206.0" y="188.0" width="24" height="24" fill="#d99700" fill-opacity="0.60"/>
+<rect x="1232.0" y="188.0" width="24" height="24" fill="#d99700" fill-opacity="0.60"/>
+<rect x="1258.0" y="188.0" width="24" height="24" fill="#d99700" fill-opacity="0.60"/>
+<rect x="1284.0" y="188.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="1310.0" y="188.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="1180.0" y="214.0" width="24" height="24" fill="#d99700" fill-opacity="0.60"/>
+<rect x="1206.0" y="214.0" width="24" height="24" fill="#d99700" fill-opacity="0.60"/>
+<rect x="1232.0" y="214.0" width="24" height="24" fill="#d99700" fill-opacity="0.60"/>
+<rect x="1258.0" y="214.0" width="24" height="24" fill="#d99700" fill-opacity="0.60"/>
+<rect x="1284.0" y="214.0" width="24" height="24" fill="#d99700" fill-opacity="0.60"/>
+<rect x="1310.0" y="214.0" width="24" height="24" fill="#eef1f4"/>
+<rect x="1180.0" y="240.0" width="24" height="24" fill="#d99700" fill-opacity="0.60"/>
+<rect x="1206.0" y="240.0" width="24" height="24" fill="#d99700" fill-opacity="0.60"/>
+<rect x="1232.0" y="240.0" width="24" height="24" fill="#d99700" fill-opacity="0.60"/>
+<rect x="1258.0" y="240.0" width="24" height="24" fill="#d99700" fill-opacity="0.60"/>
+<rect x="1284.0" y="240.0" width="24" height="24" fill="#d99700" fill-opacity="0.60"/>
+<rect x="1310.0" y="240.0" width="24" height="24" fill="#d99700" fill-opacity="0.60"/>
+<text x="1078.0" y="290.0" font-size="17" text-anchor="middle" fill="#617484" font-weight="normal">encoder: full</text>
+<text x="1258.0" y="290.0" font-size="17" text-anchor="middle" fill="#617484" font-weight="normal">decoder: causal</text>
+<line x1="1155.0" y1="190.0" x2="1178.0" y2="190.0" stroke="#172635" stroke-width="2" marker-end="url(#arr)"/>
+<text x="1160.0" y="336.0" font-size="20" text-anchor="middle" fill="#172635" font-weight="normal">decoder attends to encoder output</text>
+<text x="1160.0" y="372.0" font-size="20" text-anchor="middle" fill="#087bb9" font-weight="bold">translation, speech to text</text>
+</svg>

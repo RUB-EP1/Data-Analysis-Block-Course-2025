@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 510" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" fill="#172635">
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+<line x1="134" y1="140" x2="364" y2="140" stroke="#172635" stroke-width="3" marker-end="url(#arr)"/>
+<text x="184.6" y="129.0" font-size="24" text-anchor="middle" fill="#087bb9" font-weight="bold">+1</text>
+<line x1="134" y1="380" x2="364" y2="126" stroke="#172635" stroke-width="3" marker-end="url(#arr)"/>
+<text x="169.77481670192608" y="319.69562142300396" font-size="24" text-anchor="middle" fill="#087bb9" font-weight="bold">+1</text>
+<line x1="134" y1="140" x2="364" y2="394" stroke="#172635" stroke-width="3" marker-end="url(#arr)"/>
+<text x="169.77481670192608" y="218.30437857699604" font-size="24" text-anchor="middle" fill="#087bb9" font-weight="bold">+1</text>
+<line x1="134" y1="380" x2="364" y2="380" stroke="#172635" stroke-width="3" marker-end="url(#arr)"/>
+<text x="184.6" y="369.0" font-size="24" text-anchor="middle" fill="#087bb9" font-weight="bold">+1</text>
+<line x1="476" y1="140" x2="702" y2="230.0" stroke="#172635" stroke-width="3" marker-end="url(#arr)"/>
+<circle cx="420" cy="140" r="54" fill="#ffe4a3" stroke="#d99700" stroke-width="3"/>
+<text x="420" y="136" font-size="26" text-anchor="middle" fill="#172635" font-weight="bold">OR</text>
+<text x="420" y="166" font-size="20" text-anchor="middle" fill="#172635" font-weight="normal">b = −0.5</text>
+<line x1="476" y1="380" x2="702" y2="290.0" stroke="#172635" stroke-width="3" marker-end="url(#arr)"/>
+<circle cx="420" cy="380" r="54" fill="#ffe4a3" stroke="#d99700" stroke-width="3"/>
+<text x="420" y="376" font-size="26" text-anchor="middle" fill="#172635" font-weight="bold">AND</text>
+<text x="420" y="406" font-size="20" text-anchor="middle" fill="#172635" font-weight="normal">b = −1.5</text>
+<text x="600" y="170" font-size="26" text-anchor="middle" fill="#087bb9" font-weight="bold">+1</text>
+<text x="600" y="372" font-size="26" text-anchor="middle" fill="#c74842" font-weight="bold">−1</text>
+<circle cx="90" cy="140" r="44" fill="#e9f5fd" stroke="#087bb9" stroke-width="3"/>
+<text x="90" y="150" font-size="32" text-anchor="middle" fill="#172635" font-weight="normal" font-style="italic">x<tspan dy='8' font-size='20'>1</tspan></text>
+<circle cx="90" cy="380" r="44" fill="#e9f5fd" stroke="#087bb9" stroke-width="3"/>
+<text x="90" y="390" font-size="32" text-anchor="middle" fill="#172635" font-weight="normal" font-style="italic">x<tspan dy='8' font-size='20'>2</tspan></text>
+<circle cx="760" cy="260" r="56" fill="#ffe4a3" stroke="#d99700" stroke-width="3"/>
+<text x="760" y="256" font-size="26" text-anchor="middle" fill="#172635" font-weight="bold">XOR</text>
+<text x="760" y="286" font-size="20" text-anchor="middle" fill="#172635" font-weight="normal">b = −0.5</text>
+<line x1="818" y1="260" x2="880" y2="260" stroke="#172635" stroke-width="3" marker-end="url(#arr)"/>
+<text x="90" y="490" font-size="24" text-anchor="middle" fill="#617484" font-weight="normal">input</text>
+<text x="420" y="490" font-size="24" text-anchor="middle" fill="#617484" font-weight="normal">hidden layer</text>
+<text x="760" y="490" font-size="24" text-anchor="middle" fill="#617484" font-weight="normal">output</text>
+<text x="450" y="40" font-size="24" text-anchor="middle" fill="#617484" font-weight="normal">every unit: step(Σ wᵢ xᵢ + b)</text>
+</svg>

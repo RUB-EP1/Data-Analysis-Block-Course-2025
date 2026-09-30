@@ -1,0 +1,25 @@
+## AD in Major ML Frameworks {#original-a-16 .original-slide}
+
+```{=html}
+<div class="source-page" aria-label="Original Lecture 1A, slide 16">
+<img class="source-art" src="figures/original/original-16.svg" alt="AD in Major ML Frameworks" loading="eager" />
+<a class="source-link" href="https://arxiv.org/abs/1502.05767" title="https://arxiv.org/abs/1502.05767" style="left:76.93031%;top:4.72796%;width:12.94438%;height:2.62444%"></a>
+</div>
+```
+
+::: {.notes}
+Original Lecture-1A, slide 16. Visual source: Keynote PDF export.
+
+AD in Major ML Frameworks
+Dynamic
+ Tape reverse
+Trace to HLO
+ Transform reverse
+Eager → Opt graph
+ Tape or grad ops
+Default graph AD style
+PyTorch
+JAX
+TF 2
+Baydin et al. “AD in ML” (JMLR 2018)
+:::

@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1300 420" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" fill="#172635">
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+<text x="40.0" y="36.0" font-size="24" text-anchor="start" fill="#172635" font-weight="bold">Generating token 8: only the new row is computed</text>
+<rect x="150" y="80" width="31" height="31" fill="#087bb9" fill-opacity="0.3"/>
+<rect x="184" y="80" width="31" height="31" fill="#eef1f4"/>
+<rect x="218" y="80" width="31" height="31" fill="#eef1f4"/>
+<rect x="252" y="80" width="31" height="31" fill="#eef1f4"/>
+<rect x="286" y="80" width="31" height="31" fill="#eef1f4"/>
+<rect x="320" y="80" width="31" height="31" fill="#eef1f4"/>
+<rect x="354" y="80" width="31" height="31" fill="#eef1f4"/>
+<rect x="388" y="80" width="31" height="31" fill="#eef1f4"/>
+<rect x="150" y="114" width="31" height="31" fill="#087bb9" fill-opacity="0.3"/>
+<rect x="184" y="114" width="31" height="31" fill="#087bb9" fill-opacity="0.3"/>
+<rect x="218" y="114" width="31" height="31" fill="#eef1f4"/>
+<rect x="252" y="114" width="31" height="31" fill="#eef1f4"/>
+<rect x="286" y="114" width="31" height="31" fill="#eef1f4"/>
+<rect x="320" y="114" width="31" height="31" fill="#eef1f4"/>
+<rect x="354" y="114" width="31" height="31" fill="#eef1f4"/>
+<rect x="388" y="114" width="31" height="31" fill="#eef1f4"/>
+<rect x="150" y="148" width="31" height="31" fill="#087bb9" fill-opacity="0.3"/>
+<rect x="184" y="148" width="31" height="31" fill="#087bb9" fill-opacity="0.3"/>
+<rect x="218" y="148" width="31" height="31" fill="#087bb9" fill-opacity="0.3"/>
+<rect x="252" y="148" width="31" height="31" fill="#eef1f4"/>
+<rect x="286" y="148" width="31" height="31" fill="#eef1f4"/>
+<rect x="320" y="148" width="31" height="31" fill="#eef1f4"/>
+<rect x="354" y="148" width="31" height="31" fill="#eef1f4"/>
+<rect x="388" y="148" width="31" height="31" fill="#eef1f4"/>
+<rect x="150" y="182" width="31" height="31" fill="#087bb9" fill-opacity="0.3"/>
+<rect x="184" y="182" width="31" height="31" fill="#087bb9" fill-opacity="0.3"/>
+<rect x="218" y="182" width="31" height="31" fill="#087bb9" fill-opacity="0.3"/>
+<rect x="252" y="182" width="31" height="31" fill="#087bb9" fill-opacity="0.3"/>
+<rect x="286" y="182" width="31" height="31" fill="#eef1f4"/>
+<rect x="320" y="182" width="31" height="31" fill="#eef1f4"/>
+<rect x="354" y="182" width="31" height="31" fill="#eef1f4"/>
+<rect x="388" y="182" width="31" height="31" fill="#eef1f4"/>
+<rect x="150" y="216" width="31" height="31" fill="#087bb9" fill-opacity="0.3"/>
+<rect x="184" y="216" width="31" height="31" fill="#087bb9" fill-opacity="0.3"/>
+<rect x="218" y="216" width="31" height="31" fill="#087bb9" fill-opacity="0.3"/>
+<rect x="252" y="216" width="31" height="31" fill="#087bb9" fill-opacity="0.3"/>
+<rect x="286" y="216" width="31" height="31" fill="#087bb9" fill-opacity="0.3"/>
+<rect x="320" y="216" width="31" height="31" fill="#eef1f4"/>
+<rect x="354" y="216" width="31" height="31" fill="#eef1f4"/>
+<rect x="388" y="216" width="31" height="31" fill="#eef1f4"/>
+<rect x="150" y="250" width="31" height="31" fill="#087bb9" fill-opacity="0.3"/>
+<rect x="184" y="250" width="31" height="31" fill="#087bb9" fill-opacity="0.3"/>
+<rect x="218" y="250" width="31" height="31" fill="#087bb9" fill-opacity="0.3"/>
+<rect x="252" y="250" width="31" height="31" fill="#087bb9" fill-opacity="0.3"/>
+<rect x="286" y="250" width="31" height="31" fill="#087bb9" fill-opacity="0.3"/>
+<rect x="320" y="250" width="31" height="31" fill="#087bb9" fill-opacity="0.3"/>
+<rect x="354" y="250" width="31" height="31" fill="#eef1f4"/>
+<rect x="388" y="250" width="31" height="31" fill="#eef1f4"/>
+<rect x="150" y="284" width="31" height="31" fill="#087bb9" fill-opacity="0.3"/>
+<rect x="184" y="284" width="31" height="31" fill="#087bb9" fill-opacity="0.3"/>
+<rect x="218" y="284" width="31" height="31" fill="#087bb9" fill-opacity="0.3"/>
+<rect x="252" y="284" width="31" height="31" fill="#087bb9" fill-opacity="0.3"/>
+<rect x="286" y="284" width="31" height="31" fill="#087bb9" fill-opacity="0.3"/>
+<rect x="320" y="284" width="31" height="31" fill="#087bb9" fill-opacity="0.3"/>
+<rect x="354" y="284" width="31" height="31" fill="#087bb9" fill-opacity="0.3"/>
+<rect x="388" y="284" width="31" height="31" fill="#eef1f4"/>
+<rect x="150" y="318" width="31" height="31" fill="#c74842" fill-opacity="0.75"/>
+<rect x="184" y="318" width="31" height="31" fill="#c74842" fill-opacity="0.75"/>
+<rect x="218" y="318" width="31" height="31" fill="#c74842" fill-opacity="0.75"/>
+<rect x="252" y="318" width="31" height="31" fill="#c74842" fill-opacity="0.75"/>
+<rect x="286" y="318" width="31" height="31" fill="#c74842" fill-opacity="0.75"/>
+<rect x="320" y="318" width="31" height="31" fill="#c74842" fill-opacity="0.75"/>
+<rect x="354" y="318" width="31" height="31" fill="#c74842" fill-opacity="0.75"/>
+<rect x="388" y="318" width="31" height="31" fill="#c74842" fill-opacity="0.75"/>
+<text x="138.0" y="342.0" font-size="18" text-anchor="end" fill="#c74842" font-weight="normal">new query</text>
+<text x="286.0" y="386.0" font-size="18" text-anchor="middle" fill="#617484" font-weight="normal">keys of all previous tokens</text>
+<text x="640.0" y="100.0" font-size="24" text-anchor="start" fill="#172635" font-weight="bold">KV cache</text>
+<text x="640.0" y="132.0" font-size="20" text-anchor="start" fill="#172635" font-weight="normal">keys and values of earlier tokens never change:</text>
+<text x="640.0" y="160.0" font-size="20" text-anchor="start" fill="#172635" font-weight="normal">store them instead of recomputing them.</text>
+<text x="640.0" y="214.0" font-size="20" text-anchor="start" fill="#087bb9" font-weight="normal">cost per new token ∝ tokens so far (not their square)</text>
+<text x="640.0" y="268.0" font-size="20" text-anchor="start" fill="#172635" font-weight="normal">memory per token = 2 × layers × heads × d_head numbers</text>
+<text x="640.0" y="300.0" font-size="20" text-anchor="start" fill="#617484" font-weight="normal">GPT-2 small: 2 × 12 × 12 × 64 = 18 432 numbers ≈ 37 kB (16-bit)</text>
+<text x="640.0" y="332.0" font-size="20" text-anchor="start" fill="#617484" font-weight="normal">DeepSeek-R1 with standard attention: ~4 MB per token</text>
+<text x="640.0" y="364.0" font-size="20" text-anchor="start" fill="#617484" font-weight="normal">with multi-head latent attention (MLA): ~70 kB per token</text>
+</svg>

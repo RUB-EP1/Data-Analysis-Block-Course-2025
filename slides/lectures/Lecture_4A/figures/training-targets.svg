@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1150 340" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" fill="#172635">
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+<text x="20.0" y="62.0" font-size="22" text-anchor="start" fill="#617484" font-weight="normal">input</text>
+<text x="20.0" y="222.0" font-size="22" text-anchor="start" fill="#617484" font-weight="normal">target</text>
+<rect x="170.0" y="30.0" width="170.0" height="48.0" rx="6" fill="#fff1cf" stroke="#d99700" stroke-width="2"/>
+<text x="255.0" y="62.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">The</text>
+<line x1="255.0" y1="80.0" x2="255.0" y2="118.0" stroke="#617484" stroke-width="2" marker-end="url(#arr)"/>
+<rect x="170.0" y="120.0" width="170.0" height="44.0" rx="6" fill="#e9f5fd" stroke="#087bb9" stroke-width="2"/>
+<text x="255.0" y="149.0" font-size="18" text-anchor="middle" fill="#087bb9" font-weight="normal">p( · | ≤ here)</text>
+<line x1="255.0" y1="166.0" x2="255.0" y2="190.0" stroke="#617484" stroke-width="2" marker-end="url(#arr)"/>
+<rect x="170.0" y="192.0" width="170.0" height="48.0" rx="6" fill="#fff" stroke="#172635" stroke-width="2"/>
+<text x="255.0" y="224.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">·electron</text>
+<text x="255.0" y="272.0" font-size="17" text-anchor="middle" fill="#c74842" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">−log p(·electron)</text>
+<rect x="360.0" y="30.0" width="170.0" height="48.0" rx="6" fill="#fff1cf" stroke="#d99700" stroke-width="2"/>
+<text x="445.0" y="62.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">·electron</text>
+<line x1="445.0" y1="80.0" x2="445.0" y2="118.0" stroke="#617484" stroke-width="2" marker-end="url(#arr)"/>
+<rect x="360.0" y="120.0" width="170.0" height="44.0" rx="6" fill="#e9f5fd" stroke="#087bb9" stroke-width="2"/>
+<text x="445.0" y="149.0" font-size="18" text-anchor="middle" fill="#087bb9" font-weight="normal">p( · | ≤ here)</text>
+<line x1="445.0" y1="166.0" x2="445.0" y2="190.0" stroke="#617484" stroke-width="2" marker-end="url(#arr)"/>
+<rect x="360.0" y="192.0" width="170.0" height="48.0" rx="6" fill="#fff" stroke="#172635" stroke-width="2"/>
+<text x="445.0" y="224.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">·has</text>
+<text x="445.0" y="272.0" font-size="17" text-anchor="middle" fill="#c74842" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">−log p(·has)</text>
+<rect x="550.0" y="30.0" width="170.0" height="48.0" rx="6" fill="#fff1cf" stroke="#d99700" stroke-width="2"/>
+<text x="635.0" y="62.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">·has</text>
+<line x1="635.0" y1="80.0" x2="635.0" y2="118.0" stroke="#617484" stroke-width="2" marker-end="url(#arr)"/>
+<rect x="550.0" y="120.0" width="170.0" height="44.0" rx="6" fill="#e9f5fd" stroke="#087bb9" stroke-width="2"/>
+<text x="635.0" y="149.0" font-size="18" text-anchor="middle" fill="#087bb9" font-weight="normal">p( · | ≤ here)</text>
+<line x1="635.0" y1="166.0" x2="635.0" y2="190.0" stroke="#617484" stroke-width="2" marker-end="url(#arr)"/>
+<rect x="550.0" y="192.0" width="170.0" height="48.0" rx="6" fill="#fff" stroke="#172635" stroke-width="2"/>
+<text x="635.0" y="224.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">·negative</text>
+<text x="635.0" y="272.0" font-size="17" text-anchor="middle" fill="#c74842" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">−log p(·negative)</text>
+<rect x="740.0" y="30.0" width="170.0" height="48.0" rx="6" fill="#fff1cf" stroke="#d99700" stroke-width="2"/>
+<text x="825.0" y="62.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">·negative</text>
+<line x1="825.0" y1="80.0" x2="825.0" y2="118.0" stroke="#617484" stroke-width="2" marker-end="url(#arr)"/>
+<rect x="740.0" y="120.0" width="170.0" height="44.0" rx="6" fill="#e9f5fd" stroke="#087bb9" stroke-width="2"/>
+<text x="825.0" y="149.0" font-size="18" text-anchor="middle" fill="#087bb9" font-weight="normal">p( · | ≤ here)</text>
+<line x1="825.0" y1="166.0" x2="825.0" y2="190.0" stroke="#617484" stroke-width="2" marker-end="url(#arr)"/>
+<rect x="740.0" y="192.0" width="170.0" height="48.0" rx="6" fill="#fff" stroke="#172635" stroke-width="2"/>
+<text x="825.0" y="224.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">·charge</text>
+<text x="825.0" y="272.0" font-size="17" text-anchor="middle" fill="#c74842" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">−log p(·charge)</text>
+<rect x="930.0" y="30.0" width="170.0" height="48.0" rx="6" fill="#fff1cf" stroke="#d99700" stroke-width="2"/>
+<text x="1015.0" y="62.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">·charge</text>
+<line x1="1015.0" y1="80.0" x2="1015.0" y2="118.0" stroke="#617484" stroke-width="2" marker-end="url(#arr)"/>
+<rect x="930.0" y="120.0" width="170.0" height="44.0" rx="6" fill="#e9f5fd" stroke="#087bb9" stroke-width="2"/>
+<text x="1015.0" y="149.0" font-size="18" text-anchor="middle" fill="#087bb9" font-weight="normal">p( · | ≤ here)</text>
+<line x1="1015.0" y1="166.0" x2="1015.0" y2="190.0" stroke="#617484" stroke-width="2" marker-end="url(#arr)"/>
+<rect x="930.0" y="192.0" width="170.0" height="48.0" rx="6" fill="#fff" stroke="#172635" stroke-width="2"/>
+<text x="1015.0" y="224.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">.</text>
+<text x="1015.0" y="272.0" font-size="17" text-anchor="middle" fill="#c74842" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">−log p(.)</text>
+<text x="635.0" y="318.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal">loss = average over all positions: one text of T tokens gives T training examples, computed in one pass</text>
+</svg>

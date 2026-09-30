@@ -1,0 +1,223 @@
+<style>
+  .widget {
+    background: #fff;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+  }
+  .widget iframe {
+    border: 0;
+    display: block;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+  /* Absolute, so a poster's natural size never drives the box height —
+     the box is sized by the slide, and the image letterboxes inside it. */
+  .widget > img {
+    height: 100%;
+    left: 0;
+    object-fit: contain;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+  .widget .widget-poster { opacity: 0.4; }
+  .widget .widget-offline {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    font-size: 30px;
+    gap: 18px;
+    inset: 0;
+    justify-content: center;
+    position: absolute;
+    text-align: center;
+  }
+  .widget .widget-offline code {
+    background: #f5f8fa;
+    border: 1px solid #d8e0e7;
+    font-size: 30px;
+    padding: 12px 22px;
+  }
+  .figure-side > .widget { align-self: stretch; }
+</style>
+
+<script>
+// Live widgets in a slide, as an iframe with a static poster fallback.
+//
+//   ::: {.widget data-src="widgets/spin-transfer/index.html?alpha=0.75"
+//                data-poster="widgets/spin-transfer/poster.png"
+//                data-ratio="1.6"}
+//   :::
+//
+// The iframe is the boundary on purpose: a widget brings its own CSS, its own
+// JS and possibly its own WebGL context, and none of that should meet Reveal's
+// DOM or the .slide-body wrapper.
+//
+// Under ?export=1 the poster is shown instead, so `make pdf` gets a real page
+// rather than a blank rectangle. Same idea as data-still in frames.html.
+//
+// A widget served by a separate process (a Pluto server, say) names the command
+// that starts it:
+//
+//   ::: {.widget data-src="http://localhost:1243/edit?id=..."
+//                data-requires="make start-julia-server DECK=Lecture_3A"}
+//   :::
+//
+// Before attaching, the loader probes the server; while it does not answer, the
+// widget shows that command over the poster and retries every two seconds.
+//
+// The iframe is only attached once its slide is reached, and detached when the
+// slide is left, so a deck with several widgets does not run several WebGL
+// contexts at once (browsers cap them, and the oldest gets killed).
+(function () {
+  "use strict";
+
+  var EXPORT = new URLSearchParams(location.search).has("export");
+
+  function setup(el) {
+    var src = el.getAttribute("data-src");
+    var poster = el.getAttribute("data-poster");
+    if (!src) return;
+
+    var ratio = parseFloat(el.getAttribute("data-ratio") || "0");
+    if (ratio > 0) el.style.aspectRatio = String(ratio);
+
+    if (EXPORT) {
+      el.classList.add("widget-static");
+      if (poster) {
+        var img = document.createElement("img");
+        img.src = poster;
+        img.alt = el.getAttribute("data-alt") || "";
+        el.appendChild(img);
+      }
+      return;
+    }
+
+    // Placeholder until the slide is reached: the poster if there is one.
+    if (poster) {
+      var ph = document.createElement("img");
+      ph.className = "widget-poster";
+      ph.src = poster;
+      ph.alt = "";
+      el.appendChild(ph);
+    }
+
+    var requires = el.getAttribute("data-requires");
+    var retry = null, offline = null;
+
+    function showOffline() {
+      if (offline) return;
+      offline = document.createElement("div");
+      offline.className = "widget-offline";
+      offline.innerHTML = "<div>Live widget: the server is not running. Start it with</div><code></code>";
+      offline.querySelector("code").textContent = requires;
+      el.appendChild(offline);
+    }
+
+    function attachFrame() {
+      if (el.querySelector("iframe")) return;
+      if (offline) { offline.remove(); offline = null; }
+      var f = document.createElement("iframe");
+      f.src = src;
+      f.setAttribute("loading", "eager");
+      f.setAttribute("title", el.getAttribute("data-alt") || "widget");
+      f.setAttribute("allow", "fullscreen");
+      f.addEventListener("load", function () { wireKeys(f); });
+      el.appendChild(f);
+    }
+
+    // An opaque no-cors response is enough: it resolves if anything listens.
+    function probe() {
+      retry = null;
+      fetch(new URL(src, location.href).origin + "/", { mode: "no-cors", cache: "no-store" })
+        .then(function () { if (el._widgetActive) attachFrame(); })
+        .catch(function () {
+          if (!el._widgetActive) return;
+          showOffline();
+          retry = setTimeout(probe, 2000);
+        });
+    }
+
+    el._widgetAttach = function () {
+      el._widgetActive = true;
+      if (el.querySelector("iframe")) return;
+      if (requires) { if (!retry) probe(); } else attachFrame();
+    };
+    el._widgetDetach = function () {
+      el._widgetActive = false;
+      if (retry) { clearTimeout(retry); retry = null; }
+      if (offline) { offline.remove(); offline = null; }
+      var f = el.querySelector("iframe");
+      if (f) f.remove();
+    };
+  }
+
+  // Clicking a widget to drag it moves focus INTO the iframe, and from there
+  // the arrow keys never reach Reveal — the deck looks frozen and the presenter's
+  // clicker looks broken. Forward the navigation keys back out. Same-origin only,
+  // which is what the widget contract requires anyway.
+  var NAV = {
+    ArrowRight: "next", PageDown: "next", " ": "next",
+    ArrowLeft: "prev", PageUp: "prev",
+    ArrowDown: "down", ArrowUp: "up",
+    Home: "first", End: "last"
+  };
+
+  function wireKeys(f) {
+    var doc;
+    try { doc = f.contentDocument; } catch (e) { return; } // cross-origin
+    if (!doc) return;
+    doc.addEventListener("keydown", function (ev) {
+      var t = ev.target;
+      if (t && (/^(INPUT|BUTTON|SELECT|TEXTAREA)$/.test(t.tagName) || t.isContentEditable)) {
+        return; // a slider or button has focus: those keys are the widget's
+      }
+      var how = NAV[ev.key];
+      if (!how || !window.Reveal) return;
+      ev.preventDefault();
+      if (how === "next") Reveal.next();
+      else if (how === "prev") Reveal.prev();
+      else if (how === "down") Reveal.down();
+      else if (how === "up") Reveal.up();
+      else if (how === "first") Reveal.slide(0);
+      else if (how === "last") Reveal.slide(Reveal.getTotalSlides() - 1);
+    });
+  }
+
+  function sync(slide) {
+    document.querySelectorAll(".widget").forEach(function (el) {
+      if (!el._widgetDetach) return;
+      if (slide && slide.contains(el)) el._widgetAttach();
+      else el._widgetDetach();
+    });
+  }
+
+  function init() {
+    document.querySelectorAll(".widget").forEach(setup);
+    if (EXPORT) return;
+    window.addEventListener("load", function () {
+      if (!window.Reveal || typeof Reveal.on !== "function") {
+        // No Reveal (e.g. a plain page): just attach everything.
+        document.querySelectorAll(".widget").forEach(function (el) {
+          if (el._widgetAttach) el._widgetAttach();
+        });
+        return;
+      }
+      sync(Reveal.getCurrentSlide());
+      Reveal.on("slidechanged", function (ev) { sync(ev.currentSlide); });
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
+</script>

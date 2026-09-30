@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 790" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" fill="#172635">
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+<text x="20.0" y="32.0" font-size="22" text-anchor="start" fill="#087bb9" font-weight="bold">1. text → tokens</text>
+<rect x="40.0" y="60.0" width="108.0" height="44.0" rx="6" fill="#fff1cf" stroke="#d99700" stroke-width="2"/>
+<text x="94.0" y="90.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">The</text>
+<text x="94.0" y="132.0" font-size="18" text-anchor="middle" fill="#617484" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">464</text>
+<rect x="158.0" y="60.0" width="108.0" height="44.0" rx="6" fill="#fff1cf" stroke="#d99700" stroke-width="2"/>
+<text x="212.0" y="90.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">·American</text>
+<text x="212.0" y="132.0" font-size="18" text-anchor="middle" fill="#617484" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">1605</text>
+<rect x="276.0" y="60.0" width="108.0" height="44.0" rx="6" fill="#fff1cf" stroke="#d99700" stroke-width="2"/>
+<text x="330.0" y="90.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">·flag</text>
+<text x="330.0" y="132.0" font-size="18" text-anchor="middle" fill="#617484" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">6056</text>
+<rect x="394.0" y="60.0" width="108.0" height="44.0" rx="6" fill="#fff1cf" stroke="#d99700" stroke-width="2"/>
+<text x="448.0" y="90.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">·is</text>
+<text x="448.0" y="132.0" font-size="18" text-anchor="middle" fill="#617484" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">318</text>
+<rect x="512.0" y="60.0" width="108.0" height="44.0" rx="6" fill="#fff1cf" stroke="#d99700" stroke-width="2"/>
+<text x="566.0" y="90.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">·red</text>
+<text x="566.0" y="132.0" font-size="18" text-anchor="middle" fill="#617484" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">2266</text>
+<rect x="630.0" y="60.0" width="108.0" height="44.0" rx="6" fill="#fff1cf" stroke="#d99700" stroke-width="2"/>
+<text x="684.0" y="90.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">,</text>
+<text x="684.0" y="132.0" font-size="18" text-anchor="middle" fill="#617484" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">11</text>
+<rect x="748.0" y="60.0" width="108.0" height="44.0" rx="6" fill="#fff1cf" stroke="#d99700" stroke-width="2"/>
+<text x="802.0" y="90.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">·white</text>
+<text x="802.0" y="132.0" font-size="18" text-anchor="middle" fill="#617484" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">2330</text>
+<rect x="866.0" y="60.0" width="108.0" height="44.0" rx="6" fill="#fff1cf" stroke="#d99700" stroke-width="2"/>
+<text x="920.0" y="90.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">,</text>
+<text x="920.0" y="132.0" font-size="18" text-anchor="middle" fill="#617484" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">11</text>
+<rect x="984.0" y="60.0" width="108.0" height="44.0" rx="6" fill="#fff1cf" stroke="#d99700" stroke-width="2"/>
+<text x="1038.0" y="90.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">·and</text>
+<text x="1038.0" y="132.0" font-size="18" text-anchor="middle" fill="#617484" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">290</text>
+<text x="20.0" y="176.0" font-size="22" text-anchor="start" fill="#087bb9" font-weight="bold">2. token ids → embedding vectors (one row of W_E each, 768 numbers)</text>
+<rect x="80.0" y="192.0" width="24" height="24" fill="#087bb9" fill-opacity="0.20"/>
+<rect x="80.0" y="218.0" width="24" height="24" fill="#087bb9" fill-opacity="0.65"/>
+<rect x="80.0" y="244.0" width="24" height="24" fill="#087bb9" fill-opacity="0.35"/>
+<rect x="80.0" y="270.0" width="24" height="24" fill="#087bb9" fill-opacity="0.80"/>
+<rect x="80.0" y="296.0" width="24" height="24" fill="#087bb9" fill-opacity="0.50"/>
+<rect x="80.0" y="322.0" width="24" height="24" fill="#087bb9" fill-opacity="0.20"/>
+<rect x="198.0" y="192.0" width="24" height="24" fill="#087bb9" fill-opacity="0.50"/>
+<rect x="198.0" y="218.0" width="24" height="24" fill="#087bb9" fill-opacity="0.20"/>
+<rect x="198.0" y="244.0" width="24" height="24" fill="#087bb9" fill-opacity="0.65"/>
+<rect x="198.0" y="270.0" width="24" height="24" fill="#087bb9" fill-opacity="0.35"/>
+<rect x="198.0" y="296.0" width="24" height="24" fill="#087bb9" fill-opacity="0.80"/>
+<rect x="198.0" y="322.0" width="24" height="24" fill="#087bb9" fill-opacity="0.50"/>
+<rect x="316.0" y="192.0" width="24" height="24" fill="#087bb9" fill-opacity="0.80"/>
+<rect x="316.0" y="218.0" width="24" height="24" fill="#087bb9" fill-opacity="0.50"/>
+<rect x="316.0" y="244.0" width="24" height="24" fill="#087bb9" fill-opacity="0.20"/>
+<rect x="316.0" y="270.0" width="24" height="24" fill="#087bb9" fill-opacity="0.65"/>
+<rect x="316.0" y="296.0" width="24" height="24" fill="#087bb9" fill-opacity="0.35"/>
+<rect x="316.0" y="322.0" width="24" height="24" fill="#087bb9" fill-opacity="0.80"/>
+<rect x="434.0" y="192.0" width="24" height="24" fill="#087bb9" fill-opacity="0.35"/>
+<rect x="434.0" y="218.0" width="24" height="24" fill="#087bb9" fill-opacity="0.80"/>
+<rect x="434.0" y="244.0" width="24" height="24" fill="#087bb9" fill-opacity="0.50"/>
+<rect x="434.0" y="270.0" width="24" height="24" fill="#087bb9" fill-opacity="0.20"/>
+<rect x="434.0" y="296.0" width="24" height="24" fill="#087bb9" fill-opacity="0.65"/>
+<rect x="434.0" y="322.0" width="24" height="24" fill="#087bb9" fill-opacity="0.35"/>
+<rect x="552.0" y="192.0" width="24" height="24" fill="#087bb9" fill-opacity="0.65"/>
+<rect x="552.0" y="218.0" width="24" height="24" fill="#087bb9" fill-opacity="0.35"/>
+<rect x="552.0" y="244.0" width="24" height="24" fill="#087bb9" fill-opacity="0.80"/>
+<rect x="552.0" y="270.0" width="24" height="24" fill="#087bb9" fill-opacity="0.50"/>
+<rect x="552.0" y="296.0" width="24" height="24" fill="#087bb9" fill-opacity="0.20"/>
+<rect x="552.0" y="322.0" width="24" height="24" fill="#087bb9" fill-opacity="0.65"/>
+<rect x="670.0" y="192.0" width="24" height="24" fill="#087bb9" fill-opacity="0.20"/>
+<rect x="670.0" y="218.0" width="24" height="24" fill="#087bb9" fill-opacity="0.65"/>
+<rect x="670.0" y="244.0" width="24" height="24" fill="#087bb9" fill-opacity="0.35"/>
+<rect x="670.0" y="270.0" width="24" height="24" fill="#087bb9" fill-opacity="0.80"/>
+<rect x="670.0" y="296.0" width="24" height="24" fill="#087bb9" fill-opacity="0.50"/>
+<rect x="670.0" y="322.0" width="24" height="24" fill="#087bb9" fill-opacity="0.20"/>
+<rect x="788.0" y="192.0" width="24" height="24" fill="#087bb9" fill-opacity="0.50"/>
+<rect x="788.0" y="218.0" width="24" height="24" fill="#087bb9" fill-opacity="0.20"/>
+<rect x="788.0" y="244.0" width="24" height="24" fill="#087bb9" fill-opacity="0.65"/>
+<rect x="788.0" y="270.0" width="24" height="24" fill="#087bb9" fill-opacity="0.35"/>
+<rect x="788.0" y="296.0" width="24" height="24" fill="#087bb9" fill-opacity="0.80"/>
+<rect x="788.0" y="322.0" width="24" height="24" fill="#087bb9" fill-opacity="0.50"/>
+<rect x="906.0" y="192.0" width="24" height="24" fill="#087bb9" fill-opacity="0.80"/>
+<rect x="906.0" y="218.0" width="24" height="24" fill="#087bb9" fill-opacity="0.50"/>
+<rect x="906.0" y="244.0" width="24" height="24" fill="#087bb9" fill-opacity="0.20"/>
+<rect x="906.0" y="270.0" width="24" height="24" fill="#087bb9" fill-opacity="0.65"/>
+<rect x="906.0" y="296.0" width="24" height="24" fill="#087bb9" fill-opacity="0.35"/>
+<rect x="906.0" y="322.0" width="24" height="24" fill="#087bb9" fill-opacity="0.80"/>
+<rect x="1024.0" y="192.0" width="24" height="24" fill="#087bb9" fill-opacity="0.35"/>
+<rect x="1024.0" y="218.0" width="24" height="24" fill="#087bb9" fill-opacity="0.80"/>
+<rect x="1024.0" y="244.0" width="24" height="24" fill="#087bb9" fill-opacity="0.50"/>
+<rect x="1024.0" y="270.0" width="24" height="24" fill="#087bb9" fill-opacity="0.20"/>
+<rect x="1024.0" y="296.0" width="24" height="24" fill="#087bb9" fill-opacity="0.65"/>
+<rect x="1024.0" y="322.0" width="24" height="24" fill="#087bb9" fill-opacity="0.35"/>
+<rect x="30.0" y="370.0" width="1057.0" height="140.0" rx="12" fill="#f3f6f8" stroke="#c3d0da" stroke-width="2"/>
+<text x="561.0" y="402.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="bold">3. twelve transformer blocks, each: attention (tokens exchange information) + MLP (each token alone)</text>
+<text x="561.0" y="434.0" font-size="20" text-anchor="middle" fill="#617484" font-weight="normal">the matrix stays 9 × 768 all the way; each block adds its output to it: the residual stream</text>
+<line x1="94.0" y1="350.0" x2="94.0" y2="370.0" stroke="#617484" stroke-width="2" marker-end="url(#arr)"/>
+<line x1="212.0" y1="350.0" x2="212.0" y2="370.0" stroke="#617484" stroke-width="2" marker-end="url(#arr)"/>
+<line x1="330.0" y1="350.0" x2="330.0" y2="370.0" stroke="#617484" stroke-width="2" marker-end="url(#arr)"/>
+<line x1="448.0" y1="350.0" x2="448.0" y2="370.0" stroke="#617484" stroke-width="2" marker-end="url(#arr)"/>
+<line x1="566.0" y1="350.0" x2="566.0" y2="370.0" stroke="#617484" stroke-width="2" marker-end="url(#arr)"/>
+<line x1="684.0" y1="350.0" x2="684.0" y2="370.0" stroke="#617484" stroke-width="2" marker-end="url(#arr)"/>
+<line x1="802.0" y1="350.0" x2="802.0" y2="370.0" stroke="#617484" stroke-width="2" marker-end="url(#arr)"/>
+<line x1="920.0" y1="350.0" x2="920.0" y2="370.0" stroke="#617484" stroke-width="2" marker-end="url(#arr)"/>
+<line x1="1038.0" y1="350.0" x2="1038.0" y2="370.0" stroke="#617484" stroke-width="2" marker-end="url(#arr)"/>
+<circle cx="94.0" cy="480" r="7" fill="#087bb9" fill-opacity="0.35"/>
+<path d="M102.0,480 C134.0,465 172.0,465 204.0,480" fill="none" stroke="#087bb9" stroke-width="1.5"/>
+<circle cx="212.0" cy="480" r="7" fill="#087bb9" fill-opacity="0.35"/>
+<path d="M220.0,480 C252.0,465 290.0,465 322.0,480" fill="none" stroke="#087bb9" stroke-width="1.5"/>
+<circle cx="330.0" cy="480" r="7" fill="#087bb9" fill-opacity="0.35"/>
+<path d="M338.0,480 C370.0,465 408.0,465 440.0,480" fill="none" stroke="#087bb9" stroke-width="1.5"/>
+<circle cx="448.0" cy="480" r="7" fill="#087bb9" fill-opacity="0.35"/>
+<path d="M456.0,480 C488.0,465 526.0,465 558.0,480" fill="none" stroke="#087bb9" stroke-width="1.5"/>
+<circle cx="566.0" cy="480" r="7" fill="#087bb9" fill-opacity="0.35"/>
+<path d="M574.0,480 C606.0,465 644.0,465 676.0,480" fill="none" stroke="#087bb9" stroke-width="1.5"/>
+<circle cx="684.0" cy="480" r="7" fill="#087bb9" fill-opacity="0.35"/>
+<path d="M692.0,480 C724.0,465 762.0,465 794.0,480" fill="none" stroke="#087bb9" stroke-width="1.5"/>
+<circle cx="802.0" cy="480" r="7" fill="#087bb9" fill-opacity="0.35"/>
+<path d="M810.0,480 C842.0,465 880.0,465 912.0,480" fill="none" stroke="#087bb9" stroke-width="1.5"/>
+<circle cx="920.0" cy="480" r="7" fill="#087bb9" fill-opacity="0.35"/>
+<path d="M928.0,480 C960.0,465 998.0,465 1030.0,480" fill="none" stroke="#087bb9" stroke-width="1.5"/>
+<circle cx="1038.0" cy="480" r="9" fill="#d99700"/>
+<text x="20.0" y="566.0" font-size="22" text-anchor="start" fill="#087bb9" font-weight="bold">4. last row × unembedding matrix → 50 257 logits → softmax → probabilities</text>
+<text x="1008.0" y="612.0" font-size="20" text-anchor="end" fill="#172635" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">·blue</text>
+<rect x="1018.0" y="595.0" width="186.0" height="22" fill="#087bb9"/>
+<text x="1214.0" y="613.0" font-size="18" text-anchor="start" fill="#617484" font-weight="normal">0.93</text>
+<text x="1008.0" y="646.0" font-size="20" text-anchor="end" fill="#172635" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">·green</text>
+<rect x="1018.0" y="629.0" width="3.0" height="22" fill="#087bb9"/>
+<text x="1031.0" y="647.0" font-size="18" text-anchor="start" fill="#617484" font-weight="normal">0.01</text>
+<text x="1008.0" y="680.0" font-size="20" text-anchor="end" fill="#172635" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">·black</text>
+<rect x="1018.0" y="663.0" width="3.0" height="22" fill="#087bb9"/>
+<text x="1031.0" y="681.0" font-size="18" text-anchor="start" fill="#617484" font-weight="normal">0.01</text>
+<text x="1008.0" y="714.0" font-size="20" text-anchor="end" fill="#172635" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">·yellow</text>
+<rect x="1018.0" y="697.0" width="3.0" height="22" fill="#087bb9"/>
+<text x="1031.0" y="715.0" font-size="18" text-anchor="start" fill="#617484" font-weight="normal">0.01</text>
+<line x1="1038.0" y1="510.0" x2="1038.0" y2="585.0" stroke="#172635" stroke-width="2.5" marker-end="url(#arr)"/>
+<text x="20.0" y="770.0" font-size="22" text-anchor="start" fill="#087bb9" font-weight="bold">5. sample a token, append it to the input, and run again: autoregressive generation</text>
+<rect x="1248.0" y="592.0" width="110.0" height="44.0" rx="6" fill="#fff1cf" stroke="#d99700" stroke-width="2.5"/>
+<text x="1303.0" y="622.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="bold" font-family="Menlo, 'SF Mono', monospace">·blue</text>
+<path d="M1303.0,592 C1303.0,0 1162.0,20 1107.0,70" fill="none" stroke="#d99700" stroke-width="3" stroke-dasharray="9 6" marker-end="url(#arr)"/>
+</svg>

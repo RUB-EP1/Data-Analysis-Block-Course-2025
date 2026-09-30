@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Where the seconds and the cents go</title>
+<link rel="stylesheet" href="lab.css">
+<style>.controls{gap:14px}input[type=range]{width:130px}label{gap:7px}</style>
+</head>
+<body>
+<header><h1>Where the seconds and the cents go</h1><span class="legend">one request = read the prompt (prefill) + write tokens one by one (decode)</span></header>
+<p class="subtitle">Rates are illustrative; real ones depend on the model, the hardware and the load. Prices: Claude API list prices per million tokens, mid-2026.</p>
+<div class="controls">
+  <label for="scenario">Scenario <select id="scenario"><option value="chat">quick chat</option><option value="reason">hard question, thinking</option><option value="agent">agent step, big context</option><option value="doc">summarize a long paper</option></select></label>
+  <label for="model">Price <select id="model"><option value="opus">Opus 5 ($5 / $25)</option><option value="sonnet">Sonnet 5 ($2 / $10)</option><option value="haiku">Haiku 4.5 ($1 / $5)</option></select></label>
+  <label for="input">input <input id="input" type="range" min="2" max="6" step="0.01"><output id="input-value"></output></label>
+  <label for="cached">cached <input id="cached" type="range" min="0" max="1" step="0.05"><output id="cached-value"></output></label>
+  <label for="think">thinking <input id="think" type="range" min="0" max="20000" step="100"><output id="think-value"></output></label>
+  <label for="answer">answer <input id="answer" type="range" min="10" max="4000" step="10"><output id="answer-value"></output></label>
+</div>
+<div class="controls">
+  <label for="pre">prefill speed <input id="pre" type="range" min="500" max="20000" step="100" value="5000"><output id="pre-value"></output></label>
+  <label for="dec">decode speed <input id="dec" type="range" min="10" max="300" step="5" value="60"><output id="dec-value"></output></label>
+</div>
+<canvas id="plot" width="1600" height="400" role="img" aria-label="Timeline of one request and its cost breakdown"></canvas>
+<div id="stats" class="stats" aria-live="polite"></div>
+<p class="prompt">A person reads about 5 words ≈ 7 tokens per second: streaming at 60 tokens/s already outruns the reader. Thinking tokens are billed as output but you wait for them before the first visible word.</p>
+<script src="plot.js"></script>
+<script>
+'use strict';
+const C = $('plot'), ctx = C.getContext('2d');
+const PRICE = { opus: [5, 25], sonnet: [2, 10], haiku: [1, 5] };
+const SCEN = {
+  chat: { input: 800, cached: 0, think: 0, answer: 250 },
+  reason: { input: 1500, cached: 0, think: 8000, answer: 600 },
+  agent: { input: 120000, cached: 0.9, think: 600, answer: 300 },
+  doc: { input: 60000, cached: 0, think: 0, answer: 1200 }
+};
+function setScenario() {
+  const s = SCEN[$('scenario').value];
+  $('input').value = Math.log10(s.input); $('cached').value = s.cached; $('think').value = s.think; $('answer').value = s.answer;
+  draw();
+}
+const fmt = s => s < 1 ? (s * 1000).toFixed(0) + ' ms' : s < 90 ? s.toFixed(1) + ' s' : (s / 60).toFixed(1) + ' min';
+function draw() {
+  syncOutputs({ input: v => Math.round(10 ** v).toLocaleString() + ' tok', cached: v => (100 * v).toFixed(0) + '%',
+                think: v => v.toLocaleString() + ' tok', answer: v => v + ' tok', pre: v => v.toLocaleString() + ' tok/s', dec: v => v + ' tok/s' });
+  const N = Math.round(10 ** +$('input').value), f = +$('cached').value, Th = +$('think').value, A = +$('answer').value;
+  const pre = +$('pre').value, dec = +$('dec').value, [pin, pout] = PRICE[$('model').value];
+  const net = 0.3, tPre = N * (1 - f) / pre + N * f / (pre * 20), tThink = Th / dec, tAns = A / dec;
+  const segs = [['network', net, '#b7c3cd'], ['prefill (read prompt)', tPre, PAL.accent], ['thinking (hidden)', tThink, PAL.violet], ['answer (streamed)', tAns, PAL.green]];
+  const total = segs.reduce((s, x) => s + x[1], 0), ttft = net + tPre + tThink;
+  const cost = { 'input': N * (1 - f) * pin / 1e6, 'cached input': N * f * pin * 0.1 / 1e6, 'thinking': Th * pout / 1e6, 'answer': A * pout / 1e6 };
+  const ctot = Object.values(cost).reduce((a, b) => a + b, 0);
+  ctx.clearRect(0, 0, C.width, C.height);
+  // Timeline
+  text(ctx, 'Time for one request', 40, 30, 24, PAL.ink, 'left', '600');
+  const x0 = 40, W = 1500, y0 = 80, H = 70;
+  let x = x0;
+  segs.forEach(([name, t, c]) => {
+    const w = W * t / total; ctx.fillStyle = c; ctx.fillRect(x, y0, Math.max(w, 1), H);
+    if (w > 110) { text(ctx, name, x + 8, y0 + 30, 17, '#fff', 'left', '600'); text(ctx, fmt(t), x + 8, y0 + 54, 17, '#fff'); }
+    x += w;
+  });
+  const xt = x0 + W * ttft / total;
+  ctx.strokeStyle = PAL.red; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(xt, y0 - 22); ctx.lineTo(xt, y0 + H + 6); ctx.stroke();
+  const lab = `first visible word after ${fmt(ttft)}`;
+  text(ctx, lab, xt > x0 + W - 330 ? xt - 8 : xt + 8, y0 - 8, 18, PAL.red, xt > x0 + W - 330 ? 'right' : 'left', '600');
+  text(ctx, `done after ${fmt(total)}`, x0 + W, y0 + H + 34, 18, PAL.ink, 'right', '600');
+  // Human reading reference
+  text(ctx, `A person reading ${A} tokens at ~7 tokens/s needs ${fmt(A / 7)}.`, x0, y0 + H + 70, 17, PAL.muted);
+
+  // Cost bars
+  text(ctx, 'Cost of this request', 40, 262, 24, PAL.ink, 'left', '600');
+  const cmax = Math.max(ctot, 1e-6);
+  let cx = x0; const cy = 280, ch = 60;
+  const ccol = { 'input': PAL.accent, 'cached input': '#8ec3e6', 'thinking': PAL.violet, 'answer': PAL.green };
+  Object.entries(cost).forEach(([k, v]) => {
+    const w = W * v / cmax; ctx.fillStyle = ccol[k]; ctx.fillRect(cx, cy, Math.max(w, v > 0 ? 1 : 0), ch);
+    if (w > 130) { text(ctx, k, cx + 8, cy + 26, 17, '#fff', 'left', '600'); text(ctx, '$' + v.toFixed(4), cx + 8, cy + 48, 17, '#fff'); }
+    cx += w;
+  });
+  text(ctx, `$${ctot.toFixed(4)} per request  ·  $${(ctot * 1000).toFixed(2)} per 1000 requests`, x0, cy + ch + 32, 20, PAL.ink, 'left', '600');
+  stats([
+    ['Time to first token', fmt(ttft)], ['Total time', fmt(total)],
+    ['Tokens billed', `${N.toLocaleString()} in · ${(Th + A).toLocaleString()} out`],
+    ['Cost', '$' + ctot.toFixed(4)]
+  ]);
+}
+$('scenario').oninput = setScenario;
+document.querySelectorAll('input,#model').forEach(e => e.addEventListener('input', draw));
+setScenario();
+</script>
+</body>
+</html>

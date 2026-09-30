@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sliding a kernel over an image</title>
+<link rel="stylesheet" href="lab.css">
+<style>
+.controls{gap:18px}input[type=range]{width:120px}label{gap:8px}
+.kgrid{display:grid;grid-template-columns:repeat(3,58px);gap:3px}
+.kgrid input{width:58px;font:inherit;font-size:17px;padding:3px 4px;text-align:right;border:1px solid #adbfcc;border-radius:4px}
+</style>
+</head>
+<body>
+<header><h1>Sliding a kernel over an image</h1><span class="legend">draw on the input · shift-drag erases · click the output to jump</span></header>
+<p class="subtitle">At every position the output is the dot product of the kernel with the image patch under it: a similarity score.</p>
+<div class="controls">
+  <label for="image">Image <select id="image"></select></label>
+  <label for="kernel">Kernel <select id="kernel"></select></label>
+  <div class="kgrid" id="kgrid" aria-label="Kernel weights"></div>
+  <label for="stride">Stride <select id="stride"><option>1</option><option>2</option></select></label>
+  <label for="pad">Padding <select id="pad"><option value="0">0 (valid)</option><option value="1">1 (same)</option></select></label>
+  <label><input type="checkbox" id="relu"> ReLU</label>
+  <button id="slide">Slide</button><button id="all">Full map</button>
+</div>
+<canvas id="plot" width="1600" height="540" role="img" aria-label="Input image with the kernel window, the element-wise products, and the activation map"></canvas>
+<div id="stats" class="stats" aria-live="polite"></div>
+<p class="prompt" id="prompt">Vertical-edge kernel on the digit 7: the map is positive on one side of each vertical stroke, negative on the other, and zero on flat regions.</p>
+<script src="plot.js"></script>
+<script src="images.js"></script>
+<script>
+'use strict';
+const C = $('plot'), ctx = C.getContext('2d');
+const KERNELS = {
+  'vertical edge': [[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]],
+  'horizontal edge': [[-1, -2, -1], [0, 0, 0], [1, 2, 1]],
+  'diagonal edge': [[0, 1, 2], [-1, 0, 1], [-2, -1, 0]],
+  'blur': [[1, 1, 1], [1, 1, 1], [1, 1, 1]].map(r => r.map(v => +(v / 9).toFixed(3))),
+  'sharpen': [[0, -1, 0], [-1, 5, -1], [0, -1, 0]],
+  'identity': [[0, 0, 0], [0, 1, 0], [0, 0, 0]],
+  'custom': null
+};
+let img = IMAGES['digit 7'](), K = KERNELS['vertical edge'].map(r => r.slice());
+let pos = 0, shown = Infinity, timer = null;
+const G = { x: 40, y: 58, cell: 15.5 };                     // input grid on the canvas
+
+Object.keys(IMAGES).forEach(n => $('image').add(new Option(n, n)));
+Object.keys(KERNELS).forEach(n => $('kernel').add(new Option(n, n)));
+for (let i = 0; i < 9; i++) {
+  const e = document.createElement('input'); e.type = 'number'; e.step = '0.5'; e.id = 'k' + i;
+  e.addEventListener('input', () => { K[Math.floor(i / 3)][i % 3] = +e.value || 0; $('kernel').value = 'custom'; draw(); });
+  $('kgrid').appendChild(e);
+}
+function syncKernelInputs() { for (let i = 0; i < 9; i++) $('k' + i).value = K[Math.floor(i / 3)][i % 3]; }
+
+function geometry() {
+  const S = +$('stride').value, P = +$('pad').value, out = Math.floor((N28 + 2 * P - 3) / S) + 1;
+  return { S, P, out };
+}
+const px = (x, y) => (x < 0 || y < 0 || x >= N28 || y >= N28) ? 0 : img[y * N28 + x];
+function value(i, j, g) {                                  // output cell (row i, column j)
+  let s = 0;
+  for (let a = 0; a < 3; a++) for (let b = 0; b < 3; b++) s += K[a][b] * px(j * g.S - g.P + b, i * g.S - g.P + a);
+  return $('relu').checked ? Math.max(0, s) : s;
+}
+
+function draw() {
+  const g = geometry(), n = g.out * g.out;
+  pos = Math.min(pos, n - 1);
+  ctx.clearRect(0, 0, C.width, C.height);
+  const ink = v => mix('#ffffff', '#172635', Math.min(1, Math.max(0, v)));
+
+  // Input
+  text(ctx, 'Input  28 × 28', G.x, G.y - 18, 24, PAL.ink, 'left', '600');
+  if (g.P) { ctx.strokeStyle = '#dbe3ea'; ctx.setLineDash([4, 4]); ctx.strokeRect(G.x - G.cell, G.y - G.cell, G.cell * 30, G.cell * 30); ctx.setLineDash([]); }
+  for (let y = 0; y < N28; y++) for (let x = 0; x < N28; x++) {
+    ctx.fillStyle = ink(img[y * N28 + x]); ctx.fillRect(G.x + x * G.cell, G.y + y * G.cell, G.cell - .6, G.cell - .6);
+  }
+  ctx.strokeStyle = PAL.grid; ctx.strokeRect(G.x, G.y, G.cell * N28, G.cell * N28);
+  const i = Math.floor(pos / g.out), j = pos % g.out, x0 = j * g.S - g.P, y0 = i * g.S - g.P;
+  ctx.strokeStyle = PAL.gold; ctx.lineWidth = 4;
+  ctx.strokeRect(G.x + x0 * G.cell - 1, G.y + y0 * G.cell - 1, 3 * G.cell + 2, 3 * G.cell + 2);
+
+  // Products at the current position
+  const mx = 560, my = 110, cs = 62;
+  text(ctx, 'patch', mx + 1.5 * cs, my - 20, 21, PAL.muted, 'center');
+  text(ctx, 'kernel', mx + 4.2 * cs + 1.5 * cs, my - 20, 21, PAL.muted, 'center');
+  text(ctx, '×', mx + 3.6 * cs, my + 1.7 * cs, 40, PAL.ink, 'center');
+  const kmax = Math.max(...K.flat().map(Math.abs), 1e-9);
+  let sum = 0;
+  for (let a = 0; a < 3; a++) for (let b = 0; b < 3; b++) {
+    const v = px(x0 + b, y0 + a), w = K[a][b]; sum += v * w;
+    ctx.fillStyle = ink(v); ctx.fillRect(mx + b * cs, my + a * cs, cs - 3, cs - 3);
+    text(ctx, v.toFixed(1), mx + b * cs + cs / 2 - 1.5, my + a * cs + cs / 2 + 7, 19, v > .55 ? '#fff' : PAL.ink, 'center');
+    ctx.fillStyle = signedColour(w, kmax); ctx.fillRect(mx + 4.2 * cs + b * cs, my + a * cs, cs - 3, cs - 3);
+    text(ctx, String(+w.toFixed(2)), mx + 4.2 * cs + b * cs + cs / 2 - 1.5, my + a * cs + cs / 2 + 7, 19, PAL.ink, 'center');
+  }
+  const shownSum = $('relu').checked ? Math.max(0, sum) : sum;
+  text(ctx, `= Σ patch × kernel = ${sum.toFixed(2)}`, mx, my + 3 * cs + 52, 26, PAL.ink, 'left', '600');
+  if ($('relu').checked) text(ctx, `ReLU → ${shownSum.toFixed(2)}`, mx, my + 3 * cs + 90, 24, PAL.accent, 'left', '600');
+  text(ctx, 'Nine multiplications and one sum.', mx, my + 3 * cs + 140, 20, PAL.muted);
+  text(ctx, 'The same nine weights are used at every position.', mx, my + 3 * cs + 168, 20, PAL.muted);
+
+  // Output map
+  const O = { x: 1110, y: 58, size: 434 }, oc = O.size / g.out;
+  text(ctx, `Activation map  ${g.out} × ${g.out}`, O.x, O.y - 18, 24, PAL.ink, 'left', '600');
+  let vmax = 1e-9; const vals = [];
+  for (let k = 0; k < n; k++) { const v = value(Math.floor(k / g.out), k % g.out, g); vals.push(v); vmax = Math.max(vmax, Math.abs(v)); }
+  for (let k = 0; k < n; k++) {
+    ctx.fillStyle = k <= Math.min(pos, shown) || shown === Infinity ? signedColour(vals[k], vmax) : '#f4f6f8';
+    ctx.fillRect(O.x + (k % g.out) * oc, O.y + Math.floor(k / g.out) * oc, oc - .5, oc - .5);
+  }
+  ctx.strokeStyle = PAL.grid; ctx.lineWidth = 1; ctx.strokeRect(O.x, O.y, O.size, O.size);
+  ctx.strokeStyle = PAL.gold; ctx.lineWidth = 4; ctx.strokeRect(O.x + j * oc - 1, O.y + i * oc - 1, oc + 2, oc + 2);
+  arrow(ctx, mx + 7.6 * cs, my + 3 * cs + 44, O.x - 16, O.y + i * oc + oc / 2, PAL.gold, 2.5, 12);
+  text(ctx, 'blue = negative, gold = positive', O.x, O.y + O.size + 30, 18, PAL.muted);
+
+  stats([
+    ['Output size', `⌊(28 + 2·${g.P} − 3)/${g.S}⌋ + 1 = ${g.out}`],
+    ['Position (row, col)', `(${i}, ${j})`],
+    ['Value here', shownSum.toFixed(2)],
+    ['Map min / max', `${Math.min(...vals).toFixed(1)} / ${Math.max(...vals).toFixed(1)}`],
+    ['Weights', '9 (+ 1 bias)']
+  ]);
+}
+
+function stop() { clearInterval(timer); timer = null; $('slide').textContent = 'Slide'; }
+$('slide').onclick = () => {
+  if (timer) return stop();
+  const g = geometry(); pos = 0; shown = 0; $('slide').textContent = 'Pause';
+  timer = setInterval(() => { pos++; shown = pos; if (pos >= g.out * g.out - 1) { stop(); shown = Infinity; } draw(); }, 18);
+};
+$('all').onclick = () => { stop(); shown = Infinity; draw(); };
+$('image').addEventListener('input', () => { img = IMAGES[$('image').value](); draw(); });
+$('kernel').addEventListener('input', () => {
+  const k = KERNELS[$('kernel').value]; if (k) K = k.map(r => r.slice()); syncKernelInputs(); draw();
+});
+['stride', 'pad', 'relu'].forEach(id => $(id).addEventListener('input', () => { stop(); shown = Infinity; draw(); }));
+C.addEventListener('click', ev => {
+  const g = geometry(), [x, y] = canvasPoint(C, ev), oc = 434 / g.out;
+  if (x >= 1110 && x <= 1544 && y >= 58 && y <= 492) { stop(); shown = Infinity; pos = Math.floor((y - 58) / oc) * g.out + Math.floor((x - 1110) / oc); draw(); }
+});
+paintable(C, G, () => img, draw);
+syncKernelInputs();
+pos = 7 * 26 + 17;
+if (new URLSearchParams(location.search).has('demo')) { $('kernel').value = 'vertical edge'; }
+draw();
+</script>
+</body>
+</html>

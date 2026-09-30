@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Token embeddings of GPT-2</title>
+<link rel="stylesheet" href="lab.css">
+<style>
+.controls{gap:14px}
+select{max-width:170px}
+.side{font-size:19px;line-height:1.5}
+</style>
+</head>
+<body>
+<header><h1>Token embeddings of GPT-2</h1><span class="legend">each word is a vector of 768 learned numbers · click a word</span></header>
+<p class="subtitle">The map is a 2D t-SNE projection of the vectors. Vector arithmetic below is done in all 768 dimensions.</p>
+<div class="controls">
+  <label for="preset">Analogy <select id="preset"></select></label>
+  <label for="a"><select id="b"></select></label><b>−</b><label><select id="a"></select></label><b>+</b><label><select id="c"></select></label>
+  <button id="go">Compute</button>
+</div>
+<canvas id="plot" width="1600" height="560" role="img" aria-label="Two-dimensional map of GPT-2 word embeddings with nearest neighbours and an analogy"></canvas>
+<div id="stats" class="stats" aria-live="polite"></div>
+<script src="plot.js"></script>
+<script src="data_embed.js"></script>
+<script>
+'use strict';
+const C = $('plot'), ctx = C.getContext('2d'), D = window.DATA_EMBED;
+const N = D.words.length, dim = D.dim;
+const raw = Int8Array.from(atob(D.vec), ch => { const b = ch.charCodeAt(0); return b > 127 ? b - 256 : b; });
+const V = D.words.map((_, i) => { const v = new Float32Array(dim); for (let k = 0; k < dim; k++) v[k] = raw[i * dim + k] * D.scale[i]; return v; });
+const norm = v => Math.sqrt(v.reduce((s, x) => s + x * x, 0));
+const cos = (u, v) => { let s = 0; for (let k = 0; k < dim; k++) s += u[k] * v[k]; return s / norm(u) / norm(v); };
+const idx = w => D.words.indexOf(w);
+const COL = ['#087bb9', '#d99700', '#c74842', '#3c8d52', '#7a4fb3', '#253b53', '#e07b39', '#2a9d8f', '#9c6b00', '#b5487a', '#617484'];
+const colour = i => COL[D.catNames.indexOf(D.cats[i]) % COL.length];
+let sel = idx('king'), analogy = null;
+
+const PRESETS = [['king', 'man', 'woman'], ['Paris', 'France', 'Germany'], ['Berlin', 'Germany', 'Japan'], ['walked', 'walk', 'eat'], ['ran', 'run', 'see'],
+                 ['queen', 'woman', 'man'], ['Tokyo', 'Japan', 'Italy'], ['sister', 'girl', 'boy']].filter(p => p.every(w => idx(w) >= 0));
+PRESETS.forEach((p, i) => $('preset').add(new Option(`${p[0]} − ${p[1]} + ${p[2]}`, i)));
+const sorted = D.words.slice().sort((a, b) => a.localeCompare(b));
+['a', 'b', 'c'].forEach(id => sorted.forEach(w => $(id).add(new Option(w, w))));
+
+function setPreset(i) { const [b, a, c] = PRESETS[i]; $('b').value = b; $('a').value = a; $('c').value = c; compute(); }
+function compute() {
+  const a = idx($('a').value), b = idx($('b').value), c = idx($('c').value);
+  const t = new Float32Array(dim); for (let k = 0; k < dim; k++) t[k] = V[b][k] - V[a][k] + V[c][k];
+  const ranked = D.words.map((w, i) => [i, cos(t, V[i])]).filter(([i]) => ![a, b, c].includes(i)).sort((x, y) => y[1] - x[1]);
+  analogy = { a, b, c, top: ranked.slice(0, 5) };
+  sel = ranked[0][0];
+  draw();
+}
+
+const M = { x: 40, y: 20, w: 1020, h: 520 };
+const P = i => [M.x + 30 + D.xy[i][0] * (M.w - 60), M.y + 20 + (1 - D.xy[i][1]) * (M.h - 40)];
+function draw() {
+  ctx.clearRect(0, 0, C.width, C.height);
+  ctx.strokeStyle = PAL.grid; ctx.strokeRect(M.x, M.y, M.w, M.h);
+  for (let i = 0; i < N; i++) {
+    const [x, y] = P(i);
+    ctx.beginPath(); ctx.arc(x, y, i === sel ? 8 : 4.5, 0, 2 * Math.PI); ctx.fillStyle = colour(i); ctx.fill();
+  }
+  // Labels: the selected word's group in full colour, the others faint; the selected word on top.
+  for (let i = 0; i < N; i++) {
+    const [x, y] = P(i), mine = D.cats[i] === D.cats[sel];
+    ctx.globalAlpha = mine ? 1 : 0.45;
+    if (i !== sel) text(ctx, D.words[i], x + 6, y - 4, mine ? 16 : 13, colour(i));
+  }
+  ctx.globalAlpha = 1;
+  { const [x, y] = P(sel); ctx.fillStyle = 'rgba(255,255,255,.85)'; ctx.fillRect(x + 5, y - 24, ctx.measureText(D.words[sel]).width * 1.6 + 10, 26);
+    text(ctx, D.words[sel], x + 8, y - 5, 21, PAL.ink, 'left', '600'); }
+  if (analogy) {
+    const { a, b, c, top } = analogy, r = top[0][0];
+    arrow(ctx, ...P(a), ...P(b), PAL.ink, 2.5, 12);
+    arrow(ctx, ...P(c), ...P(r), PAL.red, 2.5, 12);
+  }
+  // Legend
+  let lx = 1100, ly = 40;
+  text(ctx, 'Groups', lx, ly, 20, PAL.ink, 'left', '600');
+  D.catNames.forEach((c, k) => {
+    ctx.fillStyle = COL[k % COL.length]; ctx.beginPath(); ctx.arc(lx + 8, ly + 24 + k * 24, 6, 0, 2 * Math.PI); ctx.fill();
+    text(ctx, c, lx + 22, ly + 30 + k * 24, 17, PAL.ink);
+  });
+  // Neighbours of the selected word, over the whole 50 257-token vocabulary
+  ly = 360;
+  text(ctx, `Nearest to “${D.words[sel]}”`, lx, ly, 20, PAL.ink, 'left', '600');
+  text(ctx, '(cosine similarity, all 50 257 tokens)', lx, ly + 22, 15, PAL.muted);
+  D.nn[sel].forEach((w, k) => text(ctx, `${k + 1}. ${w}`, lx + (k % 2) * 200, ly + 52 + Math.floor(k / 2) * 26, 18, PAL.ink));
+  if (analogy) {
+    const { a, b, c, top } = analogy;
+    stats([['Vector arithmetic', `${D.words[b]} − ${D.words[a]} + ${D.words[c]}`],
+           ['Closest words (cosine)', top.slice(0, 4).map(([i, s]) => `${D.words[i]} ${s.toFixed(2)}`).join('   ')]]);
+  }
+}
+C.addEventListener('click', ev => {
+  const [x, y] = canvasPoint(C, ev);
+  let best = -1, bd = 400;
+  for (let i = 0; i < N; i++) { const [px, py] = P(i), d = (px - x) ** 2 + (py - y) ** 2; if (d < bd) { bd = d; best = i; } }
+  if (best >= 0) { sel = best; draw(); }
+});
+$('preset').oninput = () => setPreset(+$('preset').value);
+$('go').onclick = compute;
+setPreset(0);
+</script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+## Practical Considerations {#original-a-14 .original-slide}
+
+```{=html}
+<div class="source-page" aria-label="Original Lecture 1A, slide 14">
+<img class="source-art" src="figures/original/original-14.svg" alt="Practical Considerations" loading="eager" />
+
+</div>
+```
+
+::: {.notes}
+Original Lecture-1A, slide 14. Visual source: Keynote PDF export.
+
+Practical Considerations
+Memory & Complexity
+•fAD has a small memory footprint — carry derivative 
+alongside the computation
+•rAD must remember all intermediate results 
+(GPT-3: 175 billion parameters Float16 ~350 GB), 
+some mitigated with re-computation (Gradient-
+checkpointing) https://en.wikipedia.org/wiki/GPT-3
+https://arxiv.org/pdf/1904.10631
+
+:::

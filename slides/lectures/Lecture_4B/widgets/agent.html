@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>An agent at work: building the AlexNet notebook</title>
+<link rel="stylesheet" href="lab.css">
+<style>
+body{overflow:hidden}
+.main{flex:1 1 0;min-height:0;display:grid;grid-template-columns:1fr 1.55fr;gap:20px}
+.list{min-height:0;overflow:auto;border:1px solid #dbe3ea;border-radius:8px;padding:6px}
+.row{display:grid;grid-template-columns:30px 88px 1fr;gap:8px;align-items:center;padding:4px 6px;border-radius:6px;font-size:16px;cursor:pointer;color:#9aa1a8}
+.row.done{color:#172635}.row.cur{background:#fff1cf;color:#172635;font-weight:600}
+.badge{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;border-radius:4px;padding:2px 6px;color:#fff;text-align:center}
+.card{min-height:0;display:flex;flex-direction:column;gap:10px}
+.loop{display:flex;gap:10px;align-items:center;justify-content:center;flex-shrink:0}
+.node{border:3px solid #dbe3ea;border-radius:10px;padding:8px 14px;font-size:18px;font-weight:600;color:#9aa1a8}
+.node.on{border-color:#d99700;background:#fff1cf;color:#172635}
+.arrow{color:#9aa1a8;font-size:22px}
+.detail{flex:1 1 0;min-height:0;overflow:auto;border:1px solid #dbe3ea;border-radius:8px;padding:14px 16px}
+.detail h2{margin:0 0 8px;font-size:22px}
+.detail pre{font:16px/1.45 Menlo,"SF Mono",monospace;white-space:pre-wrap;background:#f5f8fa;border-radius:6px;padding:10px 12px;margin:0}
+.detail p{font-size:19px;line-height:1.4;margin:0 0 10px}
+.ctx{flex-shrink:0;height:22px;background:#eef1f4;border-radius:5px;position:relative;overflow:hidden}
+.ctx div{height:100%;background:#087bb9;transition:width .3s}
+</style>
+</head>
+<body>
+<header><h1>An agent at work: building the AlexNet notebook</h1><span class="legend">real steps from the session that made Lecture 3B, condensed</span></header>
+<p class="subtitle">The model never runs code itself. It asks the harness to run a tool, reads the result, and decides the next step. Checks turn guesses into facts.</p>
+<div class="controls">
+  <button id="prev">◀ Back</button><button id="next">Step ▶</button><button id="play">Play</button><button id="reset">Reset</button>
+</div>
+<div class="main">
+  <div id="list" class="list"></div>
+  <div class="card">
+    <div class="loop"><span id="n-model" class="node">model decides</span><span class="arrow">→</span><span id="n-tool" class="node">harness runs tool</span><span class="arrow">→</span><span id="n-result" class="node">result into context</span><span class="arrow">↺</span></div>
+    <div id="detail" class="detail" aria-live="polite"></div>
+    <div class="ctx" title="context window use (estimated)"><div id="ctxbar"></div></div>
+  </div>
+</div>
+<div id="stats" class="stats" aria-live="polite"></div>
+<script src="plot.js"></script>
+<script>
+'use strict';
+const KIND = {
+  user: ['user', '#253b53', 'model'], think: ['think', '#7a4fb3', 'model'], call: ['tool', '#087bb9', 'tool'],
+  result: ['result', '#617484', 'result'], edit: ['edit', '#d99700', 'tool'], check: ['check', '#3c8d52', 'tool'],
+  fail: ['failure', '#c74842', 'result'], done: ['done', '#253b53', 'model']
+};
+// tok = estimated tokens this step adds to the context
+const STEPS = [
+  { k: 'user', s: 'Request', tok: 30, p: 'User: “I would also like to have cool marimo example that brings alex net and show the learned layers look like.”' },
+  { k: 'think', s: 'Plan', tok: 120, p: 'A separate Python environment (torch, torchvision, marimo). First make sure the pretrained weights download and the predictions make sense, then write the notebook section by section.' },
+  { k: 'call', s: 'Create environment', tok: 60, code: 'python3.12 -m venv .venv\n.venv/bin/python -m pip install -r requirements.txt\n.venv/bin/python -c "import torch, torchvision, marimo, skimage"' },
+  { k: 'result', s: 'Installed', tok: 20, code: 'ok 2.14.0 0.29.0 0.25.0 0.26.0' },
+  { k: 'call', s: 'Probe AlexNet', tok: 400, code: 'm = torchvision.models.alexnet(weights=IMAGENET1K_V1)\nfor image in ["astronaut", "chelsea", "coffee", "rocket", "camera"]:\n    print(image, top3(m(image)))' },
+  { k: 'result', s: 'Predictions', tok: 180, code: "chelsea [('Egyptian cat', 0.786), ('tiger cat', 0.137), ('tabby', 0.071)]\ncoffee  [('espresso', 0.973), ...]\nrocket  [('mosque', 0.623), ('drilling platform', 0.171), ...]" },
+  { k: 'edit', s: 'Write the notebook', tok: 5200, p: 'Write AlexNet_under_the_hood.py, 330 lines: predictions, the 64 first-layer kernels, activation maps of every layer, occlusion, feature visualization, embedding space, exercises.' },
+  { k: 'check', s: 'Static check', tok: 30, code: '$ marimo check AlexNet_under_the_hood.py\n(exit code 0)' },
+  { k: 'check', s: 'Run every cell', tok: 120, code: '$ marimo export html AlexNet_under_the_hood.py -o exports/…\n61,100,840 parameters\nNearest neighbours of your image in the embedding:\n  YOUR IMAGE: chelsea (1.00), chelsea (flip) (0.96), chelsea (crop) (0.70)' },
+  { k: 'think', s: 'Spot a bug in the output', tok: 60, p: 'The query image is listed as its own nearest neighbour (similarity 1.00). The ranking must skip the image itself.' },
+  { k: 'edit', s: 'Fix by string replacement', tok: 90, code: '- _order = np.argsort(-_emb[-1])[1:4]\n+ _order = [i for i in np.argsort(-_emb[-1]) if i != len(_names) - 1][:3]' },
+  { k: 'call', s: 'Try it like a student', tok: 150, p: 'Start the notebook as an app (marimo run), open it in the browser, press “Run occlusion” (a heat map appears), then press “Visualize”.' },
+  { k: 'fail', s: 'Nothing happens', tok: 40, p: 'The placeholder text disappears, but no image appears. The page shows no error.' },
+  { k: 'call', s: 'Read the server log', tok: 30, code: 'preview_logs(server)' },
+  { k: 'result', s: 'The real error', tok: 160, code: 'File "AlexNet_under_the_hood.py", line 326\n  _limit = 1000 if _layer == "fc8" else net.features[AFTER[_layer] - 2].out_channels\nAttributeError: \'ReLU\' object has no attribute \'out_channels\'' },
+  { k: 'think', s: 'Diagnose', tok: 90, p: 'features[AFTER[layer] − 2] is a convolution only for conv1 and conv2. For conv3–conv5 two steps back is a ReLU. Replace the index arithmetic by an explicit table of channel counts.' },
+  { k: 'edit', s: 'Fix', tok: 80, code: '- _limit = 1000 if _layer == "fc8" else net.features[AFTER[_layer] - 2].out_channels\n+ _limit = {"conv1": 64, "conv2": 192, "conv3": 384, "conv4": 256, "conv5": 256, "fc8": 1000}[_layer]' },
+  { k: 'check', s: 'Check again, click again', tok: 200, p: 'marimo check → exit 0. Restart the app, press “Visualize”: an image titled “conv5, channel 174” appears, with eyes and a nose in it.' },
+  { k: 'check', s: 'Look at a screenshot', tok: 1500, p: 'The title of the grid of 256 activation maps overlaps the first row of maps. Fix the figure layout (tight_layout with a margin) and re-export.' },
+  { k: 'done', s: 'Report', tok: 250, p: 'Tell the user what was built, how to run it, and what was verified — including that the notebook downloads 240 MB of weights on first start.' }
+];
+const BASE = 60000, WINDOW = 200000;   // context already used by instructions, tools and the earlier conversation
+let i = 0, timer = null;
+function draw() {
+  $('list').innerHTML = STEPS.map((st, j) => { const [lab, col] = KIND[st.k];
+    return `<div class="row ${j < i ? 'done' : ''} ${j === i ? 'cur' : ''}" data-j="${j}"><span>${j + 1}</span><span class="badge" style="background:${j <= i ? col : '#c3d0da'}">${lab}</span><span>${st.s}</span></div>`; }).join('');
+  $('list').querySelectorAll('.row').forEach(r => r.onclick = () => { stop(); i = +r.dataset.j; draw(); });
+  $('list').querySelector('.cur')?.scrollIntoView({ block: 'nearest' });
+  const st = STEPS[i], [lab, col, node] = KIND[st.k];
+  ['model', 'tool', 'result'].forEach(n => $('n-' + n).classList.toggle('on', n === node));
+  $('detail').innerHTML = `<h2 style="color:${col}">${st.s}</h2>` + (st.p ? `<p>${st.p.replace(/</g, '&lt;')}</p>` : '') + (st.code ? `<pre>${st.code.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</pre>` : '');
+  const used = BASE + STEPS.slice(0, i + 1).reduce((s, x) => s + x.tok, 0);
+  $('ctxbar').style.width = (100 * used / WINDOW) + '%';
+  const upto = STEPS.slice(0, i + 1);
+  stats([
+    ['Step', `${i + 1} / ${STEPS.length}`],
+    ['Tool calls', upto.filter(x => ['call', 'edit', 'check'].includes(x.k)).length],
+    ['Checks', upto.filter(x => x.k === 'check').length],
+    ['Bugs found', upto.filter(x => x.k === 'think' && /bug|Diagnose/.test(x.s)).length],
+    ['Context used (estimated)', `${(used / 1000).toFixed(0)} k of ${WINDOW / 1000} k tokens`]
+  ]);
+}
+function stop() { clearInterval(timer); timer = null; $('play').textContent = 'Play'; }
+$('next').onclick = () => { stop(); i = Math.min(STEPS.length - 1, i + 1); draw(); };
+$('prev').onclick = () => { stop(); i = Math.max(0, i - 1); draw(); };
+$('reset').onclick = () => { stop(); i = 0; draw(); };
+$('play').onclick = () => {
+  if (timer) return stop();
+  $('play').textContent = 'Pause';
+  timer = setInterval(() => { if (i >= STEPS.length - 1) return stop(); i++; draw(); }, 1600);
+};
+if (new URLSearchParams(location.search).has('demo')) i = 14;
+draw();
+</script>
+</body>
+</html>

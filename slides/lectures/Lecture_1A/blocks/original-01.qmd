@@ -1,0 +1,15 @@
+## Mikhail Mikhasenko {#original-a-01 .original-slide}
+
+```{=html}
+<div class="source-page" aria-label="Original Lecture 1A, slide 1">
+<img class="source-art" src="figures/original/original-01.svg" alt="Mikhail Mikhasenko" loading="eager" />
+
+</div>
+```
+
+::: {.notes}
+Original Lecture-1A, slide 1. Visual source: Keynote PDF export.
+
+Mikhail Mikhasenko
+Automatic differentiationLecture 1A
+:::

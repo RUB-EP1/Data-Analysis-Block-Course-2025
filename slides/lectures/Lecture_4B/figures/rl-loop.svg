@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1560 480" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" fill="#172635">
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+<rect x="20.0" y="150.0" width="250.0" height="150.0" rx="12" fill="#e9f5fd" stroke="#087bb9" stroke-width="3"/>
+<text x="145.0" y="186.0" font-size="25" text-anchor="middle" fill="#087bb9" font-weight="bold">Prompt</text>
+<text x="145.0" y="222.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal">a math problem,</text>
+<text x="145.0" y="252.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal">a coding task</text>
+<rect x="340.0" y="150.0" width="270.0" height="150.0" rx="12" fill="#f1eafa" stroke="#7a4fb3" stroke-width="3"/>
+<text x="475.0" y="186.0" font-size="25" text-anchor="middle" fill="#7a4fb3" font-weight="bold">Model = policy</text>
+<text x="475.0" y="222.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal">samples several</text>
+<text x="475.0" y="252.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal">answers</text>
+<rect x="1110.0" y="150.0" width="290.0" height="150.0" rx="12" fill="#e6f3e8" stroke="#3c8d52" stroke-width="3"/>
+<text x="1255.0" y="186.0" font-size="25" text-anchor="middle" fill="#3c8d52" font-weight="bold">Reward</text>
+<text x="1255.0" y="222.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal">program: correct? tests?</text>
+<text x="1255.0" y="252.0" font-size="21" text-anchor="middle" fill="#172635" font-weight="normal">or a reward model</text>
+<rect x="690.0" y="30.0" width="330.0" height="70.0" rx="12" fill="#f3f6f8" stroke="#617484" stroke-width="2"/>
+<text x="855.0" y="74.0" font-size="22" text-anchor="middle" fill="#172635" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">… so x = 42</text>
+<path d="M612,225 C650,225 650,65 686,65" fill="none" stroke="#c3d0da" stroke-width="2.5" marker-end="url(#arr)"/>
+<path d="M1022,65 C1070,65 1060,225 1106,225" fill="none" stroke="#c3d0da" stroke-width="2.5" marker-end="url(#arr)"/>
+<text x="1440.0" y="74.0" font-size="23" text-anchor="start" fill="#3c8d52" font-weight="bold">r = 1</text>
+<rect x="690.0" y="128.0" width="330.0" height="70.0" rx="12" fill="#f3f6f8" stroke="#617484" stroke-width="2"/>
+<text x="855.0" y="172.0" font-size="22" text-anchor="middle" fill="#172635" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">… so x = 17</text>
+<path d="M612,225 C650,225 650,163 686,163" fill="none" stroke="#c3d0da" stroke-width="2.5" marker-end="url(#arr)"/>
+<path d="M1022,163 C1070,163 1060,225 1106,225" fill="none" stroke="#c3d0da" stroke-width="2.5" marker-end="url(#arr)"/>
+<text x="1440.0" y="172.0" font-size="23" text-anchor="start" fill="#c74842" font-weight="bold">r = 0</text>
+<rect x="690.0" y="226.0" width="330.0" height="70.0" rx="12" fill="#f3f6f8" stroke="#617484" stroke-width="2"/>
+<text x="855.0" y="270.0" font-size="22" text-anchor="middle" fill="#172635" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">… wait, x = 42</text>
+<path d="M612,225 C650,225 650,261 686,261" fill="none" stroke="#c3d0da" stroke-width="2.5" marker-end="url(#arr)"/>
+<path d="M1022,261 C1070,261 1060,225 1106,225" fill="none" stroke="#c3d0da" stroke-width="2.5" marker-end="url(#arr)"/>
+<text x="1440.0" y="270.0" font-size="23" text-anchor="start" fill="#3c8d52" font-weight="bold">r = 1</text>
+<rect x="690.0" y="324.0" width="330.0" height="70.0" rx="12" fill="#f3f6f8" stroke="#617484" stroke-width="2"/>
+<text x="855.0" y="368.0" font-size="22" text-anchor="middle" fill="#172635" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">… x = 40 + 2i</text>
+<path d="M612,225 C650,225 650,359 686,359" fill="none" stroke="#c3d0da" stroke-width="2.5" marker-end="url(#arr)"/>
+<path d="M1022,359 C1070,359 1060,225 1106,225" fill="none" stroke="#c3d0da" stroke-width="2.5" marker-end="url(#arr)"/>
+<text x="1440.0" y="368.0" font-size="23" text-anchor="start" fill="#c74842" font-weight="bold">r = 0</text>
+<path d="M272,225 H336" fill="none" stroke="#172635" stroke-width="3" marker-end="url(#arr)"/>
+<path d="M1255,302 C1240,470 520,470 475,304" fill="none" stroke="#3c8d52" stroke-width="3" stroke-dasharray="9 6" marker-end="url(#arr)"/>
+<text x="865.0" y="455.0" font-size="22" text-anchor="middle" fill="#3c8d52" font-weight="bold">update the weights: answers with reward above the group average become more likely</text>
+</svg>

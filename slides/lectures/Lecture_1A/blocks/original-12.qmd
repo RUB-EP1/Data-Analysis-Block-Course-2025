@@ -1,0 +1,51 @@
+## Computation cost {#original-a-12 .original-slide}
+
+```{=html}
+<div class="source-page" aria-label="Original Lecture 1A, slide 12">
+<img class="source-art" src="figures/original/original-12.svg" alt="Computation cost" loading="eager" />
+
+</div>
+```
+
+::: {.notes}
+Original Lecture-1A, slide 12. Visual source: Keynote PDF export.
+
+Computation cost
+of Jacobian matrix 
+f1,…,fm
+x1
+⋅
+⋅
+⋅
+xn
+f1,…,fm
+x1
+⋅
+⋅
+⋅
+xn
+x1
+⋅
+⋅
+⋅
+xn
+f1,…,fm
+x1
+⋅
+⋅
+⋅
+xn
+Rnf
+Rm f1(x),…,fm(x)(multiple)
+Forward AD Reverse AD∂(f1,…,fm)
+∂(x1,…,xn) 1.  dual
+2.  dual
+3.…
+x1
+x2
+1.eﬀect on  
+2.eﬀect on 
+3.…
+f1
+f2
+:::

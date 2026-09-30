@@ -1,0 +1,254 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 760" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" fill="#172635">
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+<text x="80.0" y="36.0" font-size="30" text-anchor="middle" fill="#172635" font-weight="bold" font-style="italic">X</text>
+<text x="80.0" y="62.0" font-size="18" text-anchor="middle" fill="#617484" font-weight="normal">T × 768</text>
+<rect x="20.0" y="80.0" width="20" height="20" fill="#172635" fill-opacity="0.15"/>
+<rect x="42.0" y="80.0" width="20" height="20" fill="#172635" fill-opacity="0.40"/>
+<rect x="64.0" y="80.0" width="20" height="20" fill="#172635" fill-opacity="0.65"/>
+<rect x="86.0" y="80.0" width="20" height="20" fill="#172635" fill-opacity="0.32"/>
+<rect x="108.0" y="80.0" width="20" height="20" fill="#172635" fill-opacity="0.57"/>
+<rect x="130.0" y="80.0" width="20" height="20" fill="#172635" fill-opacity="0.23"/>
+<rect x="20.0" y="102.0" width="20" height="20" fill="#172635" fill-opacity="0.57"/>
+<rect x="42.0" y="102.0" width="20" height="20" fill="#172635" fill-opacity="0.23"/>
+<rect x="64.0" y="102.0" width="20" height="20" fill="#172635" fill-opacity="0.48"/>
+<rect x="86.0" y="102.0" width="20" height="20" fill="#172635" fill-opacity="0.15"/>
+<rect x="108.0" y="102.0" width="20" height="20" fill="#172635" fill-opacity="0.40"/>
+<rect x="130.0" y="102.0" width="20" height="20" fill="#172635" fill-opacity="0.65"/>
+<rect x="20.0" y="124.0" width="20" height="20" fill="#172635" fill-opacity="0.40"/>
+<rect x="42.0" y="124.0" width="20" height="20" fill="#172635" fill-opacity="0.65"/>
+<rect x="64.0" y="124.0" width="20" height="20" fill="#172635" fill-opacity="0.32"/>
+<rect x="86.0" y="124.0" width="20" height="20" fill="#172635" fill-opacity="0.57"/>
+<rect x="108.0" y="124.0" width="20" height="20" fill="#172635" fill-opacity="0.23"/>
+<rect x="130.0" y="124.0" width="20" height="20" fill="#172635" fill-opacity="0.48"/>
+<rect x="20.0" y="146.0" width="20" height="20" fill="#172635" fill-opacity="0.23"/>
+<rect x="42.0" y="146.0" width="20" height="20" fill="#172635" fill-opacity="0.48"/>
+<rect x="64.0" y="146.0" width="20" height="20" fill="#172635" fill-opacity="0.15"/>
+<rect x="86.0" y="146.0" width="20" height="20" fill="#172635" fill-opacity="0.40"/>
+<rect x="108.0" y="146.0" width="20" height="20" fill="#172635" fill-opacity="0.65"/>
+<rect x="130.0" y="146.0" width="20" height="20" fill="#172635" fill-opacity="0.32"/>
+<rect x="20.0" y="168.0" width="20" height="20" fill="#172635" fill-opacity="0.65"/>
+<rect x="42.0" y="168.0" width="20" height="20" fill="#172635" fill-opacity="0.32"/>
+<rect x="64.0" y="168.0" width="20" height="20" fill="#172635" fill-opacity="0.57"/>
+<rect x="86.0" y="168.0" width="20" height="20" fill="#172635" fill-opacity="0.23"/>
+<rect x="108.0" y="168.0" width="20" height="20" fill="#172635" fill-opacity="0.48"/>
+<rect x="130.0" y="168.0" width="20" height="20" fill="#172635" fill-opacity="0.15"/>
+<rect x="20.0" y="190.0" width="20" height="20" fill="#172635" fill-opacity="0.48"/>
+<rect x="42.0" y="190.0" width="20" height="20" fill="#172635" fill-opacity="0.15"/>
+<rect x="64.0" y="190.0" width="20" height="20" fill="#172635" fill-opacity="0.40"/>
+<rect x="86.0" y="190.0" width="20" height="20" fill="#172635" fill-opacity="0.65"/>
+<rect x="108.0" y="190.0" width="20" height="20" fill="#172635" fill-opacity="0.32"/>
+<rect x="130.0" y="190.0" width="20" height="20" fill="#172635" fill-opacity="0.57"/>
+<rect x="20.0" y="212.0" width="20" height="20" fill="#172635" fill-opacity="0.32"/>
+<rect x="42.0" y="212.0" width="20" height="20" fill="#172635" fill-opacity="0.57"/>
+<rect x="64.0" y="212.0" width="20" height="20" fill="#172635" fill-opacity="0.23"/>
+<rect x="86.0" y="212.0" width="20" height="20" fill="#172635" fill-opacity="0.48"/>
+<rect x="108.0" y="212.0" width="20" height="20" fill="#172635" fill-opacity="0.15"/>
+<rect x="130.0" y="212.0" width="20" height="20" fill="#172635" fill-opacity="0.40"/>
+<line x1="160.0" y1="160.0" x2="316.0" y2="160.0" stroke="#617484" stroke-width="2" marker-end="url(#arr)"/>
+<text x="400.0" y="140.0" font-size="30" text-anchor="start" fill="#087bb9" font-weight="bold" font-style="italic">Q</text>
+<text x="400.0" y="168.0" font-size="18" text-anchor="start" fill="#617484" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">= X W_Q</text>
+<text x="400.0" y="194.0" font-size="17" text-anchor="start" fill="#617484" font-weight="normal">T × 64</text>
+<rect x="320.0" y="90.0" width="20" height="20" fill="#087bb9" fill-opacity="0.20"/>
+<rect x="342.0" y="90.0" width="20" height="20" fill="#087bb9" fill-opacity="0.70"/>
+<rect x="364.0" y="90.0" width="20" height="20" fill="#087bb9" fill-opacity="0.50"/>
+<rect x="320.0" y="112.0" width="20" height="20" fill="#087bb9" fill-opacity="0.40"/>
+<rect x="342.0" y="112.0" width="20" height="20" fill="#087bb9" fill-opacity="0.20"/>
+<rect x="364.0" y="112.0" width="20" height="20" fill="#087bb9" fill-opacity="0.70"/>
+<rect x="320.0" y="134.0" width="20" height="20" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="342.0" y="134.0" width="20" height="20" fill="#087bb9" fill-opacity="0.40"/>
+<rect x="364.0" y="134.0" width="20" height="20" fill="#087bb9" fill-opacity="0.20"/>
+<rect x="320.0" y="156.0" width="20" height="20" fill="#087bb9" fill-opacity="0.80"/>
+<rect x="342.0" y="156.0" width="20" height="20" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="364.0" y="156.0" width="20" height="20" fill="#087bb9" fill-opacity="0.40"/>
+<rect x="320.0" y="178.0" width="20" height="20" fill="#087bb9" fill-opacity="0.30"/>
+<rect x="342.0" y="178.0" width="20" height="20" fill="#087bb9" fill-opacity="0.80"/>
+<rect x="364.0" y="178.0" width="20" height="20" fill="#087bb9" fill-opacity="0.60"/>
+<rect x="320.0" y="200.0" width="20" height="20" fill="#087bb9" fill-opacity="0.50"/>
+<rect x="342.0" y="200.0" width="20" height="20" fill="#087bb9" fill-opacity="0.30"/>
+<rect x="364.0" y="200.0" width="20" height="20" fill="#087bb9" fill-opacity="0.80"/>
+<rect x="320.0" y="222.0" width="20" height="20" fill="#087bb9" fill-opacity="0.70"/>
+<rect x="342.0" y="222.0" width="20" height="20" fill="#087bb9" fill-opacity="0.50"/>
+<rect x="364.0" y="222.0" width="20" height="20" fill="#087bb9" fill-opacity="0.30"/>
+<line x1="160.0" y1="160.0" x2="316.0" y2="350.0" stroke="#617484" stroke-width="2" marker-end="url(#arr)"/>
+<text x="400.0" y="330.0" font-size="30" text-anchor="start" fill="#c74842" font-weight="bold" font-style="italic">K</text>
+<text x="400.0" y="358.0" font-size="18" text-anchor="start" fill="#617484" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">= X W_K</text>
+<text x="400.0" y="384.0" font-size="17" text-anchor="start" fill="#617484" font-weight="normal">T × 64</text>
+<rect x="320.0" y="280.0" width="20" height="20" fill="#c74842" fill-opacity="0.20"/>
+<rect x="342.0" y="280.0" width="20" height="20" fill="#c74842" fill-opacity="0.70"/>
+<rect x="364.0" y="280.0" width="20" height="20" fill="#c74842" fill-opacity="0.50"/>
+<rect x="320.0" y="302.0" width="20" height="20" fill="#c74842" fill-opacity="0.50"/>
+<rect x="342.0" y="302.0" width="20" height="20" fill="#c74842" fill-opacity="0.30"/>
+<rect x="364.0" y="302.0" width="20" height="20" fill="#c74842" fill-opacity="0.80"/>
+<rect x="320.0" y="324.0" width="20" height="20" fill="#c74842" fill-opacity="0.80"/>
+<rect x="342.0" y="324.0" width="20" height="20" fill="#c74842" fill-opacity="0.60"/>
+<rect x="364.0" y="324.0" width="20" height="20" fill="#c74842" fill-opacity="0.40"/>
+<rect x="320.0" y="346.0" width="20" height="20" fill="#c74842" fill-opacity="0.40"/>
+<rect x="342.0" y="346.0" width="20" height="20" fill="#c74842" fill-opacity="0.20"/>
+<rect x="364.0" y="346.0" width="20" height="20" fill="#c74842" fill-opacity="0.70"/>
+<rect x="320.0" y="368.0" width="20" height="20" fill="#c74842" fill-opacity="0.70"/>
+<rect x="342.0" y="368.0" width="20" height="20" fill="#c74842" fill-opacity="0.50"/>
+<rect x="364.0" y="368.0" width="20" height="20" fill="#c74842" fill-opacity="0.30"/>
+<rect x="320.0" y="390.0" width="20" height="20" fill="#c74842" fill-opacity="0.30"/>
+<rect x="342.0" y="390.0" width="20" height="20" fill="#c74842" fill-opacity="0.80"/>
+<rect x="364.0" y="390.0" width="20" height="20" fill="#c74842" fill-opacity="0.60"/>
+<rect x="320.0" y="412.0" width="20" height="20" fill="#c74842" fill-opacity="0.60"/>
+<rect x="342.0" y="412.0" width="20" height="20" fill="#c74842" fill-opacity="0.40"/>
+<rect x="364.0" y="412.0" width="20" height="20" fill="#c74842" fill-opacity="0.20"/>
+<line x1="160.0" y1="160.0" x2="316.0" y2="540.0" stroke="#617484" stroke-width="2" marker-end="url(#arr)"/>
+<text x="400.0" y="520.0" font-size="30" text-anchor="start" fill="#3c8d52" font-weight="bold" font-style="italic">V</text>
+<text x="400.0" y="548.0" font-size="18" text-anchor="start" fill="#617484" font-weight="normal" font-family="Menlo, 'SF Mono', monospace">= X W_V</text>
+<text x="400.0" y="574.0" font-size="17" text-anchor="start" fill="#617484" font-weight="normal">T × 64</text>
+<rect x="320.0" y="470.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.20"/>
+<rect x="342.0" y="470.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.70"/>
+<rect x="364.0" y="470.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.50"/>
+<rect x="320.0" y="492.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.60"/>
+<rect x="342.0" y="492.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.40"/>
+<rect x="364.0" y="492.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.20"/>
+<rect x="320.0" y="514.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.30"/>
+<rect x="342.0" y="514.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.80"/>
+<rect x="364.0" y="514.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.60"/>
+<rect x="320.0" y="536.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.70"/>
+<rect x="342.0" y="536.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.50"/>
+<rect x="364.0" y="536.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.30"/>
+<rect x="320.0" y="558.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.40"/>
+<rect x="342.0" y="558.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.20"/>
+<rect x="364.0" y="558.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.70"/>
+<rect x="320.0" y="580.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.80"/>
+<rect x="342.0" y="580.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.60"/>
+<rect x="364.0" y="580.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.40"/>
+<rect x="320.0" y="602.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.50"/>
+<rect x="342.0" y="602.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.30"/>
+<rect x="364.0" y="602.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.80"/>
+<line x1="480.0" y1="170.0" x2="610.0" y2="250.0" stroke="#087bb9" stroke-width="2" marker-end="url(#arr)"/>
+<line x1="480.0" y1="360.0" x2="610.0" y2="300.0" stroke="#c74842" stroke-width="2" marker-end="url(#arr)"/>
+<text x="700.0" y="150.0" font-size="24" text-anchor="middle" fill="#172635" font-weight="bold">scores  Q Kᵀ / √64</text>
+<text x="700.0" y="178.0" font-size="17" text-anchor="middle" fill="#617484" font-weight="normal">T × T: every query against every key</text>
+<rect x="620.0" y="200.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.15"/>
+<rect x="642.0" y="200.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.73"/>
+<rect x="664.0" y="200.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.50"/>
+<rect x="686.0" y="200.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.27"/>
+<rect x="708.0" y="200.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.85"/>
+<rect x="730.0" y="200.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.62"/>
+<rect x="752.0" y="200.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.38"/>
+<rect x="620.0" y="222.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.50"/>
+<rect x="642.0" y="222.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.27"/>
+<rect x="664.0" y="222.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.85"/>
+<rect x="686.0" y="222.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.62"/>
+<rect x="708.0" y="222.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.38"/>
+<rect x="730.0" y="222.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.15"/>
+<rect x="752.0" y="222.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.73"/>
+<rect x="620.0" y="244.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.85"/>
+<rect x="642.0" y="244.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.62"/>
+<rect x="664.0" y="244.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.38"/>
+<rect x="686.0" y="244.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.15"/>
+<rect x="708.0" y="244.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.73"/>
+<rect x="730.0" y="244.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.50"/>
+<rect x="752.0" y="244.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.27"/>
+<rect x="620.0" y="266.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.38"/>
+<rect x="642.0" y="266.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.15"/>
+<rect x="664.0" y="266.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.73"/>
+<rect x="686.0" y="266.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.50"/>
+<rect x="708.0" y="266.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.27"/>
+<rect x="730.0" y="266.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.85"/>
+<rect x="752.0" y="266.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.62"/>
+<rect x="620.0" y="288.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.73"/>
+<rect x="642.0" y="288.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.50"/>
+<rect x="664.0" y="288.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.27"/>
+<rect x="686.0" y="288.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.85"/>
+<rect x="708.0" y="288.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.62"/>
+<rect x="730.0" y="288.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.38"/>
+<rect x="752.0" y="288.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.15"/>
+<rect x="620.0" y="310.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.27"/>
+<rect x="642.0" y="310.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.85"/>
+<rect x="664.0" y="310.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.62"/>
+<rect x="686.0" y="310.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.38"/>
+<rect x="708.0" y="310.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.15"/>
+<rect x="730.0" y="310.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.73"/>
+<rect x="752.0" y="310.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.50"/>
+<rect x="620.0" y="332.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.62"/>
+<rect x="642.0" y="332.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.38"/>
+<rect x="664.0" y="332.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.15"/>
+<rect x="686.0" y="332.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.73"/>
+<rect x="708.0" y="332.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.50"/>
+<rect x="730.0" y="332.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.27"/>
+<rect x="752.0" y="332.0" width="20" height="20" fill="#7a4fb3" fill-opacity="0.85"/>
+<line x1="790.0" y1="280.0" x2="860.0" y2="280.0" stroke="#172635" stroke-width="2.5" marker-end="url(#arr)"/>
+<text x="1010.0" y="150.0" font-size="24" text-anchor="middle" fill="#172635" font-weight="bold">mask + softmax → A</text>
+<text x="1010.0" y="178.0" font-size="17" text-anchor="middle" fill="#617484" font-weight="normal">future hidden; each row sums to 1</text>
+<rect x="930.0" y="200.0" width="20" height="20" fill="#087bb9" fill-opacity="0.90"/>
+<rect x="952.0" y="200.0" width="20" height="20" fill="#eef1f4"/>
+<rect x="974.0" y="200.0" width="20" height="20" fill="#eef1f4"/>
+<rect x="996.0" y="200.0" width="20" height="20" fill="#eef1f4"/>
+<rect x="1018.0" y="200.0" width="20" height="20" fill="#eef1f4"/>
+<rect x="1040.0" y="200.0" width="20" height="20" fill="#eef1f4"/>
+<rect x="1062.0" y="200.0" width="20" height="20" fill="#eef1f4"/>
+<rect x="930.0" y="222.0" width="20" height="20" fill="#087bb9" fill-opacity="0.90"/>
+<rect x="952.0" y="222.0" width="20" height="20" fill="#087bb9" fill-opacity="0.25"/>
+<rect x="974.0" y="222.0" width="20" height="20" fill="#eef1f4"/>
+<rect x="996.0" y="222.0" width="20" height="20" fill="#eef1f4"/>
+<rect x="1018.0" y="222.0" width="20" height="20" fill="#eef1f4"/>
+<rect x="1040.0" y="222.0" width="20" height="20" fill="#eef1f4"/>
+<rect x="1062.0" y="222.0" width="20" height="20" fill="#eef1f4"/>
+<rect x="930.0" y="244.0" width="20" height="20" fill="#087bb9" fill-opacity="0.25"/>
+<rect x="952.0" y="244.0" width="20" height="20" fill="#087bb9" fill-opacity="0.90"/>
+<rect x="974.0" y="244.0" width="20" height="20" fill="#087bb9" fill-opacity="0.25"/>
+<rect x="996.0" y="244.0" width="20" height="20" fill="#eef1f4"/>
+<rect x="1018.0" y="244.0" width="20" height="20" fill="#eef1f4"/>
+<rect x="1040.0" y="244.0" width="20" height="20" fill="#eef1f4"/>
+<rect x="1062.0" y="244.0" width="20" height="20" fill="#eef1f4"/>
+<rect x="930.0" y="266.0" width="20" height="20" fill="#087bb9" fill-opacity="0.25"/>
+<rect x="952.0" y="266.0" width="20" height="20" fill="#087bb9" fill-opacity="0.25"/>
+<rect x="974.0" y="266.0" width="20" height="20" fill="#087bb9" fill-opacity="0.90"/>
+<rect x="996.0" y="266.0" width="20" height="20" fill="#087bb9" fill-opacity="0.25"/>
+<rect x="1018.0" y="266.0" width="20" height="20" fill="#eef1f4"/>
+<rect x="1040.0" y="266.0" width="20" height="20" fill="#eef1f4"/>
+<rect x="1062.0" y="266.0" width="20" height="20" fill="#eef1f4"/>
+<rect x="930.0" y="288.0" width="20" height="20" fill="#087bb9" fill-opacity="0.25"/>
+<rect x="952.0" y="288.0" width="20" height="20" fill="#087bb9" fill-opacity="0.25"/>
+<rect x="974.0" y="288.0" width="20" height="20" fill="#087bb9" fill-opacity="0.25"/>
+<rect x="996.0" y="288.0" width="20" height="20" fill="#087bb9" fill-opacity="0.90"/>
+<rect x="1018.0" y="288.0" width="20" height="20" fill="#087bb9" fill-opacity="0.25"/>
+<rect x="1040.0" y="288.0" width="20" height="20" fill="#eef1f4"/>
+<rect x="1062.0" y="288.0" width="20" height="20" fill="#eef1f4"/>
+<rect x="930.0" y="310.0" width="20" height="20" fill="#087bb9" fill-opacity="0.25"/>
+<rect x="952.0" y="310.0" width="20" height="20" fill="#087bb9" fill-opacity="0.25"/>
+<rect x="974.0" y="310.0" width="20" height="20" fill="#087bb9" fill-opacity="0.25"/>
+<rect x="996.0" y="310.0" width="20" height="20" fill="#087bb9" fill-opacity="0.25"/>
+<rect x="1018.0" y="310.0" width="20" height="20" fill="#087bb9" fill-opacity="0.90"/>
+<rect x="1040.0" y="310.0" width="20" height="20" fill="#087bb9" fill-opacity="0.25"/>
+<rect x="1062.0" y="310.0" width="20" height="20" fill="#eef1f4"/>
+<rect x="930.0" y="332.0" width="20" height="20" fill="#087bb9" fill-opacity="0.25"/>
+<rect x="952.0" y="332.0" width="20" height="20" fill="#087bb9" fill-opacity="0.25"/>
+<rect x="974.0" y="332.0" width="20" height="20" fill="#087bb9" fill-opacity="0.25"/>
+<rect x="996.0" y="332.0" width="20" height="20" fill="#087bb9" fill-opacity="0.25"/>
+<rect x="1018.0" y="332.0" width="20" height="20" fill="#087bb9" fill-opacity="0.25"/>
+<rect x="1040.0" y="332.0" width="20" height="20" fill="#087bb9" fill-opacity="0.90"/>
+<rect x="1062.0" y="332.0" width="20" height="20" fill="#087bb9" fill-opacity="0.25"/>
+<line x1="1010.0" y1="370.0" x2="1010.0" y2="450.0" stroke="#172635" stroke-width="2.5" marker-end="url(#arr)"/>
+<line x1="420.0" y1="520.0" x2="900.0" y2="520.0" stroke="#3c8d52" stroke-width="2" marker-end="url(#arr)"/>
+<text x="1010.0" y="480.0" font-size="24" text-anchor="middle" fill="#172635" font-weight="bold">output = A V</text>
+<text x="1010.0" y="506.0" font-size="17" text-anchor="middle" fill="#617484" font-weight="normal">T × 64: weighted average of values</text>
+<rect x="975.0" y="525.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.30"/>
+<rect x="997.0" y="525.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.47"/>
+<rect x="1019.0" y="525.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.63"/>
+<rect x="975.0" y="547.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.47"/>
+<rect x="997.0" y="547.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.63"/>
+<rect x="1019.0" y="547.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.80"/>
+<rect x="975.0" y="569.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.63"/>
+<rect x="997.0" y="569.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.80"/>
+<rect x="1019.0" y="569.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.30"/>
+<rect x="975.0" y="591.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.80"/>
+<rect x="997.0" y="591.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.30"/>
+<rect x="1019.0" y="591.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.47"/>
+<rect x="975.0" y="613.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.30"/>
+<rect x="997.0" y="613.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.47"/>
+<rect x="1019.0" y="613.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.63"/>
+<rect x="975.0" y="635.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.47"/>
+<rect x="997.0" y="635.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.63"/>
+<rect x="1019.0" y="635.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.80"/>
+<rect x="975.0" y="657.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.63"/>
+<rect x="997.0" y="657.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.80"/>
+<rect x="1019.0" y="657.0" width="20" height="20" fill="#3c8d52" fill-opacity="0.30"/>
+<text x="640.0" y="700.0" font-size="22" text-anchor="middle" fill="#172635" font-weight="normal">12 heads in parallel (different W_Q, W_K, W_V) → concatenate 12 × 64 = 768 → multiply by W_O</text>
+<text x="640.0" y="734.0" font-size="20" text-anchor="middle" fill="#617484" font-weight="normal">parameters per layer: 4 × 768² ≈ 2.4 M</text>
+</svg>

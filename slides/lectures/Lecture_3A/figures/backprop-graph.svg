@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 550" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" fill="#172635">
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+<circle cx="90" cy="100" r="40" fill="#e9f5fd" stroke="#087bb9" stroke-width="3"/>
+<text x="90" y="111" font-size="32" text-anchor="middle" fill="#172635" font-weight="normal" font-style="italic">x</text>
+<text x="90" y="46" font-size="26" text-anchor="middle" fill="#087bb9" font-weight="bold">1.5</text>
+<text x="90" y="176" font-size="26" text-anchor="middle" fill="#c74842" font-weight="bold">-0.215</text>
+<circle cx="90" cy="340" r="40" fill="#e9f5fd" stroke="#087bb9" stroke-width="3"/>
+<text x="90" y="351" font-size="32" text-anchor="middle" fill="#172635" font-weight="normal" font-style="italic">w</text>
+<text x="90" y="286" font-size="26" text-anchor="middle" fill="#087bb9" font-weight="bold">0.8</text>
+<text x="90" y="416" font-size="26" text-anchor="middle" fill="#c74842" font-weight="bold">-0.403</text>
+<circle cx="400" cy="440" r="40" fill="#e9f5fd" stroke="#087bb9" stroke-width="3"/>
+<text x="400" y="451" font-size="32" text-anchor="middle" fill="#172635" font-weight="normal" font-style="italic">b</text>
+<text x="400" y="386" font-size="26" text-anchor="middle" fill="#087bb9" font-weight="bold">-0.2</text>
+<text x="400" y="516" font-size="26" text-anchor="middle" fill="#c74842" font-weight="bold">-0.269</text>
+<circle cx="330" cy="210" r="48" fill="#fff" stroke="#172635" stroke-width="3"/>
+<text x="330" y="222" font-size="34" text-anchor="middle" fill="#172635" font-weight="bold">×</text>
+<circle cx="560" cy="290" r="48" fill="#fff" stroke="#172635" stroke-width="3"/>
+<text x="560" y="302" font-size="34" text-anchor="middle" fill="#172635" font-weight="bold">+</text>
+<circle cx="770" cy="290" r="48" fill="#fff" stroke="#172635" stroke-width="3"/>
+<text x="770" y="302" font-size="34" text-anchor="middle" fill="#172635" font-weight="bold">σ</text>
+<circle cx="980" cy="290" r="48" fill="#fff" stroke="#172635" stroke-width="3"/>
+<text x="980" y="302" font-size="26" text-anchor="middle" fill="#172635" font-weight="bold">−log</text>
+<line x1="130" y1="114" x2="286" y2="192" stroke="#172635" stroke-width="2.5" marker-end="url(#arr)"/>
+<line x1="130" y1="326" x2="286" y2="232" stroke="#172635" stroke-width="2.5" marker-end="url(#arr)"/>
+<line x1="376" y1="226" x2="514" y2="276" stroke="#172635" stroke-width="2.5" marker-end="url(#arr)"/>
+<line x1="436" y1="414" x2="526" y2="326" stroke="#172635" stroke-width="2.5" marker-end="url(#arr)"/>
+<line x1="608" y1="290" x2="720" y2="290" stroke="#172635" stroke-width="2.5" marker-end="url(#arr)"/>
+<line x1="818" y1="290" x2="930" y2="290" stroke="#172635" stroke-width="2.5" marker-end="url(#arr)"/>
+<line x1="1028" y1="290" x2="1130" y2="290" stroke="#172635" stroke-width="2.5" marker-end="url(#arr)"/>
+<text x="456" y="212" font-size="25" text-anchor="middle" fill="#087bb9" font-weight="bold">u = 1.2</text>
+<text x="456" y="280" font-size="25" text-anchor="middle" fill="#c74842" font-weight="bold">-0.269</text>
+<text x="664" y="262" font-size="25" text-anchor="middle" fill="#087bb9" font-weight="bold">z = 1</text>
+<text x="664" y="330" font-size="25" text-anchor="middle" fill="#c74842" font-weight="bold">-0.269</text>
+<text x="874" y="262" font-size="25" text-anchor="middle" fill="#087bb9" font-weight="bold">a = 0.731</text>
+<text x="874" y="330" font-size="25" text-anchor="middle" fill="#c74842" font-weight="bold">-1.368</text>
+<text x="1080" y="262" font-size="25" text-anchor="middle" fill="#087bb9" font-weight="bold">L = 0.313</text>
+<text x="1080" y="330" font-size="25" text-anchor="middle" fill="#c74842" font-weight="bold">1</text>
+<text x="1080" y="370" font-size="22" text-anchor="middle" fill="#617484" font-weight="normal">label y = 1</text>
+<text x="700" y="470" font-size="26" text-anchor="start" fill="#087bb9" font-weight="bold">forward values</text>
+<text x="700" y="506" font-size="26" text-anchor="start" fill="#c74842" font-weight="bold">backward: ∂L/∂(·)</text>
+</svg>

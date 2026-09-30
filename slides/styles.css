@@ -1,0 +1,845 @@
+/* Keynote-like deck styling for a locked 1920×1080 frame.
+   All sizes are literal slide pixels: the export pins Reveal to scale 1,
+   so 1 CSS px here is 1 px in charm.pdf. */
+
+:root {
+  /* Ink */
+  --ink: #111418;
+  --muted: #71787f;
+  --faint: #9aa1a8;
+  --line: #dfe3e7;
+
+  /* Accents, sampled from the Keynote deck */
+  --ref: #1a56a8;
+  --accent: #ff0a9b;
+  --title-a: #357ee3;
+  --title-b: #b932f9;
+
+  /* Frame */
+  --slide-w: 1920px;
+  --slide-h: 1080px;
+  --gutter-x: 104px;
+  --gutter-top: 58px;
+  --gutter-bottom: 62px;
+
+  /* Type scale */
+  --fs-body: 42px;
+  --fs-title: 76px;
+  --fs-subtitle: 46px;
+  --fs-ref: 24px;
+  --fs-caption: 30px;
+  --fs-chrome: 24px;
+
+  --canvas-bg: #eceef1;
+
+  /* Take over Reveal's own font variables (the simple theme points headings
+     at "News Cycle", which is not bundled and falls back to plain Helvetica). */
+  --deck-font: "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+  --r-main-font: var(--deck-font);
+  --r-heading-font: var(--deck-font);
+  --r-heading-font-weight: 700;
+  --r-heading-line-height: 1.1;
+  --r-heading-letter-spacing: -0.012em;
+  --r-heading-text-transform: none;
+  --r-heading-color: var(--ink);
+  --r-heading-margin: 0;
+}
+
+html,
+body {
+  background: var(--canvas-bg);
+  height: 100%;
+  margin: 0;
+}
+
+.reveal-viewport {
+  align-items: center;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  min-height: 100%;
+  overflow: auto;
+  padding: 1.25rem;
+}
+
+.reveal {
+  aspect-ratio: 16 / 9;
+  background: #fff;
+  box-shadow: 0 8px 32px rgba(20, 30, 45, 0.08);
+  box-sizing: border-box;
+  color: var(--ink);
+  font-family: var(--deck-font);
+  font-size: var(--fs-body);
+  font-weight: 400;
+  overflow: hidden;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+}
+
+.reveal .slides {
+  background: transparent;
+  margin: 0;
+  text-align: left;
+}
+
+.reveal .slides > section,
+.reveal .slides > section > section {
+  box-sizing: border-box !important;
+  height: calc(100% - var(--gutter-top) - var(--gutter-bottom)) !important;
+  left: var(--gutter-x) !important;
+  overflow: hidden;
+  padding: 0 !important;
+  top: var(--gutter-top) !important;
+  width: calc(100% - 2 * var(--gutter-x)) !important;
+}
+
+/* Content slides are a column: title block, then a body that fills the rest. */
+.reveal .slides > section:not(.section-title):not(.title-card):not(#title-slide) {
+  align-items: stretch;
+  display: flex !important;
+  flex-direction: column;
+}
+
+/* ── Type ────────────────────────────────────────────────────── */
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4 {
+  color: var(--ink);
+  font-family: var(--deck-font);
+  font-weight: 700;
+  letter-spacing: -0.012em;
+  text-transform: none;
+}
+
+.reveal h2 {
+  flex: 0 0 auto;
+  font-size: var(--fs-title);
+  line-height: 1.1;
+  margin: 0 0 0.05em;
+}
+
+.reveal h2:empty {
+  display: none;
+}
+
+/* Keynote's bold second line under the title. */
+.reveal .slides > section:not(.section-title) > .subtitle {
+  color: var(--ink);
+  flex: 0 0 auto;
+  font-size: var(--fs-subtitle);
+  font-weight: 700;
+  letter-spacing: -0.008em;
+  line-height: 1.18;
+  margin: 0.14em 0 0;
+}
+
+.reveal .slides > section:not(.section-title) > .subtitle p {
+  margin: 0;
+}
+
+.reveal h3 {
+  font-size: 0.88em;
+  font-weight: 700;
+  margin: 0 0 0.35em;
+}
+
+.reveal p,
+.reveal li {
+  line-height: 1.34;
+}
+
+.reveal p {
+  margin: 0 0 0.55em;
+}
+
+.reveal strong {
+  font-weight: 700;
+}
+
+.reveal em {
+  font-style: italic;
+}
+
+/* Bullets, Keynote-style: marker in the gutter, text hanging. */
+.reveal ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  list-style: none;
+  margin: 0.1em 0 0.3em;
+  padding: 0;
+}
+
+.reveal ul > li {
+  margin: 0;
+  padding-left: 1.05em;
+  position: relative;
+}
+
+.reveal ul > li::before {
+  background: #4a5058;
+  border-radius: 50%;
+  content: "";
+  height: 0.23em;
+  left: 0.14em;
+  position: absolute;
+  top: 0.54em;
+  width: 0.23em;
+}
+
+.reveal ul ul {
+  gap: 0.3em;
+  margin: 0.35em 0 0;
+}
+
+.reveal ul ul > li::before {
+  background: var(--faint);
+  border-radius: 0;
+  height: 2px;
+  top: 0.64em;
+  width: 0.36em;
+}
+
+.reveal ol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  margin: 0.1em 0 0.3em;
+  padding-left: 1.1em;
+}
+
+.reveal ol > li {
+  margin: 0;
+  padding-left: 0.2em;
+}
+
+/* ── Math ────────────────────────────────────────────────────── */
+
+.reveal .MathJax,
+.reveal mjx-container {
+  color: var(--ink);
+}
+
+/* Display equations read as part of the left column, not as centred islands. */
+.reveal mjx-container[jax="CHTML"][display="true"] {
+  margin: 0.5em 0 0.6em !important;
+  text-align: left;
+}
+
+.reveal mjx-container[jax="CHTML"][display="true"] > mjx-math {
+  margin: 0 !important;
+  padding-left: 0.1em;
+}
+
+.reveal .eq-center mjx-container[jax="CHTML"][display="true"],
+.reveal .eq-center mjx-container[jax="CHTML"][display="true"] > mjx-math {
+  text-align: center;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* ── References, top right ───────────────────────────────────── */
+
+.slide-refs {
+  align-items: flex-end;
+  display: flex;
+  flex-direction: column;
+  font-size: var(--fs-ref);
+  gap: 0.25em;
+  left: auto;
+  line-height: 1.3;
+  margin: 0;
+  max-width: 34%;
+  pointer-events: auto;
+  position: absolute;
+  right: 0;
+  top: 0.55em;
+  z-index: 6;
+}
+
+.slide-refs p {
+  margin: 0;
+}
+
+.slide-refs a {
+  color: var(--ref);
+  font-size: var(--fs-ref);
+  text-align: right;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.reveal section:has(.slide-refs) > h2 {
+  max-width: 64%;
+  padding-right: 0.3em;
+}
+
+.reveal section.section-title .slide-refs,
+.reveal section.title-card .slide-refs,
+.reveal #title-slide .slide-refs {
+  display: none;
+}
+
+/* ── Body region ─────────────────────────────────────────────── */
+
+/* Injected by charm.qmd: everything after the title block. */
+.slide-body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  /* `safe` degrades to flex-start when the content is taller than the box,
+     so a full slide never rides up over its own title. */
+  justify-content: safe center;
+  min-height: 0;
+  /* Extra bottom padding pushes the centred block above the middle,
+     the way a Keynote text box sits. */
+  padding: 0.35em 0 1.6em;
+}
+
+/* When the body carries a block that wants to grow, let it grow instead. */
+.slide-body:has(> .figure-side),
+.slide-body:has(> .figure-slide),
+.slide-body:has(> .two-figures),
+.slide-body:has(> .three-figures),
+.slide-body:has(> .plan-list) {
+  justify-content: stretch;
+  padding-bottom: 0.2em;
+}
+
+.slide-body > :last-child {
+  margin-bottom: 0;
+}
+
+/* ── Title card ──────────────────────────────────────────────── */
+
+.reveal section.title-card {
+  text-align: center;
+}
+
+.reveal section.title-card h2 {
+  background: linear-gradient(95deg, var(--title-a) 0%, var(--title-b) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-size: 112px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+  margin: 2.55em 0 0;
+  max-width: none;
+}
+
+.reveal section.title-card .title-lines {
+  color: var(--ink);
+  font-size: 44px;
+  line-height: 1.85;
+  margin-top: 0.75em;
+}
+
+.reveal section.title-card .title-lines p:first-child {
+  font-size: 46px;
+  margin-bottom: 0.7em;
+}
+
+.reveal section.title-card .title-lines p:last-child {
+  color: var(--muted);
+  font-size: 36px;
+}
+
+.reveal section.title-card .title-logo-rub,
+.reveal section.title-card .title-logo-fsp,
+.reveal section.title-card .title-logo-lhcb {
+  border: 0;
+  box-shadow: none;
+  display: block;
+  margin: 0;
+  position: absolute;
+}
+
+.reveal section.title-card .title-logo-rub {
+  height: 96px;
+  left: 0;
+  top: 0;
+  width: auto;
+}
+
+.reveal section.title-card .title-logo-fsp {
+  height: 82px;
+  right: 208px;
+  top: 8px;
+  width: auto;
+}
+
+.reveal section.title-card .title-logo-lhcb {
+  height: 84px;
+  right: 0;
+  top: 6px;
+  width: auto;
+}
+
+/* ── Section divider ─────────────────────────────────────────── */
+
+.reveal section.section-title {
+  align-items: center;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.reveal section.section-title h2 {
+  border: 0;
+  color: var(--accent);
+  font-size: 104px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0;
+  max-width: none;
+  padding: 0;
+}
+
+.reveal section.section-title h2 mjx-container {
+  color: var(--accent);
+}
+
+.reveal section.section-title .subtitle {
+  color: var(--muted);
+  font-size: 38px;
+  font-style: normal;
+  font-weight: 400;
+  margin: 0.7em 0 0;
+  max-width: 24em;
+}
+
+.reveal section.section-title .subtitle p {
+  margin: 0;
+}
+
+/* ── Layouts ─────────────────────────────────────────────────── */
+
+.reveal img {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  display: block;
+  object-fit: contain;
+}
+
+.figure-side {
+  align-items: stretch;
+  display: grid;
+  flex: 1 1 auto;
+  gap: 52px;
+  grid-template-columns: minmax(0, 0.47fr) minmax(0, 0.53fr);
+  min-height: 0;
+}
+
+.figure-side.wide-text {
+  grid-template-columns: minmax(0, 0.54fr) minmax(0, 0.46fr);
+}
+
+/* Short caption, big map: give the plot the width it needs to fill the height. */
+.figure-side.wide-fig {
+  gap: 44px;
+  grid-template-columns: minmax(0, 0.38fr) minmax(0, 0.62fr);
+}
+
+.figure-side > p,
+.figure-side > figure {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  min-height: 0;
+  min-width: 0;
+}
+
+/* The text column centres; a live block stretches to the row. */
+.figure-side > div:not(.frames):not(.widget) {
+  align-self: center;
+}
+
+.figure-side > .frames {
+  align-self: stretch;
+}
+
+.figure-side > div {
+  min-width: 0;
+}
+
+.figure-side img {
+  height: 100%;
+  max-height: 100%;
+  max-width: 100%;
+  width: auto;
+}
+
+.figure-side ul {
+  margin-top: 0.2em;
+}
+
+.two-col {
+  align-items: start;
+  display: grid;
+  flex: 0 1 auto;
+  gap: 72px;
+  grid-template-columns: 1fr 1fr;
+  min-height: 0;
+}
+
+.three-col {
+  align-items: start;
+  display: grid;
+  gap: 40px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.two-figures,
+.three-figures {
+  display: grid;
+  flex: 1 1 auto;
+  gap: 40px;
+  min-height: 0;
+}
+
+.two-figures {
+  grid-template-columns: 1fr 1fr;
+}
+
+.three-figures {
+  align-items: center;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.two-figures > p,
+.three-figures > p {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  margin: 0;
+  min-height: 0;
+  min-width: 0;
+}
+
+.two-figures img,
+.three-figures img {
+  height: auto;
+  max-height: 100%;
+  width: 100%;
+}
+
+.figure-slide {
+  align-items: center;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+}
+
+/* The image box takes the leftover height; the image letterboxes inside it.
+   A percentage max-height would not resolve against an auto-height flex item. */
+.figure-slide > p,
+.figure-slide > figure {
+  flex: 1 1 auto;
+  margin: 0;
+  min-height: 0;
+  position: relative;
+  width: 100%;
+}
+
+.figure-slide > p > img,
+.figure-slide > figure img {
+  height: 100%;
+  left: 0;
+  object-fit: contain;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.figure-slide > .caption {
+  flex: 0 0 auto;
+}
+
+.caption {
+  color: var(--muted);
+  flex: 0 0 auto;
+  font-size: var(--fs-caption);
+  line-height: 1.4;
+  margin: 0.7em 0 0;
+}
+
+.figure-slide .caption,
+.three-figures + .caption,
+.two-figures + .caption {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 52em;
+  text-align: center;
+}
+
+.quiet {
+  color: var(--muted);
+  font-size: 0.78em;
+}
+
+/* Links in slide text, matching the reference colour. */
+.reveal .slide-body a,
+.reveal .slides > section > p a,
+.reveal li a {
+  color: var(--ref);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+/* ── Tables ──────────────────────────────────────────────────── */
+
+.reveal table,
+.reveal .slides table,
+.reveal .slides section table {
+  border-collapse: collapse;
+  font-size: 0.86em;
+  margin: 0.3em 0 0.5em;
+  width: max-content !important;
+}
+
+.reveal th,
+.reveal td {
+  border-bottom: 1px solid var(--line);
+  padding: 0.3em 1.4em 0.3em 0;
+  white-space: nowrap;
+}
+
+.reveal thead th {
+  border-bottom: 2px solid var(--ink);
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.numbers {
+  border-collapse: collapse;
+  font-size: 0.8em;
+  margin-top: 0.35em;
+}
+
+.numbers th,
+.numbers td {
+  border-bottom: 1px solid var(--line);
+  padding: 0.3em 0.9em 0.3em 0;
+  text-align: right;
+}
+
+.numbers th:first-child,
+.numbers td:first-child {
+  text-align: left;
+}
+
+.numbers th {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+/* ── Plan and close ──────────────────────────────────────────── */
+
+.plan-list {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 0.75em;
+  justify-content: center;
+  list-style: none;
+  margin: 0;
+  max-width: 32em;
+  padding: 0;
+}
+
+.plan-list li {
+  padding-left: 1.05em;
+  position: relative;
+}
+
+.plan-list li::before {
+  background: var(--accent);
+  border-radius: 50%;
+  content: "";
+  height: 0.23em;
+  left: 0.14em;
+  position: absolute;
+  top: 0.54em;
+  width: 0.23em;
+}
+
+.plan-list strong {
+  font-weight: 700;
+}
+
+.reveal section.close-card .slide-body {
+  justify-content: center;
+}
+
+.reveal section.close-card p {
+  font-size: 1.05em;
+  line-height: 1.42;
+  margin: 0 0 0.75em;
+  max-width: 26em;
+}
+
+/* ── Animations ──────────────────────────────────────────────── */
+
+/* A frame sequence with a scrub slider. The stage takes the height it is
+   given; the frame letterboxes inside it, so the layout never jumps as
+   frames of slightly different size go past. */
+.frames {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+}
+
+.frames-stage {
+  flex: 1 1 auto;
+  min-height: 0;
+  position: relative;
+}
+
+.frames-stage img {
+  height: 100%;
+  left: 0;
+  object-fit: contain;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.frames-bar {
+  align-items: center;
+  display: flex;
+  flex: 0 0 auto;
+  gap: 18px;
+}
+
+.frames-static .frames-bar {
+  display: none;
+}
+
+.frames-play {
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  flex: 0 0 auto;
+  font-size: 18px;
+  height: 44px;
+  justify-content: center;
+  line-height: 1;
+  padding: 0;
+  width: 44px;
+}
+
+.frames-play:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.frames-range {
+  accent-color: var(--accent);
+  cursor: pointer;
+  flex: 1 1 auto;
+  height: 22px;
+  min-width: 0;
+}
+
+.frames-readout {
+  color: var(--muted);
+  flex: 0 0 auto;
+  font-size: var(--fs-caption);
+  font-variant-numeric: tabular-nums;
+  min-width: 7em;
+  text-align: right;
+}
+
+/* A plain video figure: `<video class="video-figure" ...>` */
+.video-figure {
+  background: transparent;
+  display: block;
+  height: 100%;
+  object-fit: contain;
+  width: 100%;
+}
+
+.figure-slide > .frames,
+.figure-slide > .widget,
+.figure-slide > .video-figure {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+}
+
+/* ── Chrome ──────────────────────────────────────────────────── */
+
+.reveal .footer {
+  display: none !important;
+}
+
+.reveal .slide-number {
+  background: transparent !important;
+  bottom: 22px !important;
+  color: var(--faint) !important;
+  font-family: inherit;
+  font-size: var(--fs-chrome) !important;
+  line-height: 1.2;
+  position: absolute !important;
+  right: var(--gutter-x) !important;
+  z-index: 21;
+}
+
+.reveal .controls,
+.reveal .progress,
+.slide-menu-button,
+.reveal .slide-chalkboard-buttons,
+.reveal .chalkboard-button {
+  display: none !important;
+}
+
+.reveal:has(.slides > section.title-card.present) .slide-number {
+  display: none !important;
+}
+
+/* Locked 1920×1080 frame for `make pdf` (?export=1). */
+html.export-pdf,
+html.export-pdf body {
+  background: #fff;
+  height: 1080px;
+  overflow: hidden;
+  width: 1920px;
+}
+
+html.export-pdf .reveal-viewport {
+  align-items: stretch;
+  height: 1080px;
+  justify-content: stretch;
+  min-height: 1080px;
+  overflow: hidden;
+  padding: 0;
+  width: 1920px;
+}
+
+html.export-pdf .reveal {
+  aspect-ratio: auto;
+  box-shadow: none;
+  height: 1080px !important;
+  width: 1920px !important;
+}

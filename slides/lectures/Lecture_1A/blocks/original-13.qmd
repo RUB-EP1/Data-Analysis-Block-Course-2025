@@ -1,0 +1,34 @@
+## Higher-Order Derivatives {#original-a-13 .original-slide}
+
+```{=html}
+<div class="source-page" aria-label="Original Lecture 1A, slide 13">
+<img class="source-art" src="figures/original/original-13.svg" alt="Higher-Order Derivatives" loading="eager" />
+
+</div>
+```
+
+::: {.notes}
+Original Lecture-1A, slide 13. Visual source: Keynote PDF export.
+
+Higher-Order Derivatives
+Hessian
+•Forward mode can be applied twice, or  
+use Hyper-dual numbers 
+•Reverse mode can be applied to each 
+gradient component to get row-wise 
+Hessians
+f1(x): ⃗x∈Rnf1
+R(scalar)
+∂2f1
+∂xi∂xj
+f1,…,fm
+x1
+⋅
+⋅
+⋅
+xn
+x1
+⋅xn
+Rnf
+Rm f1(x),…,fm(x)(multiple)
+:::

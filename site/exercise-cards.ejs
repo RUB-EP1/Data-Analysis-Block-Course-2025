@@ -1,0 +1,43 @@
+<%
+const molab = "https://molab.marimo.io/github/ctoennis/Data-Analysis-Block-Course-2026/blob/main/";
+const fileName = (p) => p.split("/").pop();
+%>
+```{=html}
+<div class="card-grid">
+<% for (const item of items) { %>
+  <article class="course-card exercise-card" id="exercise-<%= item.number %>" <%= metadataAttrs(item) %>>
+    <a class="card-head" href="<%- item.sheet %>">
+      <span class="card-tag">Exercise <%= item.number %> · after Lecture <%= item.lecture %></span>
+      <h3 class="card-title"><%= item.title %></h3>
+      <p class="card-meta"><span><%= item.instructor %></span><span><%= item.when %></span></p>
+    </a>
+    <div class="card-actions">
+      <a class="btn-main" href="<%- item.sheet %>">Sheet (PDF) →</a>
+      <% if (item.solution) { %><a class="chip" href="<%- item.solution %>">Solution</a><% } %>
+    </div>
+    <% if (item.homework) { %>
+    <ul class="materials">
+      <li>
+        <span class="kind kind-marimo">marimo</span>
+        <span class="label">Homework</span>
+        <span class="links">
+          <a href="<%- molab + item.homework %>" target="_blank" rel="noopener">molab</a>
+          <a href="<%- item.homework %>" download="<%= fileName(item.homework) %>">.py</a>
+        </span>
+      </li>
+      <% if (item.homework_solution) { %>
+      <li>
+        <span class="kind kind-marimo">marimo</span>
+        <span class="label">Homework solution</span>
+        <span class="links">
+          <a href="<%- molab + item.homework_solution %>" target="_blank" rel="noopener">molab</a>
+          <a href="<%- item.homework_solution %>" download="<%= fileName(item.homework_solution) %>">.py</a>
+        </span>
+      </li>
+      <% } %>
+    </ul>
+    <% } %>
+  </article>
+<% } %>
+</div>
+```

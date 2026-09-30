@@ -1,0 +1,15 @@
+## Example: mutations and branchings {#original-a-17 .original-slide}
+
+```{=html}
+<div class="source-page" aria-label="Original Lecture 1A, slide 17">
+<img class="source-art" src="figures/original/original-17.svg" alt="Example: mutations and branchings" loading="eager" />
+
+</div>
+```
+
+::: {.notes}
+Original Lecture-1A, slide 17. Visual source: Keynote PDF export.
+
+Example: mutations and branchings
+
+:::
