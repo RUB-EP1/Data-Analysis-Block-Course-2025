@@ -19,7 +19,7 @@ make -C slides start-julia-server DECK=Lecture_3B
 
 ## mnist-draw.jl — train, then draw (in the slides)
 
-Embedded in the slides "Train a network, then draw for it" and "Shift the digits".
+Formerly embedded in the slides; they now use the in-browser widgets `widgets/mnist.html` and `widgets/mnist-shift.html`, whose weights come from `../scripts/make_mnist_data.jl`.
 
 A dense network (784–128–10) or a small CNN, trained with the "Train one epoch"
 button (about 0.3 s per epoch for the dense network and 3 s for the CNN on a laptop

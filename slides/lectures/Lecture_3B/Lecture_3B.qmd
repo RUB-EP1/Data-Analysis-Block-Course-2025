@@ -337,23 +337,15 @@ Receptive field recursion: r_l = r_(l−1) + (K_l − 1) · j_(l−1), where j i
 
 ## Train a network, then draw for it {#widget-mnist-live .l1b}
 
-::: {.mnist-live}
-::: {.widget data-src="http://localhost:1243/edit?id=3b0a7000-0000-4000-8000-0000000d4a01&isolated_cell_id=4fbdcb67-a78b-4426-910c-830f39cc1cb3&isolated_cell_id=4262e0ff-4e84-4190-83ac-a7fe0024a1f5" data-poster="widgets/mnist-train-poster.png" data-requires="make start-julia-server DECK=Lecture_3B" data-alt="Pluto cells: model choice, a Train one epoch button, and the test accuracy after each epoch"}
-:::
-::: {.widget data-src="http://localhost:1243/edit?id=3b0a7000-0000-4000-8000-0000000d4a01&isolated_cell_id=351a5dea-2b79-4b53-beac-154503b52c34&isolated_cell_id=d629e83e-b1cf-46cd-a045-e25dbf0b6462" data-poster="widgets/mnist-draw-poster.png" data-requires="make start-julia-server DECK=Lecture_3B" data-alt="Pluto cells: a drawing pad and the network's probabilities for the drawn digit"}
-:::
-:::
-
-::: {.mnist-caption}
-Live Julia (Flux) in Pluto: 60 000 training images, one epoch per click, on this laptop's CPU.
+::: {.widget data-src="widgets/mnist.html" data-poster="widgets/mnist-poster.png" data-alt="Drawing pad, the network input, feature maps of both convolution layers, class probabilities, and test accuracy after 0 to 3 epochs"}
 :::
 
 ::: {.notes}
-Live cells of pluto/mnist-draw.jl; start the server before the lecture with `make -C slides start-julia-server DECK=Lecture_3B` (about a minute to load Flux). Both panels are views of the same notebook, so training on the left changes the predictions on the right.
+The widget runs the forward pass of the CNN in the browser; the weights after 0, 1, 2 and 3 epochs were trained in Julia (Flux) by scripts/make_mnist_data.jl on all 60 000 training digits (Adam, batches of 128). The same network lives in pluto/mnist-draw.jl for training it live: `make -C slides start-julia-server DECK=Lecture_3B`.
 
-Suggested sequence: draw a digit with the untrained dense network (random guess, about 10 %). Train one epoch (about 0.3 s after the first, compiling, epoch): about 94 %. Draw again; ask the audience for hard digits (a 4 with an open top, a 7 with a bar, a 1 with a foot). Then switch to the CNN (2 × conv 3 × 3 + pool, about 5 000 parameters instead of 100 000) and train two epochs (about 3 s each): about 97 %.
+Suggested sequence: pick "untrained" and draw a digit (random guess, test accuracy about 10 %). Switch to 1 epoch: about 96 %. Draw again; ask the audience for hard digits (a 4 with an open top, a 7 with a bar, a 1 with a foot). Watch the layer-1 maps: edge and stroke detectors, the same 8 filters applied everywhere. Only 5 258 weights, against about 100 000 for a dense 784–128–10 network.
 
-The pad crops the drawing, scales it into 20 × 20 and centres it by its centre of mass in 28 × 28, as the MNIST digits were prepared. After clicking into a panel, click the slide title to get the arrow keys back.
+The pad crops the drawing, scales it into 20 × 20 and centres it by its centre of mass in 28 × 28, as the MNIST digits were prepared. After clicking into the widget, click the slide title to get the arrow keys back.
 :::
 
 ## Shift the digits {#widget-mnist-shift .l1b}
@@ -364,18 +356,18 @@ MNIST digits are centred. Move every test image a few pixels to the right and me
 
 | shift | 0 px | 2 px | 3 px |
 |---|---:|---:|---:|
-| dense 784–128–10 | 95 % | 71 % | 49 % |
+| dense 784–128–10 | 96 % | 75 % | 47 % |
 | boosted trees (JLBoost) | 90 % | 69 % | 51 % |
-| **CNN** | **97 %** | **92 %** | **78 %** |
+| **CNN** | **97 %** | **91 %** | **74 %** |
 
 Trees and dense networks see each pixel as a fixed input. The CNN applies the same kernels everywhere and pools.
 :::
-::: {.widget data-src="http://localhost:1243/edit?id=3b0a7000-0000-4000-8000-0000000d4a01&isolated_cell_id=4fbdcb67-a78b-4426-910c-830f39cc1cb3&isolated_cell_id=f8dd5fdd-7e21-4478-acbd-9b7cf57047b2" data-poster="widgets/mnist-shift-poster.png" data-requires="make start-julia-server DECK=Lecture_3B" data-alt="Pluto cells: model choice, training button, and test accuracy against the shift of the test digits for each trained model"}
+::: {.widget data-src="widgets/mnist-shift.html" data-poster="widgets/mnist-shift-poster.png" data-alt="A test digit shifted to the right, the CNN's class probabilities, and test accuracy against the shift for the CNN and a dense network"}
 :::
 :::
 
 ::: {.notes}
-Live: the curve of every model trained on the previous slide is kept, so train the dense network and the CNN and both appear. The table was measured offline on 2 000 test images, networks trained for 3 epochs; the trees are ten one-versus-rest JLBoost boosters (10 000 images, 20 rounds, depth 4, 92 % unshifted), see pluto/mnist-trees.jl and pluto/README.md. This is the "shift the cat" argument of the "Why not a dense network?" slide, measured. Pooling gives only limited invariance, so the CNN also degrades for larger shifts; data augmentation (shifted training copies) fixes the rest.
+The widget shows the CNN of the previous slide after 3 epochs on a shifted test digit, and the accuracy curves of the CNN and the dense network (both 3 epochs, from scripts/make_mnist_data.jl). The table was measured offline on 2 000 test images, networks trained for 3 epochs; the trees are ten one-versus-rest JLBoost boosters (10 000 images, 20 rounds, depth 4, 92 % unshifted), see pluto/mnist-trees.jl and pluto/README.md. This is the "shift the cat" argument of the "Why not a dense network?" slide, measured. Pooling gives only limited invariance, so the CNN also degrades for larger shifts; data augmentation (shifted training copies) fixes the rest.
 :::
 
 ## ImageNet {#imagenet .l1b}

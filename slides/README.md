@@ -22,7 +22,7 @@ Lectures 1B, 2A, 2B, 3A, 3B, 4A and 4B are fully native Quarto. Lecture 2B inclu
 widgets (split search, regression boosting, BCE classification). Lecture 2A includes four interactive
 widgets and executable Julia notebooks in its local workspace. Its obsolete full-slide SVG screenshots and
 per-slide include files have been removed. Lecture 3A (neural networks, gradient descent,
-optimizers) includes five widgets. Lecture 3B (convolutional networks) includes two widgets
+optimizers) includes five widgets. Lecture 3B (convolutional networks) includes four widgets (two run a trained MNIST CNN in the browser)
 and a marimo notebook that opens the pretrained AlexNet. Lecture 4A (transformers) includes five widgets and a marimo notebook
 that opens GPT-2 and trains a tiny GPT. Lecture 4B (chats and agents) includes four widgets and
 a marimo notebook with a complete agent loop. Lecture 1A still contains imported

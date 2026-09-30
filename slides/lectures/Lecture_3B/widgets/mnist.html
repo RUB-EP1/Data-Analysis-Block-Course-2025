@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Draw a digit for a trained CNN</title>
+<link rel="stylesheet" href="lab.css">
+<style>
+.controls{gap:18px}
+.seg{display:inline-flex;border:1px solid #adbfcc;border-radius:8px;overflow:hidden}
+.seg button{border:0;border-radius:0;border-right:1px solid #adbfcc;padding:7px 16px}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed=true]{background:#087bb9;color:#fff}
+.main{flex:1 1 0;min-height:0;display:flex;gap:30px;align-items:stretch}
+.pad{flex:0 0 auto;display:flex;flex-direction:column;gap:10px;height:100%;min-height:0}
+.pad .title{font-size:23px;font-weight:600}
+#pad{flex:1 1 0;min-height:0;width:auto;height:100%;aspect-ratio:1;background:#172635;border-radius:10px;touch-action:none;cursor:crosshair}
+.pad .hint{font-size:18px;color:#536878}
+#viz{flex:1 1 0;min-width:0}
+</style>
+</head>
+<body>
+<header><h1>Draw a digit for a trained CNN</h1><span class="legend">draw on the dark pad · pick how long the network was trained</span></header>
+<p class="subtitle">Trained on 60 000 MNIST digits; the weights after each epoch are stored, and your browser runs the network while you draw.</p>
+<div class="controls">
+  <span class="seg" role="group" aria-label="Training epochs" id="epochs"></span>
+  <button id="clear">Clear</button>
+  <button id="sample">Test digit</button>
+</div>
+<div class="main">
+  <div class="pad">
+    <span class="title">Your drawing</span>
+    <canvas id="pad" width="280" height="280" role="img" aria-label="Drawing pad"></canvas>
+  </div>
+  <canvas id="viz" width="1000" height="520" role="img" aria-label="Network input, feature maps of both convolution layers, class probabilities and test accuracy per epoch"></canvas>
+</div>
+<div id="stats" class="stats" aria-live="polite"></div>
+<script src="plot.js"></script>
+<script src="mnist-net.js"></script>
+<script src="data_mnist.js"></script>
+<script>
+'use strict';
+const D = window.DATA_MNIST;
+const NETS = D.checkpoints.map(c => mnistWeights(c.w));
+const DIGITS = b64bytes(D.digits);
+const pad = $('pad'), pctx = pad.getContext('2d');
+const V = $('viz'), ctx = V.getContext('2d');
+let epoch = D.checkpoints.length - 1, img = null, pending = false;
+
+// ---- epoch selector
+D.checkpoints.forEach((c, k) => {
+  const b = document.createElement('button');
+  b.textContent = k === 0 ? 'untrained' : `${k} epoch${k > 1 ? 's' : ''}`;
+  b.onclick = () => { epoch = k; update(); };
+  $('epochs').appendChild(b);
+});
+
+// ---- drawing pad (same stroke and preprocessing as the Pluto DrawPad)
+pctx.lineWidth = 22; pctx.lineCap = pctx.lineJoin = 'round'; pctx.strokeStyle = pctx.fillStyle = '#fff';
+let drawing = false, last = null;
+const padPos = ev => { const r = pad.getBoundingClientRect(); return [(ev.clientX - r.left) * 280 / r.width, (ev.clientY - r.top) * 280 / r.height]; };
+pad.addEventListener('pointerdown', ev => {
+  drawing = true; last = padPos(ev);
+  try { pad.setPointerCapture(ev.pointerId); } catch (_) {}
+  pctx.beginPath(); pctx.arc(last[0], last[1], 11, 0, 2 * Math.PI); pctx.fill(); schedule();
+});
+pad.addEventListener('pointermove', ev => {
+  if (!drawing) return;
+  const p = padPos(ev);
+  pctx.beginPath(); pctx.moveTo(...last); pctx.lineTo(...p); pctx.stroke(); last = p; schedule();
+});
+const stop = () => { drawing = false; };
+pad.addEventListener('pointerup', stop); pad.addEventListener('pointercancel', stop);
+$('clear').onclick = () => { pctx.clearRect(0, 0, 280, 280); schedule(); };
+
+// Put a stored test digit on the pad (white on transparent, scaled ×10).
+let sampleIdx = 0;
+function loadSample(i) {
+  const t = document.createElement('canvas'); t.width = t.height = 28;
+  const tc = t.getContext('2d'), im = tc.createImageData(28, 28);
+  for (let p = 0; p < 784; p++) { im.data[4 * p] = im.data[4 * p + 1] = im.data[4 * p + 2] = 255; im.data[4 * p + 3] = DIGITS[i * 784 + p]; }
+  tc.putImageData(im, 0, 0);
+  pctx.clearRect(0, 0, 280, 280); pctx.imageSmoothingEnabled = true; pctx.drawImage(t, 0, 0, 280, 280);
+  schedule();
+}
+$('sample').onclick = () => { sampleIdx = (sampleIdx + 7) % D.labels.length; loadSample(sampleIdx); };
+
+function schedule() { if (!pending) { pending = true; requestAnimationFrame(() => { pending = false; update(); }); } }
+
+// ---- drawing helpers
+function map(m, off, n, x, y, size, vmax) {
+  const c = size / n;
+  for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) {
+    ctx.fillStyle = viridis(m[off + j * n + i] / vmax); ctx.fillRect(x + i * c, y + j * c, c + .4, c + .4);
+  }
+  ctx.strokeStyle = PAL.grid; ctx.lineWidth = 1; ctx.strokeRect(x, y, size, size);
+}
+function digit(m, x, y, size) {
+  const c = size / 28;
+  ctx.fillStyle = '#172635'; ctx.fillRect(x, y, size, size);
+  for (let j = 0; j < 28; j++) for (let i = 0; i < 28; i++) {
+    const v = m ? m[j * 28 + i] : 0;
+    if (v > 0) { ctx.fillStyle = mix('#172635', '#ffffff', v); ctx.fillRect(x + i * c, y + j * c, c + .4, c + .4); }
+  }
+}
+const maxOf = a => a.reduce((m, v) => v > m ? v : m, 1e-6);
+
+function update() {
+  [...$('epochs').children].forEach((b, k) => b.setAttribute('aria-pressed', k === epoch));
+  img = mnistPreprocess(pad);
+  const out = img ? mnistForward(NETS[epoch], img) : null;
+  ctx.clearRect(0, 0, V.width, V.height);
+
+  // Row 1: input → layer 1 → layer 2 → prediction
+  const top = 50, H = 21;
+  text(ctx, 'Network input', 0, 30, H, PAL.ink, 'left', '600');
+  text(ctx, '28 × 28', 0, top + 200, 17, PAL.muted);
+  digit(img, 0, top, 176);
+  arrow(ctx, 186, top + 88, 214, top + 88, PAL.muted, 2, 9);
+  text(ctx, 'Layer 1 · 8 filters 3×3', 226, 30, H, PAL.ink, 'left', '600');
+  text(ctx, '8 maps, 26 × 26', 226, top + 200, 17, PAL.muted);
+  const S1 = 82;
+  for (let k = 0; k < 8; k++) {
+    const x = 226 + (k % 4) * (S1 + 6), y = top + Math.floor(k / 4) * (S1 + 6);
+    if (out) map(out.a1, k * 676, 26, x, y, S1, maxOf(out.a1)); else { ctx.fillStyle = '#eef3f7'; ctx.fillRect(x, y, S1, S1); }
+  }
+  arrow(ctx, 586, top + 88, 614, top + 88, PAL.muted, 2, 9);
+  text(ctx, 'Layer 2 · 16 filters', 626, 30, H, PAL.ink, 'left', '600');
+  text(ctx, 'pool, then 11 × 11', 626, top + 200, 17, PAL.muted);
+  const S2 = 40;
+  for (let k = 0; k < 16; k++) {
+    const x = 626 + (k % 4) * (S2 + 4), y = top + Math.floor(k / 4) * (S2 + 4);
+    if (out) map(out.a2, k * 121, 11, x, y, S2, maxOf(out.a2)); else { ctx.fillStyle = '#eef3f7'; ctx.fillRect(x, y, S2, S2); }
+  }
+  arrow(ctx, 812, top + 88, 840, top + 88, PAL.muted, 2, 9);
+  const k = out ? out.probs.indexOf(Math.max(...out.probs)) : -1;
+  text(ctx, 'Prediction', 920, 30, H, PAL.ink, 'center', '600');
+  if (out) {
+    text(ctx, String(k), 920, top + 150, 150, PAL.accent, 'center', '700');
+    text(ctx, `${(100 * out.probs[k]).toFixed(0)} %`, 920, top + 196, 22, PAL.ink, 'center', '600');
+  } else text(ctx, 'draw a digit', 920, top + 96, 20, PAL.muted, 'center');
+
+  // Row 2: class probabilities
+  const P = new Panel(ctx, 40, 310, 540, 150, [-0.5, 9.5], [0, 1]);
+  P.frame('Probabilities (softmax of the 10 outputs)', '', '', [], [0, 0.5, 1], v => String(v));
+  for (let d = 0; d < 10; d++) {
+    const p = out ? out.probs[d] : 0, x0 = P.X(d - 0.36), x1 = P.X(d + 0.36);
+    ctx.fillStyle = d === k ? PAL.accent : '#b9cde0';
+    ctx.fillRect(x0, P.Y(p), x1 - x0, P.Y(0) - P.Y(p));
+    text(ctx, String(d), P.X(d), P.y + P.h + 28, 22, d === k ? PAL.accent : PAL.ink, 'center', d === k ? '700' : '');
+  }
+
+  // Row 2: test accuracy per epoch
+  const A = new Panel(ctx, 700, 310, 290, 150, [-0.3, 3.3], [0, 1]);
+  A.frame('Test accuracy', '', '', [0, 1, 2, 3], [0, 0.5, 1], v => String(v));
+  A.hline(0.1, PAL.muted, 1.5, [6, 6]);
+  text(ctx, 'guessing', A.X(1.5), A.Y(0.1) - 8, 16, PAL.muted, 'center');
+  A.line(D.checkpoints.map((c, i) => [i, c.acc]), PAL.accent, 3);
+  D.checkpoints.forEach((c, i) => A.dot(i, c.acc, i === epoch ? PAL.gold : PAL.accent, i === epoch ? 10 : 6));
+
+  const cp = D.checkpoints[epoch];
+  stats([
+    ['Training', epoch === 0 ? 'none (random weights)' : `${epoch} epoch${epoch > 1 ? 's' : ''} × 469 batches of 128`],
+    ['Test accuracy (10 000 digits)', `${(100 * cp.acc).toFixed(1)} %`],
+    ['Weights', `${D.params.toLocaleString('en')} (a dense 784–128–10 net: ${D.dense.params.toLocaleString('en')})`],
+  ]);
+}
+
+update();
+if (new URLSearchParams(location.search).has('demo')) loadSample(D.labels.lastIndexOf(3));
+else loadSample(D.labels.indexOf(7));
+</script>
+</body>
+</html>

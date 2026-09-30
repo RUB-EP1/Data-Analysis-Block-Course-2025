@@ -44,32 +44,40 @@ the fc7 embedding space; exercises. Everything runs on a laptop CPU.
 `notebooks/exports/AlexNet_under_the_hood.html` is a static export
 (`marimo export html AlexNet_under_the_hood.py -o notebooks/exports/AlexNet_under_the_hood.html`).
 
-## Two interactive widgets
+## Four interactive widgets
 
 1. **conv.html** — slide a 3 × 3 kernel over a drawable 28 × 28 image; preset or
    editable kernels, stride, padding, ReLU; the nine products at each position.
 2. **stack.html** — conv → ReLU → max-pool → conv: four hand-set edge kernels,
    then four 3 × 3 × 4 corner kernels that combine two edge maps; hover a corner
    unit to see its 8 × 8 receptive field.
+3. **mnist.html** ("Train a network, then draw for it") — draw a digit for a trained
+   CNN (2 × conv 3×3 + pool, dense; 5 258 weights). Pick the weights after 0, 1, 2 or
+   3 epochs; the widget shows the preprocessed input, all feature maps, the class
+   probabilities and the test accuracy per epoch.
+4. **mnist-shift.html** ("Shift the digits") — a test digit moved to the right, the
+   CNN's prediction for it, and accuracy against shift for the CNN and a dense
+   784–128–10 network (2 000 test digits).
 
-They share `widgets/plot.js`, `widgets/lab.css` and `widgets/images.js` (procedural
-test images). Posters: `zsh scripts/make_posters.zsh`.
-
-## Live Julia slides (Pluto)
-
-"Train a network, then draw for it" and "Shift the digits" (after "A convolutional
-network") embed cells of `pluto/mnist-draw.jl`: Flux trains a dense network or a small
-CNN on MNIST, one epoch per click, the audience draws digits for it, and the shift plot
-keeps one curve per trained model. Start the server before the lecture (about a minute
-to load Flux); until it answers, the slides show this command:
+They share `widgets/plot.js` and `widgets/lab.css`; conv and stack use
+`widgets/images.js` (procedural test images). The MNIST widgets only run inference:
+`widgets/mnist-net.js` is the forward pass and `widgets/data_mnist.js` (144 KB) holds
+the weights, accuracies and shift curves, written by
 
 ```sh
-make -C slides start-julia-server DECK=Lecture_3B
+julia --project=slides/lectures/Lecture_3B/pluto slides/lectures/Lecture_3B/scripts/make_mnist_data.jl
+node slides/lectures/Lecture_3B/scripts/check_mnist_widget.mjs   # JS logits = Flux logits
 ```
 
-The same server opens `pluto/mnist-trees.jl` (boosted trees on pixels, not in the
-slides). See `pluto/README.md`. The posters `widgets/mnist-*-poster.png` for the PDF
-are screenshots of the isolated cells after two epochs of each model.
+(about half a minute on a laptop CPU; MNIST from `~/.cache/mnist/MNIST/raw`).
+Posters: `zsh scripts/make_posters.zsh`.
+
+## Live Julia (Pluto)
+
+`pluto/mnist-draw.jl` trains the same networks live in Flux, one epoch per click; it is
+no longer embedded in the slides. `pluto/mnist-trees.jl` has the boosted trees of the
+shift table. Serve both with `make -C slides start-julia-server DECK=Lecture_3B`; see
+`pluto/README.md`.
 
 ## Figures
 

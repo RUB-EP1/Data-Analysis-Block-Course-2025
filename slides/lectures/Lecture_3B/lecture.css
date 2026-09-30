@@ -105,19 +105,10 @@
 #params table col:nth-child(2){width:17%!important}
 #params table col:nth-child(3){width:33%!important}
 
-/* Live Pluto cells (pluto/mnist-draw.jl via `make start-julia-server DECK=Lecture_3B`).
-   Pluto renders at its own CSS size; the iframes are scaled up to slide scale. */
-#widget-mnist-live .mnist-live{display:grid;grid-template-columns:1fr 1fr;gap:40px;height:780px}
-#widget-mnist-live .widget,#widget-mnist-shift .widget{height:100%;min-height:0;border:1px solid #d8e0e7}
-#widget-mnist-live .widget iframe,#widget-mnist-shift .widget iframe{width:71.43%;height:71.43%;transform:scale(1.4);transform-origin:0 0}
-#widget-mnist-live .mnist-caption{color:#5e5e5e;font-size:26px;margin-top:14px}
-#widget-mnist-shift .mnist-shift{grid-template-columns:.85fr 1.15fr;gap:50px;height:800px;align-items:stretch}
-#widget-mnist-shift .l1b-copy{font-size:32px;align-self:center}
-#widget-mnist-shift table{font-size:30px}
-#widget-mnist-shift table td,#widget-mnist-shift table th{padding:10px 16px}
-#widget-mnist-live .mnist-live{height:830px}
-#widget-mnist-live .mnist-live>.widget:nth-child(2) iframe{width:80%;height:80%;transform:scale(1.25)}
-#widget-mnist-live .mnist-live,#widget-mnist-shift .mnist-shift{flex:none}
-#widget-mnist-live .mnist-live{height:790px}
-#widget-mnist-live .mnist-live>.widget:nth-child(2) iframe{width:86.96%;height:86.96%;transform:scale(1.15)}
-#widget-mnist-live .mnist-live{height:770px;margin-top:10px}
+/* In-browser MNIST widgets: widgets/mnist.html and widgets/mnist-shift.html. */
+#widget-mnist-live .widget{height:820px;flex:none;border:1px solid #d8e0e7}
+#widget-mnist-shift .mnist-shift{grid-template-columns:.8fr 1.2fr;gap:40px;height:810px;align-items:stretch;flex:none}
+#widget-mnist-shift .widget{height:100%;min-height:0;border:1px solid #d8e0e7}
+#widget-mnist-shift .l1b-copy{font-size:30px;align-self:center}
+#widget-mnist-shift table{font-size:28px}
+#widget-mnist-shift table td,#widget-mnist-shift table th{padding:8px 14px}

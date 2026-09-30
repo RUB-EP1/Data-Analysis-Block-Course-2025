@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shift the digits</title>
+<link rel="stylesheet" href="lab.css">
+<style>
+.controls{gap:18px}
+.thumbs{display:flex;gap:6px;flex-wrap:wrap}
+.thumbs canvas{width:44px;height:44px;flex:none;border-radius:6px;cursor:pointer;outline:2px solid transparent;outline-offset:1px}
+.thumbs canvas[aria-pressed=true]{outline-color:#087bb9}
+input[type=range]{width:260px}
+</style>
+</head>
+<body>
+<header><h1>Shift the digits</h1><span class="legend">pick a digit · move it to the right</span></header>
+<p class="subtitle">The CNN after 3 epochs, run in your browser. Curves: 2 000 test digits, all shifted.</p>
+<div class="controls">
+  <label for="shift">Shift <input id="shift" type="range" min="0" max="6" step="1" value="0"><output id="shift-value"></output></label>
+  <div class="thumbs" id="thumbs" role="group" aria-label="Test digits"></div>
+</div>
+<canvas id="plot" width="1000" height="560" role="img" aria-label="The shifted digit, the CNN's class probabilities, and test accuracy against the shift for the CNN and a dense network"></canvas>
+<div id="stats" class="stats" aria-live="polite"></div>
+<script src="plot.js"></script>
+<script src="mnist-net.js"></script>
+<script src="data_mnist.js"></script>
+<script>
+'use strict';
+const D = window.DATA_MNIST;
+const last = D.checkpoints.length - 1, NET = mnistWeights(D.checkpoints[last].w), CNN = D.checkpoints[last].shift;
+const BYTES = b64bytes(D.digits);
+const digitAt = i => Float32Array.from(BYTES.subarray(i * 784, (i + 1) * 784), v => v / 255);
+const C = $('plot'), ctx = C.getContext('2d');
+// One test digit per class, as thumbnails.
+const PICKS = [...Array(10).keys()].map(d => D.labels.indexOf(d));
+let pick = PICKS[4];
+
+function paint28(c, m, x, y, size, bg = '#172635') {
+  const s = size / 28;
+  c.fillStyle = bg; c.fillRect(x, y, size, size);
+  for (let j = 0; j < 28; j++) for (let i = 0; i < 28; i++) {
+    const v = m[j * 28 + i];
+    if (v > 0) { c.fillStyle = mix(bg, '#ffffff', v); c.fillRect(x + i * s, y + j * s, s + .4, s + .4); }
+  }
+}
+PICKS.forEach(i => {
+  const t = document.createElement('canvas'); t.width = t.height = 56;
+  paint28(t.getContext('2d'), digitAt(i), 0, 0, 56);
+  t.title = `test digit ${D.labels[i]}`; t.tabIndex = 0;
+  t.onclick = () => { pick = i; draw(); };
+  t.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { pick = i; draw(); } };
+  $('thumbs').appendChild(t);
+});
+
+function draw() {
+  syncOutputs({ shift: v => `${v} px` });
+  [...$('thumbs').children].forEach((t, k) => t.setAttribute('aria-pressed', PICKS[k] === pick));
+  const s = +$('shift').value, img = shiftRight(digitAt(pick), s);
+  const out = mnistForward(NET, img), k = out.probs.indexOf(Math.max(...out.probs)), ok = k === D.labels[pick];
+  ctx.clearRect(0, 0, C.width, C.height);
+
+  // The shifted digit, with the frame of the unshifted 20 × 20 box
+  text(ctx, 'What the network sees', 0, 26, 23, PAL.ink, 'left', '600');
+  const G = { x: 0, y: 44, size: 220 };
+  paint28(ctx, img, G.x, G.y, G.size);
+  const c = G.size / 28;
+  ctx.setLineDash([6, 5]); ctx.strokeStyle = 'rgba(255,255,255,.45)'; ctx.lineWidth = 1.5;
+  ctx.strokeRect(G.x + 4 * c, G.y + 4 * c, 20 * c, 20 * c); ctx.setLineDash([]);
+  text(ctx, 'dashed: the 20 × 20 box of MNIST', 0, G.y + G.size + 24, 17, PAL.muted);
+
+  // Class probabilities
+  const P = new Panel(ctx, 280, 44, 440, 190, [-0.5, 9.5], [0, 1]);
+  P.frame('', '', '', [], [0, 0.5, 1], v => String(v));
+  text(ctx, 'CNN probabilities', 280, 26, 23, PAL.ink, 'left', '600');
+  for (let d = 0; d < 10; d++) {
+    const p = out.probs[d], x0 = P.X(d - 0.36), x1 = P.X(d + 0.36);
+    ctx.fillStyle = d === k ? (ok ? PAL.accent : PAL.red) : '#b9cde0';
+    ctx.fillRect(x0, P.Y(p), x1 - x0, P.Y(0) - P.Y(p));
+    text(ctx, String(d), P.X(d), P.y + P.h + 26, 20, d === k ? (ok ? PAL.accent : PAL.red) : PAL.ink, 'center', d === k ? '700' : '');
+  }
+  text(ctx, String(k), 870, 170, 140, ok ? PAL.accent : PAL.red, 'center', '700');
+  text(ctx, ok ? 'correct' : `wrong: it is a ${D.labels[pick]}`, 870, 214, 22, ok ? PAL.accent : PAL.red, 'center', '600');
+
+  // Accuracy against shift
+  const A = new Panel(ctx, 70, 336, 910, 150, [-0.2, 6.2], [0, 1]);
+  A.frame('Test accuracy against shift', 'shift to the right (pixels)', 'accuracy', D.shifts, [0, 0.5, 1], v => String(v));
+  A.hline(0.1, PAL.muted, 1.5, [6, 6]);
+  text(ctx, 'guessing', A.X(0.05), A.Y(0.1) - 8, 16, PAL.muted, 'left');
+  A.vline(s, PAL.gold, 2, [4, 4]);
+  A.line(D.shifts.map((x, i) => [x, D.dense.shift[i]]), PAL.muted, 3, [10, 6]);
+  A.line(D.shifts.map((x, i) => [x, CNN[i]]), PAL.accent, 4);
+  D.shifts.forEach((x, i) => { A.dot(x, D.dense.shift[i], PAL.muted, 5); A.dot(x, CNN[i], PAL.accent, 6); });
+  A.dot(s, CNN[s], PAL.gold, 10); A.dot(s, D.dense.shift[s], PAL.gold, 8);
+  text(ctx, 'CNN', A.X(0.12), A.Y(CNN[0]) + 28, 20, PAL.accent, 'left', '700');
+  text(ctx, '- - dense 784–128–10', A.X(0.4), A.Y(0.6), 20, PAL.muted, 'left', '600');
+
+  stats([
+    [`CNN at ${s} px`, `${(100 * CNN[s]).toFixed(0)} %`],
+    [`Dense at ${s} px`, `${(100 * D.dense.shift[s]).toFixed(0)} %`],
+    ['Both trained', '3 epochs, unshifted digits'],
+  ]);
+}
+
+$('shift').addEventListener('input', draw);
+if (new URLSearchParams(location.search).has('demo')) { $('shift').value = 3; }
+draw();
+</script>
+</body>
+</html>
